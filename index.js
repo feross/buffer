@@ -860,7 +860,7 @@ function readFloat(buffer, offset, isBigEndian, noAssert) {
         'Trying to read beyond buffer length');
   }
 
-  return require('buffer_ieee754').readIEEE754(buffer, offset, isBigEndian,
+  return require('./buffer_ieee754').readIEEE754(buffer, offset, isBigEndian,
       23, 4);
 }
 
@@ -881,7 +881,7 @@ function readDouble(buffer, offset, isBigEndian, noAssert) {
         'Trying to read beyond buffer length');
   }
 
-  return require('buffer_ieee754').readIEEE754(buffer, offset, isBigEndian,
+  return require('./buffer_ieee754').readIEEE754(buffer, offset, isBigEndian,
       52, 8);
 }
 
@@ -1171,7 +1171,7 @@ function writeFloat(buffer, value, offset, isBigEndian, noAssert) {
     verifIEEE754(value, 3.4028234663852886e+38, -3.4028234663852886e+38);
   }
 
-  require('buffer_ieee754').writeIEEE754(buffer, value, offset, isBigEndian,
+  require('./buffer_ieee754').writeIEEE754(buffer, value, offset, isBigEndian,
       23, 4);
 }
 
@@ -1200,7 +1200,7 @@ function writeDouble(buffer, value, offset, isBigEndian, noAssert) {
     verifIEEE754(value, 1.7976931348623157E+308, -1.7976931348623157E+308);
   }
 
-  require('buffer_ieee754').writeIEEE754(buffer, value, offset, isBigEndian,
+  require('./buffer_ieee754').writeIEEE754(buffer, value, offset, isBigEndian,
       52, 8);
 }
 
