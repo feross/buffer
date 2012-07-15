@@ -1,6 +1,6 @@
 {
     "name" : "buffer-browserify",
-    "version" : "0.0.1",
+    "version" : "0.0.2",
     "description" : "buffer module compatibility for browserify",
     "main" : "index.js",
     "browserify" : "index.js",
@@ -32,5 +32,5 @@
         "test" : "node node_modules/tap/bin/tap.js test/*.js"
     },
     "license" : "MIT/X11",
-    "engine" : { "node" : ">=0.4" }
+    "engine" : { "node" : ">=0.6" }
 }
