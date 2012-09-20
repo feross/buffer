@@ -74,20 +74,25 @@ test('hex buffer to ascii', function (t) {
 });
 
 test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function(t) {
-    t.plan(2*2*2+2);
+    t.plan(2*(2*2*2+2));
     ["UInt","Int"].forEach(function(x){
         [8,16,32].forEach(function(y){
             var endianesses = (y === 8) ? [""] : ["LE","BE"];
             endianesses.forEach(function(z){
                 var v1  = new buffer.Buffer(y / 8);
                 var v2  = new Buffer(y / 8);
-                var fn  = "write" + x + y + z;
+                var writefn  = "write" + x + y + z;
                 var val = (x === "Int") ? -3 : 3;
-                v1[fn](val, 0);
-                v2[fn](val, 0);
+                v1[writefn](val, 0);
+                v2[writefn](val, 0);
                 t.equal(
                     v1.toString("hex"),
                     v2.toString("hex")
+                );
+                var readfn = "read" + x + y + z;
+                t.equal(
+                    v1[readfn](0),
+                    v2[readfn](0)
                 );
             });
         });

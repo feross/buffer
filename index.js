@@ -288,6 +288,17 @@ SlowBuffer.prototype.slice = function(start, end) {
   return new Buffer(this, end - start, +start);
 };
 
+SlowBuffer.prototype.copy = function(target, targetstart, sourcestart, sourceend) {
+  var temp = [];
+  for (var i=sourcestart; i<sourceend; i++) {
+    assert.ok(typeof this[i] !== 'undefined', "copying undefined buffer bytes!");
+    temp.push(this[i]);
+  }
+
+  for (var i=targetstart; i<targetstart+temp.length; i++) {
+    target[i] = temp[i-targetstart];
+  }
+};
 
 function coerce(length) {
   // Coerce length to a number (possibly NaN), round up
@@ -649,7 +660,7 @@ Buffer.prototype.readUInt8 = function(offset, noAssert) {
         'Trying to read beyond buffer length');
   }
 
-  return buffer[offset];
+  return buffer.parent[buffer.offset + offset];
 };
 
 function readUInt16(buffer, offset, isBigEndian, noAssert) {
@@ -668,11 +679,11 @@ function readUInt16(buffer, offset, isBigEndian, noAssert) {
   }
 
   if (isBigEndian) {
-    val = buffer[offset] << 8;
-    val |= buffer[offset + 1];
+    val = buffer.parent[buffer.offset + offset] << 8;
+    val |= buffer.parent[buffer.offset + offset + 1];
   } else {
-    val = buffer[offset];
-    val |= buffer[offset + 1] << 8;
+    val = buffer.parent[buffer.offset + offset];
+    val |= buffer.parent[buffer.offset + offset + 1] << 8;
   }
 
   return val;
@@ -701,15 +712,15 @@ function readUInt32(buffer, offset, isBigEndian, noAssert) {
   }
 
   if (isBigEndian) {
-    val = buffer[offset + 1] << 16;
-    val |= buffer[offset + 2] << 8;
-    val |= buffer[offset + 3];
-    val = val + (buffer[offset] << 24 >>> 0);
+    val = buffer.parent[buffer.offset + offset + 1] << 16;
+    val |= buffer.parent[buffer.offset + offset + 2] << 8;
+    val |= buffer.parent[buffer.offset + offset + 3];
+    val = val + (buffer.parent[buffer.offset + offset] << 24 >>> 0);
   } else {
-    val = buffer[offset + 2] << 16;
-    val |= buffer[offset + 1] << 8;
-    val |= buffer[offset];
-    val = val + (buffer[offset + 3] << 24 >>> 0);
+    val = buffer.parent[buffer.offset + offset + 2] << 16;
+    val |= buffer.parent[buffer.offset + offset + 1] << 8;
+    val |= buffer.parent[buffer.offset + offset];
+    val = val + (buffer.parent[buffer.offset + offset + 3] << 24 >>> 0);
   }
 
   return val;
@@ -781,12 +792,12 @@ Buffer.prototype.readInt8 = function(offset, noAssert) {
         'Trying to read beyond buffer length');
   }
 
-  neg = buffer[offset] & 0x80;
+  neg = buffer.parent[buffer.offset + offset] & 0x80;
   if (!neg) {
-    return (buffer[offset]);
+    return (buffer.parent[buffer.offset + offset]);
   }
 
-  return ((0xff - buffer[offset] + 1) * -1);
+  return ((0xff - buffer.parent[buffer.offset + offset] + 1) * -1);
 };
 
 function readInt16(buffer, offset, isBigEndian, noAssert) {
