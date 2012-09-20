@@ -931,7 +931,7 @@ Buffer.prototype.writeUInt8 = function(value, offset, noAssert) {
     verifuint(value, 0xff);
   }
 
-  buffer[offset] = value;
+  buffer.parent[buffer.offset + offset] = value;
 };
 
 function writeUInt16(buffer, value, offset, isBigEndian, noAssert) {
@@ -952,11 +952,11 @@ function writeUInt16(buffer, value, offset, isBigEndian, noAssert) {
   }
 
   if (isBigEndian) {
-    buffer[offset] = (value & 0xff00) >>> 8;
-    buffer[offset + 1] = value & 0x00ff;
+    buffer.parent[buffer.offset + offset] = (value & 0xff00) >>> 8;
+    buffer.parent[buffer.offset + offset + 1] = value & 0x00ff;
   } else {
-    buffer[offset + 1] = (value & 0xff00) >>> 8;
-    buffer[offset] = value & 0x00ff;
+    buffer.parent[buffer.offset + offset + 1] = (value & 0xff00) >>> 8;
+    buffer.parent[buffer.offset + offset] = value & 0x00ff;
   }
 }
 
@@ -986,15 +986,15 @@ function writeUInt32(buffer, value, offset, isBigEndian, noAssert) {
   }
 
   if (isBigEndian) {
-    buffer[offset] = (value >>> 24) & 0xff;
-    buffer[offset + 1] = (value >>> 16) & 0xff;
-    buffer[offset + 2] = (value >>> 8) & 0xff;
-    buffer[offset + 3] = value & 0xff;
+    buffer.parent[buffer.offset + offset] = (value >>> 24) & 0xff;
+    buffer.parent[buffer.offset + offset + 1] = (value >>> 16) & 0xff;
+    buffer.parent[buffer.offset + offset + 2] = (value >>> 8) & 0xff;
+    buffer.parent[buffer.offset + offset + 3] = value & 0xff;
   } else {
-    buffer[offset + 3] = (value >>> 24) & 0xff;
-    buffer[offset + 2] = (value >>> 16) & 0xff;
-    buffer[offset + 1] = (value >>> 8) & 0xff;
-    buffer[offset] = value & 0xff;
+    buffer.parent[buffer.offset + offset + 3] = (value >>> 24) & 0xff;
+    buffer.parent[buffer.offset + offset + 2] = (value >>> 16) & 0xff;
+    buffer.parent[buffer.offset + offset + 1] = (value >>> 8) & 0xff;
+    buffer.parent[buffer.offset + offset] = value & 0xff;
   }
 }
 
