@@ -73,7 +73,7 @@ test('hex buffer to ascii', function (t) {
     t.end();
 });
 
-test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function(t) {
+test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function (t) {
     t.plan(2*(2*2*2+2));
     ["UInt","Int"].forEach(function(x){
         [8,16,32].forEach(function(y){
@@ -97,5 +97,25 @@ test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function(t) {
             });
         });
     });
+    t.end();
+});
+
+test("concat() a varying number of buffers", function (t) {
+    t.plan(5);
+    var zero = [];
+    var one  = [ new buffer.Buffer('asdf') ];
+    var long = [];
+    for (var i = 0; i < 10; i++) long.push(new buffer.Buffer('asdf'));
+
+    var flatZero = buffer.Buffer.concat(zero);
+    var flatOne = buffer.Buffer.concat(one);
+    var flatLong = buffer.Buffer.concat(long);
+    var flatLongLen = buffer.Buffer.concat(long, 40);
+
+    t.equal(flatZero.length, 0);
+    t.equal(flatOne.toString(), 'asdf');
+    t.equal(flatOne, one[0]);
+    t.equal(flatLong.toString(), (new Array(10+1).join('asdf')));
+    t.equal(flatLongLen.toString(), (new Array(10+1).join('asdf')));
     t.end();
 });
