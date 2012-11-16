@@ -416,10 +416,6 @@ Buffer.concat = function (list, totalLength) {
   var pos = 0;
   for (var i = 0; i < list.length; i++) {
     var buf = list[i];
-    // To deal with string objects
-    if (!Buffer.isBuffer(buf)) {
-      buf = new Buffer(buf);
-    }
     buf.copy(buffer, pos);
     pos += buf.length;
   }
