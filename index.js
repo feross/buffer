@@ -49,6 +49,7 @@ SlowBuffer.byteLength = function (str, encoding) {
       return utf8ToBytes(str).length;
 
     case 'ascii':
+    case 'binary':
       return str.length;
 
     case 'base64':
@@ -80,6 +81,8 @@ SlowBuffer.prototype.asciiWrite = function (string, offset, length) {
   var bytes, pos;
   return SlowBuffer._charsWritten =  blitBuffer(asciiToBytes(string), this, offset, length);
 };
+
+SlowBuffer.prototype.binaryWrite = SlowBuffer.prototype.asciiWrite;
 
 SlowBuffer.prototype.base64Write = function (string, offset, length) {
   var bytes, pos;
@@ -124,6 +127,8 @@ SlowBuffer.prototype.asciiSlice = function () {
     ret += String.fromCharCode(bytes[i]);
   return ret;
 }
+
+SlowBuffer.prototype.binarySlice = SlowBuffer.prototype.asciiSlice;
 
 SlowBuffer.prototype.inspect = function() {
   var out = [],
