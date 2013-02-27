@@ -19,6 +19,15 @@ test('utf8 buffer to hex', function (t) {
     t.end();
 });
 
+test('utf8 to utf8', function (t) {
+    t.plan(1);
+    t.equal(
+        new buffer.Buffer("öäüõÖÄÜÕ", "utf8").toString("utf8"),
+        new Buffer("öäüõÖÄÜÕ", "utf8").toString("utf8")
+    );
+    t.end();
+});
+
 test('ascii buffer to base64', function (t) {
     t.plan(1);
     t.equal(
@@ -69,6 +78,43 @@ test('hex buffer to ascii', function (t) {
     t.equal(
         new buffer.Buffer("31323334353621402324255e", "hex").toString("ascii"),
         new Buffer("31323334353621402324255e", "hex").toString("ascii")
+    );
+    t.end();
+});
+/*
+test('utf8 to ascii', function (t) {
+    t.plan(1);
+    t.equal(
+        new buffer.Buffer("öäüõÖÄÜÕ", "utf8").toString("ascii"),
+        new Buffer("öäüõÖÄÜÕ", "utf8").toString("ascii")
+    );
+    t.end();
+});
+*/
+
+test('base64 buffer to binary', function (t) {
+    t.plan(1);
+    t.equal(
+        new buffer.Buffer("MTIzNDU2IUAjJCVe", "base64").toString("binary"),
+        new Buffer("MTIzNDU2IUAjJCVe", "base64").toString("binary")
+    );
+    t.end();
+});
+
+test('hex buffer to binary', function (t) {
+    t.plan(1);
+    t.equal(
+        new buffer.Buffer("31323334353621402324255e", "hex").toString("binary"),
+        new Buffer("31323334353621402324255e", "hex").toString("binary")
+    );
+    t.end();
+});
+
+test('utf8 to binary', function (t) {
+    t.plan(1);
+    t.equal(
+        new buffer.Buffer("öäüõÖÄÜÕ", "utf8").toString("binary"),
+        new Buffer("öäüõÖÄÜÕ", "utf8").toString("binary")
     );
     t.end();
 });
