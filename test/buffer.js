@@ -100,6 +100,39 @@ test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function (t) {
     t.end();
 });
 
+test("hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow", function (t) {
+    t.plan(3*(2*2*2+2));
+    ["UInt","Int"].forEach(function(x){
+        [8,16,32].forEach(function(y){
+            var endianesses = (y === 8) ? [""] : ["LE","BE"];
+            endianesses.forEach(function(z){
+                var v1  = new buffer.Buffer(y / 8 - 1);
+                var v2  = new Buffer(y / 8 - 1);
+                var next = new buffer.Buffer(4);
+                next.writeUInt32BE(0, 0);
+                var writefn  = "write" + x + y + z;
+                var val = (x === "Int") ? -3 : 3;
+                v1[writefn](val, 0, true);
+                v2[writefn](val, 0, true);
+                t.equal(
+                    v1.toString("hex"),
+                    v2.toString("hex")
+                );
+                // check that nothing leaked to next buffer.
+                t.equal(next.readUInt32BE(0), 0);
+                // check that no bytes are read from next buffer.
+                next.writeInt32BE(~0, 0);
+                var readfn = "read" + x + y + z;
+                t.equal(
+                    v1[readfn](0, true),
+                    v2[readfn](0, true)
+                );
+            });
+        });
+    });
+    t.end();
+});
+
 test("concat() a varying number of buffers", function (t) {
     t.plan(5);
     var zero = [];
