@@ -305,6 +305,19 @@ SlowBuffer.prototype.copy = function(target, targetstart, sourcestart, sourceend
   }
 };
 
+SlowBuffer.prototype.fill = function(value, start, end) {
+  if (end > this.length) {
+    throw new Error('oob');
+  }
+  if (start > end) {
+    throw new Error('oob');
+  }
+
+  for (var i = start; i < end; i++) {
+    this[i] = value;
+  }
+}
+
 function coerce(length) {
   // Coerce length to a number (possibly NaN), round up
   // in case it's fractional (e.g. 123.456) then do a
