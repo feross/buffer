@@ -119,3 +119,11 @@ test("concat() a varying number of buffers", function (t) {
     t.equal(flatLongLen.toString(), (new Array(10+1).join('asdf')));
     t.end();
 });
+
+test("buffer from buffer", function (t) {
+    t.plan(1);
+    var b1 = new buffer.Buffer('asdf');
+    var b2 = new buffer.Buffer(b1);
+    t.equal(b1.toString('hex'), b2.toString('hex'));
+    t.end();
+});
