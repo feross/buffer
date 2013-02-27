@@ -359,7 +359,12 @@ function Buffer(subject, encoding, offset) {
     // Treat array-ish objects as a byte array.
     if (isArrayIsh(subject)) {
       for (var i = 0; i < this.length; i++) {
-        this.parent[i + this.offset] = subject[i];
+        if (subject instanceof Buffer) {
+          this.parent[i + this.offset] = subject.readUInt8(i);
+        }
+        else {
+          this.parent[i + this.offset] = subject[i];
+        }
       }
     } else if (type == 'string') {
       // We are a string
