@@ -215,4 +215,12 @@ test("fill", function(t) {
     b2.fill(2);
     t.equal(b1.toString('hex'), b2.toString('hex'));
     t.end();
-})
+});
+
+test("[] indexes", function(t) {
+    t.plan(3);
+    var buf = new buffer.Buffer('abc');
+    t.equal(buf[0], 97);
+    t.equal(buf[1], 98);
+    t.equal(buf[2], 99);
+});
