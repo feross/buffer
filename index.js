@@ -1,5 +1,7 @@
 var assert = require('assert');
 exports.Buffer = Buffer;
+exports.SlowBuffer = Buffer;
+Buffer.poolSize = 8192;
 exports.INSPECT_MAX_BYTES = 50;
 
 function Buffer(subject, encoding, offset) {
