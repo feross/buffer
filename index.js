@@ -379,14 +379,19 @@ function Buffer(subject, encoding, offset) {
       for (var i = 0; i < this.length; i++) {
         if (subject instanceof Buffer) {
           this.parent[i + this.offset] = subject.readUInt8(i);
+          this[i] = subject.readUInt8(i);
         }
         else {
           this.parent[i + this.offset] = subject[i];
+          this[i] = subject[i];
         }
       }
     } else if (type == 'string') {
       // We are a string
       this.length = this.write(subject, 0, encoding);
+      for (var i = 0; i < this.length; i++) {
+        this[i] = this.parent[i];
+      }
     }
   }
 
