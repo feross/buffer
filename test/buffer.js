@@ -216,19 +216,3 @@ test("fill", function(t) {
     t.equal(b1.toString('hex'), b2.toString('hex'));
     t.end();
 });
-
-test("indexes from a string", function(t) {
-    t.plan(3);
-    var buf = new buffer.Buffer('abc');
-    t.equal(buf[0], 97);
-    t.equal(buf[1], 98);
-    t.equal(buf[2], 99);
-});
-
-test("indexes from an array", function(t) {
-    t.plan(3);
-    var buf = new buffer.Buffer([ 97, 98, 99 ]);
-    t.equal(buf[0], 97);
-    t.equal(buf[1], 98);
-    t.equal(buf[2], 99);
-});
