@@ -306,12 +306,31 @@ Buffer.prototype.copy = function(target, targetstart, sourcestart, sourceend) {
   }
 };
 
-Buffer.prototype.fill = function(value, start, end) {
-  if (end > this.length) {
-    throw new Error('oob');
+// fill(value, start=0, end=buffer.length)
+Buffer.prototype.fill = function fill(value, start, end) {
+  value || (value = 0);
+  start || (start = 0);
+  end || (end = this.length);
+
+  if (typeof value === 'string') {
+    value = value.charCodeAt(0);
   }
-  if (start > end) {
-    throw new Error('oob');
+  if (!(typeof value === 'number') || isNaN(value)) {
+    throw new Error('value is not a number');
+  }
+
+  if (end < start) throw new Error('end < start');
+
+  // Fill 0 bytes; we're done
+  if (end === start) return 0;
+  if (this.length == 0) return 0;
+
+  if (start < 0 || start >= this.length) {
+    throw new Error('start out of bounds');
+  }
+
+  if (end < 0 || end > this.length) {
+    throw new Error('end out of bounds');
   }
 
   for (var i = start; i < end; i++) {
