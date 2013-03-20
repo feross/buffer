@@ -7,6 +7,7 @@ function Buffer(subject, encoding, offset) {
     return new Buffer(subject, encoding, offset);
   }
   this.parent = this;
+  this.offset = 0;
 
   var type;
 
@@ -57,12 +58,12 @@ function Buffer(subject, encoding, offset) {
 
 Buffer.prototype.get = function get(i) {
   if (i < 0 || i >= this.length) throw new Error('oob');
-  return this[this.offset + i];
+  return this[i];
 };
 
 Buffer.prototype.set = function set(i, v) {
   if (i < 0 || i >= this.length) throw new Error('oob');
-  return this[this.offset + i] = v;
+  return this[i] = v;
 };
 
 Buffer.byteLength = function (str, encoding) {
@@ -494,7 +495,7 @@ Buffer.prototype.readUInt8 = function(offset, noAssert) {
 
   if (offset >= buffer.length) return;
 
-  return buffer.parent[buffer.offset + offset];
+  return buffer[buffer.offset + offset];
 };
 
 function readUInt16(buffer, offset, isBigEndian, noAssert) {
@@ -515,14 +516,14 @@ function readUInt16(buffer, offset, isBigEndian, noAssert) {
   if (offset >= buffer.length) return 0;
 
   if (isBigEndian) {
-    val = buffer.parent[buffer.offset + offset] << 8;
+    val = buffer[buffer.offset + offset] << 8;
     if (offset + 1 < buffer.length) {
-      val |= buffer.parent[buffer.offset + offset + 1];
+      val |= buffer[buffer.offset + offset + 1];
     }
   } else {
-    val = buffer.parent[buffer.offset + offset];
+    val = buffer[buffer.offset + offset];
     if (offset + 1 < buffer.length) {
-      val |= buffer.parent[buffer.offset + offset + 1] << 8;
+      val |= buffer[buffer.offset + offset + 1] << 8;
     }
   }
 
@@ -555,20 +556,20 @@ function readUInt32(buffer, offset, isBigEndian, noAssert) {
 
   if (isBigEndian) {
     if (offset + 1 < buffer.length)
-      val = buffer.parent[buffer.offset + offset + 1] << 16;
+      val = buffer[buffer.offset + offset + 1] << 16;
     if (offset + 2 < buffer.length)
-      val |= buffer.parent[buffer.offset + offset + 2] << 8;
+      val |= buffer[buffer.offset + offset + 2] << 8;
     if (offset + 3 < buffer.length)
-      val |= buffer.parent[buffer.offset + offset + 3];
-    val = val + (buffer.parent[buffer.offset + offset] << 24 >>> 0);
+      val |= buffer[buffer.offset + offset + 3];
+    val = val + (buffer[buffer.offset + offset] << 24 >>> 0);
   } else {
     if (offset + 2 < buffer.length)
-      val = buffer.parent[buffer.offset + offset + 2] << 16;
+      val = buffer[buffer.offset + offset + 2] << 16;
     if (offset + 1 < buffer.length)
-      val |= buffer.parent[buffer.offset + offset + 1] << 8;
-    val |= buffer.parent[buffer.offset + offset];
+      val |= buffer[buffer.offset + offset + 1] << 8;
+    val |= buffer[buffer.offset + offset];
     if (offset + 3 < buffer.length)
-      val = val + (buffer.parent[buffer.offset + offset + 3] << 24 >>> 0);
+      val = val + (buffer[buffer.offset + offset + 3] << 24 >>> 0);
   }
 
   return val;
@@ -642,12 +643,12 @@ Buffer.prototype.readInt8 = function(offset, noAssert) {
 
   if (offset >= buffer.length) return;
 
-  neg = buffer.parent[buffer.offset + offset] & 0x80;
+  neg = buffer[buffer.offset + offset] & 0x80;
   if (!neg) {
-    return (buffer.parent[buffer.offset + offset]);
+    return (buffer[buffer.offset + offset]);
   }
 
-  return ((0xff - buffer.parent[buffer.offset + offset] + 1) * -1);
+  return ((0xff - buffer[buffer.offset + offset] + 1) * -1);
 };
 
 function readInt16(buffer, offset, isBigEndian, noAssert) {
@@ -793,7 +794,7 @@ Buffer.prototype.writeUInt8 = function(value, offset, noAssert) {
   }
 
   if (offset < buffer.length) {
-    buffer.parent[buffer.offset + offset] = value;
+    buffer[buffer.offset + offset] = value;
   }
 };
 
@@ -815,7 +816,7 @@ function writeUInt16(buffer, value, offset, isBigEndian, noAssert) {
   }
 
   for (var i = 0; i < Math.min(buffer.length - offset, 2); i++) {
-    buffer.parent[buffer.offset + offset + i] =
+    buffer[buffer.offset + offset + i] =
         (value & (0xff << (8 * (isBigEndian ? 1 - i : i)))) >>>
             (isBigEndian ? 1 - i : i) * 8;
   }
@@ -848,7 +849,7 @@ function writeUInt32(buffer, value, offset, isBigEndian, noAssert) {
   }
 
   for (var i = 0; i < Math.min(buffer.length - offset, 4); i++) {
-    buffer.parent[buffer.offset + offset + i] =
+    buffer[buffer.offset + offset + i] =
         (value >>> (isBigEndian ? 3 - i : i) * 8) & 0xff;
   }
 }
