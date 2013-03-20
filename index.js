@@ -6,6 +6,7 @@ function Buffer(subject, encoding, offset) {
   if (!(this instanceof Buffer)) {
     return new Buffer(subject, encoding, offset);
   }
+  this.parent = this;
 
   var type;
 
@@ -46,6 +47,10 @@ function Buffer(subject, encoding, offset) {
     } else if (type == 'string') {
       // We are a string
       this.length = this.write(subject, 0, encoding);
+    } else if (type === 'number') {
+      for (var i = 0; i < this.length; i++) {
+        this[i] = 0;
+      }
     }
   }
 }
