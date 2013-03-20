@@ -1,9 +1,8 @@
-exports.Buffer = SlowBuffer;
-var Buffer = SlowBuffer;
+exports.Buffer = Buffer;
 
-function SlowBuffer(subject, encoding, offset) {
-  if (!(this instanceof SlowBuffer)) {
-    return new SlowBuffer(subject, encoding, offset);
+function Buffer(subject, encoding, offset) {
+  if (!(this instanceof Buffer)) {
+    return new Buffer(subject, encoding, offset);
   }
 
   var type;
@@ -20,7 +19,7 @@ function SlowBuffer(subject, encoding, offset) {
         break;
 
       case 'string':
-        this.length = SlowBuffer.byteLength(subject, encoding);
+        this.length = Buffer.byteLength(subject, encoding);
         break;
 
       case 'object': // Assume object is an array
@@ -35,7 +34,7 @@ function SlowBuffer(subject, encoding, offset) {
     // Treat array-ish objects as a byte array.
     if (isArrayIsh(subject)) {
       for (var i = 0; i < this.length; i++) {
-        if (subject instanceof SlowBuffer) {
+        if (subject instanceof Buffer) {
           this[i] = subject.readUInt8(i);
         }
         else {
@@ -86,7 +85,7 @@ function base64ToBytes(str) {
   return require("base64-js").toByteArray(str);
 }
 
-SlowBuffer.byteLength = function (str, encoding) {
+Buffer.byteLength = function (str, encoding) {
   switch (encoding || "utf8") {
     case 'hex':
       return str.length / 2;
@@ -119,24 +118,24 @@ function blitBuffer(src, dst, offset, length) {
   return i;
 }
 
-SlowBuffer.prototype.utf8Write = function (string, offset, length) {
+Buffer.prototype.utf8Write = function (string, offset, length) {
   var bytes, pos;
-  return SlowBuffer._charsWritten =  blitBuffer(utf8ToBytes(string), this, offset, length);
+  return Buffer._charsWritten =  blitBuffer(utf8ToBytes(string), this, offset, length);
 };
 
-SlowBuffer.prototype.asciiWrite = function (string, offset, length) {
+Buffer.prototype.asciiWrite = function (string, offset, length) {
   var bytes, pos;
-  return SlowBuffer._charsWritten =  blitBuffer(asciiToBytes(string), this, offset, length);
+  return Buffer._charsWritten =  blitBuffer(asciiToBytes(string), this, offset, length);
 };
 
-SlowBuffer.prototype.binaryWrite = SlowBuffer.prototype.asciiWrite;
+Buffer.prototype.binaryWrite = Buffer.prototype.asciiWrite;
 
-SlowBuffer.prototype.base64Write = function (string, offset, length) {
+Buffer.prototype.base64Write = function (string, offset, length) {
   var bytes, pos;
-  return SlowBuffer._charsWritten = blitBuffer(base64ToBytes(string), this, offset, length);
+  return Buffer._charsWritten = blitBuffer(base64ToBytes(string), this, offset, length);
 };
 
-SlowBuffer.prototype.base64Slice = function (start, end) {
+Buffer.prototype.base64Slice = function (start, end) {
   var bytes = Array.prototype.slice.apply(this, arguments)
   return require("base64-js").fromByteArray(bytes);
 }
@@ -149,7 +148,7 @@ function decodeUtf8Char(str) {
   }
 }
 
-SlowBuffer.prototype.utf8Slice = function () {
+Buffer.prototype.utf8Slice = function () {
   var bytes = Array.prototype.slice.apply(this, arguments);
   var res = "";
   var tmp = "";
@@ -167,7 +166,7 @@ SlowBuffer.prototype.utf8Slice = function () {
   return res + decodeUtf8Char(tmp);
 }
 
-SlowBuffer.prototype.asciiSlice = function () {
+Buffer.prototype.asciiSlice = function () {
   var bytes = Array.prototype.slice.apply(this, arguments);
   var ret = "";
   for (var i = 0; i < bytes.length; i++)
@@ -175,9 +174,9 @@ SlowBuffer.prototype.asciiSlice = function () {
   return ret;
 }
 
-SlowBuffer.prototype.binarySlice = SlowBuffer.prototype.asciiSlice;
+Buffer.prototype.binarySlice = Buffer.prototype.asciiSlice;
 
-SlowBuffer.prototype.inspect = function() {
+Buffer.prototype.inspect = function() {
   var out = [],
       len = this.length;
   for (var i = 0; i < len; i++) {
@@ -187,11 +186,11 @@ SlowBuffer.prototype.inspect = function() {
       break;
     }
   }
-  return '<SlowBuffer ' + out.join(' ') + '>';
+  return '<Buffer ' + out.join(' ') + '>';
 };
 
 
-SlowBuffer.prototype.hexSlice = function(start, end) {
+Buffer.prototype.hexSlice = function(start, end) {
   var len = this.length;
 
   if (!start || start < 0) start = 0;
@@ -205,7 +204,7 @@ SlowBuffer.prototype.hexSlice = function(start, end) {
 };
 
 
-SlowBuffer.prototype.toString = function(encoding, start, end) {
+Buffer.prototype.toString = function(encoding, start, end) {
   encoding = String(encoding || 'utf8').toLowerCase();
   start = +start || 0;
   if (typeof end == 'undefined') end = this.length;
@@ -242,7 +241,7 @@ SlowBuffer.prototype.toString = function(encoding, start, end) {
 };
 
 
-SlowBuffer.prototype.hexWrite = function(string, offset, length) {
+Buffer.prototype.hexWrite = function(string, offset, length) {
   offset = +offset || 0;
   var remaining = this.length - offset;
   if (!length) {
@@ -267,12 +266,12 @@ SlowBuffer.prototype.hexWrite = function(string, offset, length) {
     if (isNaN(byte)) throw new Error('Invalid hex string');
     this[offset + i] = byte;
   }
-  SlowBuffer._charsWritten = i * 2;
+  Buffer._charsWritten = i * 2;
   return i;
 };
 
 
-SlowBuffer.prototype.write = function(string, offset, length, encoding) {
+Buffer.prototype.write = function(string, offset, length, encoding) {
   // Support both (string, offset, length, encoding)
   // and the legacy (string, encoding, offset, length)
   if (isFinite(offset)) {
@@ -327,7 +326,7 @@ SlowBuffer.prototype.write = function(string, offset, length, encoding) {
 
 
 // slice(start, end)
-SlowBuffer.prototype.slice = function(start, end) {
+Buffer.prototype.slice = function(start, end) {
   if (end === undefined) end = this.length;
 
   if (end > this.length) {
@@ -340,7 +339,7 @@ SlowBuffer.prototype.slice = function(start, end) {
   return new Buffer(this, end - start, +start);
 };
 
-SlowBuffer.prototype.copy = function(target, targetstart, sourcestart, sourceend) {
+Buffer.prototype.copy = function(target, targetstart, sourcestart, sourceend) {
   var temp = [];
   for (var i=sourcestart; i<sourceend; i++) {
     assert.ok(typeof this[i] !== 'undefined', "copying undefined buffer bytes!");
@@ -352,7 +351,7 @@ SlowBuffer.prototype.copy = function(target, targetstart, sourcestart, sourceend
   }
 };
 
-SlowBuffer.prototype.fill = function(value, start, end) {
+Buffer.prototype.fill = function(value, start, end) {
   if (end > this.length) {
     throw new Error('oob');
   }
@@ -367,7 +366,7 @@ SlowBuffer.prototype.fill = function(value, start, end) {
 
 // Static methods
 Buffer.isBuffer = function isBuffer(b) {
-  return b instanceof Buffer || b instanceof SlowBuffer;
+  return b instanceof Buffer || b instanceof Buffer;
 };
 
 Buffer.concat = function (list, totalLength) {
