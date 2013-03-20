@@ -1,4 +1,4 @@
-var B = require('../index.js').Buffer;
+var B = require('../').Buffer;
 var test = require('tap').test;
 
 test('indexes from a string', function(t) {
