@@ -1,5 +1,5 @@
 var buffer = require('../index.js');
-var test = require('tap').test;
+var test = require('tape');
 
 test('utf8 buffer to base64', function (t) {
     t.plan(1);

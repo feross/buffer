@@ -1,5 +1,5 @@
 var B = require('../').Buffer;
-var test = require('tap').test;
+var test = require('tape');
 
 test('indexes from a string', function(t) {
     t.plan(3);
