@@ -11,11 +11,23 @@
         "base64-js" : "0.0.2"
     },
     "devDependencies" : {
-        "tap"        : "0.2.x"
+        "tape" : "~0.3.0",
+        "tap" : "~0.4.0"
     },
     "repository" : {
         "type" : "git",
         "url" : "http://github.com/toots/buffer-browserify.git"
+    },
+    "testling" : {
+        "files" : "test/*.js",
+        "browsers" : [
+            "ie/6..latest",
+            "chrome/20..latest",
+            "firefox/10..latest",
+            "safari/latest",
+            "opera/11.0..latest",
+            "iphone/6", "ipad/6"
+        ]
     },
     "keywords" : [
         "buffer",
@@ -29,7 +41,7 @@
         "email" : "toots@rastageeks.org"
     },
     "scripts" : {
-        "test" : "node node_modules/tap/bin/tap.js test/*.js"
+        "test" : "tap test/*.js"
     },
     "license" : "MIT/X11",
     "engine" : { "node" : ">=0.6" }
