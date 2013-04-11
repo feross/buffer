@@ -223,3 +223,12 @@ test("fill", function(t) {
     t.equal(b.toString('hex'), '02020202020202020202');
     t.end();
 });
+
+test('copy() empty buffer with sourceEnd=0', function (t) {
+    t.plan(1);
+    var source = new B([42]);
+    var destination = new B([43]);
+    source.copy(destination, 0, 0, 0);
+    t.equal(destination.readUInt8(0), 43);
+    t.end();
+});
