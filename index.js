@@ -306,7 +306,9 @@ Buffer.prototype.slice = function(start, end) {
 Buffer.prototype.copy = function(target, target_start, start, end) {
   var source = this;
   start || (start = 0);
-  end || (end = this.length);
+  if (end === undefined || isNaN(end)) {
+    end = this.length;
+  }
   target_start || (target_start = 0);
 
   if (end < start) throw new Error('sourceEnd < sourceStart');
