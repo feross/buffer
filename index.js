@@ -1,10 +1,11 @@
-var assert = require('assert');
+var assert;
 exports.Buffer = Buffer;
 exports.SlowBuffer = Buffer;
 Buffer.poolSize = 8192;
 exports.INSPECT_MAX_BYTES = 50;
 
 function Buffer(subject, encoding, offset) {
+  if(!assert) assert== require('assert');
   if (!(this instanceof Buffer)) {
     return new Buffer(subject, encoding, offset);
   }
