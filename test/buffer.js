@@ -232,3 +232,11 @@ test('copy() empty buffer with sourceEnd=0', function (t) {
     t.equal(destination.readUInt8(0), 43);
     t.end();
 });
+
+test('base64 ignore whitespace', function(t) {
+  t.plan(1);
+  var text = "\n   YW9ldQ==  ";
+  var buf = new B(text, 'base64');
+  t.equal(buf.toString(), 'aoeu');
+  t.end();
+});
