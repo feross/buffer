@@ -470,7 +470,7 @@ function asciiToBytes(str) {
 }
 
 function base64ToBytes(str) {
-  return require("base64-js").toByteArray(str);
+  return require("base64-js").toByteArray(str.trim());
 }
 
 function blitBuffer(src, dst, offset, length) {
