@@ -17,7 +17,11 @@ function Buffer(subject, encoding, offset) {
   // Are we slicing?
   if (typeof offset === 'number') {
     this.length = coerce(encoding);
-    this.offset = offset;
+    // slicing works, with limitations (no parent tracking/update)
+    // check https://github.com/toots/buffer-browserify/issues/19
+    for (var i = 0; i < this.length; i++) {
+        this[i] = subject.get(i+offset);
+    }
   } else {
     // Find the length
     switch (type = typeof subject) {
