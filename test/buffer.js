@@ -240,3 +240,9 @@ test('base64 ignore whitespace', function(t) {
   t.equal(buf.toString(), 'aoeu');
   t.end();
 });
+
+test('buffer.slice sets indexes', function (t) {
+  t.plan(1);
+  t.equal((new B('hallo')).slice(0, 5).toString(), 'hallo');
+  t.end();
+});
