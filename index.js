@@ -493,8 +493,13 @@ function asciiToBytes(str) {
   return byteArray;
 }
 
+function stringtrim(str) {
+  if (str.trim) return str.trim();
+  return str.replace(/^\s+|\s+$/g, '');
+}
+
 function base64ToBytes(str) {
-  return require("base64-js").toByteArray(str.trim());
+  return require("base64-js").toByteArray(stringtrim(str));
 }
 
 function blitBuffer(src, dst, offset, length) {
