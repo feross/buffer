@@ -246,3 +246,10 @@ test('buffer.slice sets indexes', function (t) {
   t.equal((new B('hallo')).slice(0, 5).toString(), 'hallo');
   t.end();
 });
+
+test('buffer.slice out of range', function (t) {
+  t.plan(2);
+  t.equal((new B('hallo')).slice(0, 10).toString(), 'hallo');
+  t.equal((new B('hallo')).slice(10, 2).toString(), '');
+  t.end();
+});

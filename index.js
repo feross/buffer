@@ -292,18 +292,21 @@ Buffer.prototype.write = function(string, offset, length, encoding) {
   }
 };
 
-
 // slice(start, end)
+function clamp(index, len, defaultValue) {
+  if (typeof index !== 'number') return defaultValue;
+  index = ~~index;  // Coerce to integer.
+  if (index >= len) return len;
+  if (index >= 0) return index;
+  index += len;
+  if (index >= 0) return index;
+  return 0;
+}
+
 Buffer.prototype.slice = function(start, end) {
-  if (end === undefined) end = this.length;
-
-  if (end > this.length) {
-    throw new Error('oob');
-  }
-  if (start > end) {
-    throw new Error('oob');
-  }
-
+  var len = this.length;
+  start = clamp(start, len, 0);
+  end = clamp(end, len, len);
   return new Buffer(this, end - start, +start);
 };
 
