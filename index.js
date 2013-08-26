@@ -4,6 +4,11 @@ exports.SlowBuffer = Buffer;
 Buffer.poolSize = 8192;
 exports.INSPECT_MAX_BYTES = 50;
 
+function stringtrim(str) {
+  if (str.trim) return str.trim();
+  return str.replace(/^\s+|\s+$/g, '');
+}
+
 function Buffer(subject, encoding, offset) {
   if(!assert) assert= require('assert');
   if (!(this instanceof Buffer)) {
@@ -11,6 +16,16 @@ function Buffer(subject, encoding, offset) {
   }
   this.parent = this;
   this.offset = 0;
+
+  // Work-around: node's base64 implementation
+  // allows for non-padded strings while base64-js
+  // does not..
+  if (encoding == "base64" && typeof subject == "string") {
+    subject = stringtrim(subject);
+    while (subject.length % 4 != 0) {
+      subject = subject + "="; 
+    }
+  }
 
   var type;
 
@@ -496,13 +511,8 @@ function asciiToBytes(str) {
   return byteArray;
 }
 
-function stringtrim(str) {
-  if (str.trim) return str.trim();
-  return str.replace(/^\s+|\s+$/g, '');
-}
-
 function base64ToBytes(str) {
-  return require("base64-js").toByteArray(stringtrim(str));
+  return require("base64-js").toByteArray(str);
 }
 
 function blitBuffer(src, dst, offset, length) {
