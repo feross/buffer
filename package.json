@@ -1,6 +1,6 @@
 {
     "name" : "buffer-browserify",
-    "version" : "0.2.1",
+    "version" : "0.2.2",
     "description" : "buffer module compatibility for browserify",
     "main" : "index.js",
     "browserify" : "index.js",
