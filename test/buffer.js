@@ -253,3 +253,9 @@ test('buffer.slice out of range', function (t) {
   t.equal((new B('hallo')).slice(10, 2).toString(), '');
   t.end();
 });
+
+test('base64 strings without padding', function (t) {
+  t.plan(1);
+  t.equal((new B('YW9ldQ', 'base64').toString()), 'aoeu');
+  t.end(); 
+});
