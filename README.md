@@ -1,4 +1,4 @@
-buffer-browserify
+buffer-browserify-fast
 ===============
 
 The buffer module from [node.js](http://nodejs.org/),

@@ -1,48 +1,55 @@
 {
-    "name" : "buffer-browserify",
-    "version" : "0.2.2",
-    "description" : "buffer module compatibility for browserify",
-    "main" : "index.js",
-    "browserify" : "index.js",
-    "directories" : {
-        "test" : "test"
-    },
-    "dependencies" : {
-        "base64-js" : "0.0.2"
-    },
-    "devDependencies" : {
-        "tape" : "~2.1.0",
-        "tap" : "~0.4.4"
-    },
-    "repository" : {
-        "type" : "git",
-        "url" : "http://github.com/toots/buffer-browserify.git"
-    },
-    "testling" : {
-        "files" : "test/*.js",
-        "browsers" : [
-            "ie/6..latest",
-            "chrome/20..latest",
-            "firefox/10..latest",
-            "safari/latest",
-            "opera/11.0..latest",
-            "iphone/6", "ipad/6"
-        ]
-    },
-    "keywords" : [
-        "buffer",
-        "browserify",
-        "compatible",
-        "meatless",
-        "browser"
-    ],
-    "author" : {
-        "name" : "Romain Beauxis",
-        "email" : "toots@rastageeks.org"
-    },
-    "scripts" : {
-        "test" : "tape test/*.js"
-    },
-    "license" : "MIT/X11",
-    "engine" : { "node" : ">=0.6" }
+  "name": "buffer-browserify-fast",
+  "version": "0.3.0",
+  "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
+  "main": "index.js",
+  "browserify": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "base64-js": "0.0.4",
+    "buffer-browserify": "~0.2.2"
+  },
+  "devDependencies": {
+    "tape": "~2.1.0",
+    "tap": "~0.4.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/feross/buffer-browserify-fast.git"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/20..latest",
+      "firefox/10..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6"
+    ]
+  },
+  "keywords": [
+    "buffer",
+    "browserify",
+    "compatible",
+    "meatless",
+    "browser",
+    "arraybuffer",
+    "uint8array",
+    "dataview"
+  ],
+  "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
+  "contributors": [
+    "Romain Beauxis <toots@rastageeks.org>"
+  ],
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "license": "MIT/X11",
+  "engine": {
+    "node": ">=0.6"
+  }
 }
