@@ -257,5 +257,5 @@ test('buffer.slice out of range', function (t) {
 test('base64 strings without padding', function (t) {
   t.plan(1);
   t.equal((new B('YW9ldQ', 'base64').toString()), 'aoeu');
-  t.end(); 
+  t.end();
 });

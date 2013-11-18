@@ -41,7 +41,7 @@
         "email" : "toots@rastageeks.org"
     },
     "scripts" : {
-        "test" : "tap test/*.js"
+        "test" : "tape test/*.js"
     },
     "license" : "MIT/X11",
     "engine" : { "node" : ">=0.6" }
