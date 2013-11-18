@@ -1,14 +1,13 @@
-buffer-browserify-fast
+native-buffer-browserify
 ===============
 
-The buffer module from [node.js](http://nodejs.org/), but for browsers.
+The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
 When you `require('buffer')` in
 [browserify](http://github.com/substack/node-browserify),
 this module will be loaded.
 
 It will also be loaded if you use the global `Buffer` variable.
-
 
 ## Features
 

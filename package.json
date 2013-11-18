@@ -1,12 +1,8 @@
 {
-  "name": "buffer-browserify-fast",
+  "name": "native-buffer-browserify",
   "version": "0.3.0",
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
-  "browserify": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "dependencies": {
     "base64-js": "0.0.4",
     "buffer-browserify": "~0.2.2"
@@ -19,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/feross/buffer-browserify-fast.git"
+    "url": "git://github.com/feross/native-buffer-browserify.git"
   },
   "testling": {
     "files": "test/*.js",
@@ -50,7 +46,7 @@
   "scripts": {
     "test": "tape test/*.js"
   },
-  "license": "MIT/X11",
+  "license": "MIT",
   "engine": {
     "node": ">=0.6"
   }
