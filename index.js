@@ -546,7 +546,7 @@ function BufferReadDoubleBE (offset, noAssert) {
 function BufferWriteUInt8 (value, offset, noAssert) {
   var buf = this
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
+    assert.ok(value !== undefined && value !== null, 'missing value')
     assert.ok(offset !== undefined && offset !== null, 'missing offset')
     assert.ok(offset < buf.length, 'trying to write beyond buffer length')
     verifuint(value, 0xff)
@@ -593,7 +593,7 @@ function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
     assert.ok(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
     assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'trying to write beyond buffer length')
+    assert.ok(offset + 3 < buf.length, 'trying to write beyond buffer length')
     verifuint(value, 0xffffffff)
   }
 
@@ -638,7 +638,7 @@ function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
     assert.ok(value !== undefined && value !== null, 'missing value')
     assert.ok(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
+    assert.ok(offset !== undefined && offset !== null, 'missing offset')
     assert.ok(offset + 1 < buf.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7fff, -0x8000)
   }
@@ -669,7 +669,7 @@ function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
     assert.ok(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
     assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'Trying to write beyond buffer length')
+    assert.ok(offset + 3 < buf.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7fffffff, -0x80000000)
   }
 
@@ -822,55 +822,45 @@ function stringtrim (str) {
 }
 
 function augment (arr) {
-  if (arr._isBuffer) return arr // do not augment an Uint8Array twice
-
   // Augment the Uint8Array *instance* (not the class!) with Buffer methods
   arr.write = BufferWrite
 
   arr.toString = BufferToString
   arr.toLocaleString = BufferToString
   arr.toJSON = BufferToJSON
-
   arr.copy = BufferCopy
   arr.slice = BufferSlice
-
   arr.readUInt8 = BufferReadUInt8
   arr.readUInt16LE = BufferReadUInt16LE
   arr.readUInt16BE = BufferReadUInt16BE
   arr.readUInt32LE = BufferReadUInt32LE
   arr.readUInt32BE = BufferReadUInt32BE
-
   arr.readInt8 = BufferReadInt8
   arr.readInt16LE = BufferReadInt16LE
   arr.readInt16BE = BufferReadInt16BE
   arr.readInt32LE = BufferReadInt32LE
   arr.readInt32BE = BufferReadInt32BE
-
   arr.readFloatLE = BufferReadFloatLE
   arr.readFloatBE = BufferReadFloatBE
   arr.readDoubleLE = BufferReadDoubleLE
   arr.readDoubleBE = BufferReadDoubleBE
-
   arr.writeUInt8 = BufferWriteUInt8
   arr.writeUInt16LE = BufferWriteUInt16LE
   arr.writeUInt16BE = BufferWriteUInt16BE
   arr.writeUInt32LE = BufferWriteUInt32LE
   arr.writeUInt32BE = BufferWriteUInt32BE
-
   arr.writeInt8 = BufferWriteInt8
   arr.writeInt16LE = BufferWriteInt16LE
   arr.writeInt16BE = BufferWriteInt16BE
   arr.writeInt32LE = BufferWriteInt32LE
   arr.writeInt32BE = BufferWriteInt32BE
-
   arr.writeFloatLE = BufferWriteFloatLE
   arr.writeFloatBE = BufferWriteFloatBE
   arr.writeDoubleLE = BufferWriteDoubleLE
   arr.writeDoubleBE = BufferWriteDoubleBE
-
   arr.fill = BufferFill
   arr.inspect = BufferInspect
-  arr.toArrayBuffer = BufferToArrayBuffer // Node 0.12
+  arr.toArrayBuffer = BufferToArrayBuffer
 
   // Private
   arr._isBuffer = true
