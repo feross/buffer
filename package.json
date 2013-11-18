@@ -11,8 +11,8 @@
         "base64-js" : "0.0.2"
     },
     "devDependencies" : {
-        "tape" : "~0.3.0",
-        "tap" : "~0.4.0"
+        "tape" : "~2.1.0",
+        "tap" : "~0.4.4"
     },
     "repository" : {
         "type" : "git",
