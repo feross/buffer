@@ -268,7 +268,10 @@ function BufferToString (encoding, start, end) {
 }
 
 function BufferToJSON () {
-  return Array.prototype.slice.call(this, 0)
+  return {
+    type: 'Buffer',
+    data: Array.prototype.slice.call(this, 0)
+  }
 }
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
