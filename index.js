@@ -865,7 +865,6 @@ function augment (arr) {
   arr.inspect = BufferInspect
   arr.toArrayBuffer = BufferToArrayBuffer
 
-  // Private
   arr._isBuffer = true
 
   if (arr.byteLength !== 0)
@@ -962,14 +961,10 @@ function decodeUtf8Char (str) {
  *      max             The maximum value
  */
 function verifuint (value, max) {
-  assert.ok(typeof (value) == 'number',
-      'cannot write a non-number as a number')
-
+  assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
   assert.ok(value >= 0,
       'specified a negative value for writing an unsigned value')
-
   assert.ok(value <= max, 'value is larger than maximum value for type')
-
   assert.ok(Math.floor(value) === value, 'value has a fractional component')
 }
 
@@ -978,18 +973,13 @@ function verifuint (value, max) {
  */
 function verifsint(value, max, min) {
   assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
-
   assert.ok(value <= max, 'value larger than maximum allowed value')
-
   assert.ok(value >= min, 'value smaller than minimum allowed value')
-
   assert.ok(Math.floor(value) === value, 'value has a fractional component')
 }
 
 function verifIEEE754(value, max, min) {
   assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
-
   assert.ok(value <= max, 'value larger than maximum allowed value')
-
   assert.ok(value >= min, 'value smaller than minimum allowed value')
 }
