@@ -1,6 +1,6 @@
 {
   "name": "native-buffer-browserify",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
   "dependencies": {
