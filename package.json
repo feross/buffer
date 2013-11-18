@@ -4,12 +4,10 @@
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
   "dependencies": {
-    "base64-js": "0.0.4",
-    "buffer-browserify": "~0.2.2"
+    "base64-js": "0.0.4"
   },
   "devDependencies": {
     "tape": "~2.1.0",
-    "tap": "~0.4.4",
     "benchmark": "~1.0.0",
     "browserify": "~2.35.4"
   },

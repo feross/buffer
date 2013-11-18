@@ -1,15 +1,9 @@
 var assert
 
-if (typeof Uint8Array === 'function') {
-  // Modern browser!
-  exports.Buffer = Buffer
-  exports.SlowBuffer = Buffer
-  exports.INSPECT_MAX_BYTES = 50
-  Buffer.poolSize = 8192
-} else {
-  // Old browser :(
-  module.exports = require('buffer-browserify')
-}
+exports.Buffer = Buffer
+exports.SlowBuffer = Buffer
+exports.INSPECT_MAX_BYTES = 50
+Buffer.poolSize = 8192
 
 // TODO: throw the correct exception type on errors (look at node source)
 

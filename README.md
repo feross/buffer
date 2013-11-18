@@ -18,7 +18,7 @@ It will also be loaded if you use the global `Buffer` variable.
 - Square-bracket `buf[4]` notation works!
 - Does not modify any browser prototypes.
 - All tests from the original `buffer-browserify` project pass.
-- Works in browsers **without** `Uint8Array` support (IE9 and below)
+- Requires browsers to have `Uint8Array` support (IE9 and up)
 
 
 ## How does it work?
