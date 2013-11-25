@@ -1,12 +1,26 @@
-var assert
-
 exports.Buffer = Buffer
 exports.SlowBuffer = Buffer
 exports.INSPECT_MAX_BYTES = 50
 Buffer.poolSize = 8192
 
-// TODO: throw the correct exception type on errors (look at node source)
+var assert
+var browserSupport
 
+/**
+ * Class: Buffer
+ * =============
+ *
+ * The Buffer constructor returns instances of `Uint8Array` that are augmented
+ * with function properties for all the node `Buffer` API functions. We use
+ * `Uint8Array` so that square bracket notation works as expected -- it returns
+ * a single octet.
+ *
+ * By augmenting the instances, we can avoid modifying the `Uint8Array`
+ * prototype.
+ *
+ * Firefox is a special case because it doesn't allow augmenting "native" object
+ * instances. See `ProxyBuffer` below for more details.
+ */
 function Buffer (subject, encoding) {
   if (!assert) assert = require('assert')
 
@@ -73,7 +87,7 @@ Buffer.isEncoding = function(encoding) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return b instanceof Uint8Array && b._isBuffer
+  return b && b._isBuffer
 }
 
 Buffer.byteLength = function (str, encoding) {
@@ -231,11 +245,15 @@ function BufferWrite (string, offset, length, encoding) {
 }
 
 function BufferToString (encoding, start, end) {
+  var self = (this instanceof ProxyBuffer)
+    ? this._proxy
+    : this
+
   encoding = String(encoding || 'utf8').toLowerCase()
   start = Number(start) || 0
   end = (end !== undefined)
     ? Number(end)
-    : end = this.length
+    : end = self.length
 
   // Fastpath empty strings
   if (end === start)
@@ -243,20 +261,20 @@ function BufferToString (encoding, start, end) {
 
   switch (encoding) {
     case 'hex':
-      return _hexSlice(this, start, end)
+      return _hexSlice(self, start, end)
 
     case 'utf8':
     case 'utf-8':
-      return _utf8Slice(this, start, end)
+      return _utf8Slice(self, start, end)
 
     case 'ascii':
-      return _asciiSlice(this, start, end)
+      return _asciiSlice(self, start, end)
 
     case 'binary':
-      return _binarySlice(this, start, end)
+      return _binarySlice(self, start, end)
 
     case 'base64':
-      return _base64Slice(this, start, end)
+      return _base64Slice(self, start, end)
 
     default:
       throw new Error('Unknown encoding')
@@ -820,52 +838,173 @@ function stringtrim (str) {
   return str.replace(/^\s+|\s+$/g, '')
 }
 
-function augment (arr) {
-  // Augment the Uint8Array *instance* (not the class!) with Buffer methods
-  arr.write = BufferWrite
-  arr.toString = BufferToString
-  arr.toLocaleString = BufferToString
-  arr.toJSON = BufferToJSON
-  arr.copy = BufferCopy
-  arr.slice = BufferSlice
-  arr.readUInt8 = BufferReadUInt8
-  arr.readUInt16LE = BufferReadUInt16LE
-  arr.readUInt16BE = BufferReadUInt16BE
-  arr.readUInt32LE = BufferReadUInt32LE
-  arr.readUInt32BE = BufferReadUInt32BE
-  arr.readInt8 = BufferReadInt8
-  arr.readInt16LE = BufferReadInt16LE
-  arr.readInt16BE = BufferReadInt16BE
-  arr.readInt32LE = BufferReadInt32LE
-  arr.readInt32BE = BufferReadInt32BE
-  arr.readFloatLE = BufferReadFloatLE
-  arr.readFloatBE = BufferReadFloatBE
-  arr.readDoubleLE = BufferReadDoubleLE
-  arr.readDoubleBE = BufferReadDoubleBE
-  arr.writeUInt8 = BufferWriteUInt8
-  arr.writeUInt16LE = BufferWriteUInt16LE
-  arr.writeUInt16BE = BufferWriteUInt16BE
-  arr.writeUInt32LE = BufferWriteUInt32LE
-  arr.writeUInt32BE = BufferWriteUInt32BE
-  arr.writeInt8 = BufferWriteInt8
-  arr.writeInt16LE = BufferWriteInt16LE
-  arr.writeInt16BE = BufferWriteInt16BE
-  arr.writeInt32LE = BufferWriteInt32LE
-  arr.writeInt32BE = BufferWriteInt32BE
-  arr.writeFloatLE = BufferWriteFloatLE
-  arr.writeFloatBE = BufferWriteFloatBE
-  arr.writeDoubleLE = BufferWriteDoubleLE
-  arr.writeDoubleBE = BufferWriteDoubleBE
-  arr.fill = BufferFill
-  arr.inspect = BufferInspect
-  arr.toArrayBuffer = BufferToArrayBuffer
+/**
+ * Check to see if the browser supports augmenting a `Uint8Array` instance.
+ * @return {boolean}
+ */
+function _browserSupport () {
+  var arr = new Uint8Array(0)
+  arr.foo = function () { return 42 }
 
-  arr._isBuffer = true
+  try {
+    return (42 === arr.foo())
+  } catch (e) {
+    return false
+  }
+}
+
+/**
+ * Class: ProxyBuffer
+ * ==================
+ *
+ * Only used in Firefox, since Firefox does not allow augmenting "native"
+ * objects (like Uint8Array instances) with new properties for some unknown
+ * (probably silly) reason. So we'll use an ES6 Proxy (supported since
+ * Firefox 18) to wrap the Uint8Array instance without actually adding any
+ * properties to it.
+ *
+ * Instances of this "fake" Buffer class are the "target" of the
+ * ES6 Proxy (see `augment` function).
+ *
+ * We couldn't just use the `Uint8Array` as the target of the `Proxy` because
+ * Proxies have an important limitation on trapping the `toString` method.
+ * `Object.prototype.toString.call(proxy)` gets called whenever something is
+ * implicitly cast to a String. Unfortunately, with a `Proxy` this
+ * unconditionally returns `Object.prototype.toString.call(target)` which would
+ * always return "[object Uint8Array]" if we used the `Uint8Array` instance as
+ * the target. And, remember, in Firefox we cannot redefine the `Uint8Array`
+ * instance's `toString` method.
+ *
+ * So, we use this `ProxyBuffer` class as the proxy's "target". Since this class
+ * has its own custom `toString` method, it will get called whenever `toString`
+ * gets called, implicitly or explicitly, on the `Proxy` instance.
+ *
+ * We also have to define the Uint8Array methods `subarray` and `set` on
+ * `ProxyBuffer` because if we didn't then `proxy.subarray(0)` would have its
+ * `this` set to `proxy` (a `Proxy` instance) which throws an exception in
+ * Firefox which expects it to be a `TypedArray` instance.
+ */
+function ProxyBuffer (arr) {
+  this._arr = arr
 
   if (arr.byteLength !== 0)
-    arr._dataview = new DataView(arr.buffer, arr.byteOffset, arr.byteLength)
+    this._dataview = new DataView(arr.buffer, arr.byteOffset, arr.byteLength)
+}
 
-  return arr
+ProxyBuffer.prototype.write = BufferWrite
+ProxyBuffer.prototype.toString = BufferToString
+ProxyBuffer.prototype.toLocaleString = BufferToString
+ProxyBuffer.prototype.toJSON = BufferToJSON
+ProxyBuffer.prototype.copy = BufferCopy
+ProxyBuffer.prototype.slice = BufferSlice
+ProxyBuffer.prototype.readUInt8 = BufferReadUInt8
+ProxyBuffer.prototype.readUInt16LE = BufferReadUInt16LE
+ProxyBuffer.prototype.readUInt16BE = BufferReadUInt16BE
+ProxyBuffer.prototype.readUInt32LE = BufferReadUInt32LE
+ProxyBuffer.prototype.readUInt32BE = BufferReadUInt32BE
+ProxyBuffer.prototype.readInt8 = BufferReadInt8
+ProxyBuffer.prototype.readInt16LE = BufferReadInt16LE
+ProxyBuffer.prototype.readInt16BE = BufferReadInt16BE
+ProxyBuffer.prototype.readInt32LE = BufferReadInt32LE
+ProxyBuffer.prototype.readInt32BE = BufferReadInt32BE
+ProxyBuffer.prototype.readFloatLE = BufferReadFloatLE
+ProxyBuffer.prototype.readFloatBE = BufferReadFloatBE
+ProxyBuffer.prototype.readDoubleLE = BufferReadDoubleLE
+ProxyBuffer.prototype.readDoubleBE = BufferReadDoubleBE
+ProxyBuffer.prototype.writeUInt8 = BufferWriteUInt8
+ProxyBuffer.prototype.writeUInt16LE = BufferWriteUInt16LE
+ProxyBuffer.prototype.writeUInt16BE = BufferWriteUInt16BE
+ProxyBuffer.prototype.writeUInt32LE = BufferWriteUInt32LE
+ProxyBuffer.prototype.writeUInt32BE = BufferWriteUInt32BE
+ProxyBuffer.prototype.writeInt8 = BufferWriteInt8
+ProxyBuffer.prototype.writeInt16LE = BufferWriteInt16LE
+ProxyBuffer.prototype.writeInt16BE = BufferWriteInt16BE
+ProxyBuffer.prototype.writeInt32LE = BufferWriteInt32LE
+ProxyBuffer.prototype.writeInt32BE = BufferWriteInt32BE
+ProxyBuffer.prototype.writeFloatLE = BufferWriteFloatLE
+ProxyBuffer.prototype.writeFloatBE = BufferWriteFloatBE
+ProxyBuffer.prototype.writeDoubleLE = BufferWriteDoubleLE
+ProxyBuffer.prototype.writeDoubleBE = BufferWriteDoubleBE
+ProxyBuffer.prototype.fill = BufferFill
+ProxyBuffer.prototype.inspect = BufferInspect
+ProxyBuffer.prototype.toArrayBuffer = BufferToArrayBuffer
+ProxyBuffer.prototype._isBuffer = true
+ProxyBuffer.prototype.subarray = function () {
+  return this._arr.subarray.apply(this._arr, arguments)
+}
+ProxyBuffer.prototype.set = function () {
+  return this._arr.set.apply(this._arr, arguments)
+}
+
+var ProxyHandler = {
+  get: function (target, name) {
+    if (name in target) return target[name]
+    else return target._arr[name]
+  },
+  set: function (target, name, value) {
+    target._arr[name] = value
+  }
+}
+
+function augment (arr) {
+  if (browserSupport === undefined) {
+    browserSupport = _browserSupport()
+  }
+
+  if (browserSupport) {
+    // Augment the Uint8Array *instance* (not the class!) with Buffer methods
+    arr.write = BufferWrite
+    arr.toString = BufferToString
+    arr.toLocaleString = BufferToString
+    arr.toJSON = BufferToJSON
+    arr.copy = BufferCopy
+    arr.slice = BufferSlice
+    arr.readUInt8 = BufferReadUInt8
+    arr.readUInt16LE = BufferReadUInt16LE
+    arr.readUInt16BE = BufferReadUInt16BE
+    arr.readUInt32LE = BufferReadUInt32LE
+    arr.readUInt32BE = BufferReadUInt32BE
+    arr.readInt8 = BufferReadInt8
+    arr.readInt16LE = BufferReadInt16LE
+    arr.readInt16BE = BufferReadInt16BE
+    arr.readInt32LE = BufferReadInt32LE
+    arr.readInt32BE = BufferReadInt32BE
+    arr.readFloatLE = BufferReadFloatLE
+    arr.readFloatBE = BufferReadFloatBE
+    arr.readDoubleLE = BufferReadDoubleLE
+    arr.readDoubleBE = BufferReadDoubleBE
+    arr.writeUInt8 = BufferWriteUInt8
+    arr.writeUInt16LE = BufferWriteUInt16LE
+    arr.writeUInt16BE = BufferWriteUInt16BE
+    arr.writeUInt32LE = BufferWriteUInt32LE
+    arr.writeUInt32BE = BufferWriteUInt32BE
+    arr.writeInt8 = BufferWriteInt8
+    arr.writeInt16LE = BufferWriteInt16LE
+    arr.writeInt16BE = BufferWriteInt16BE
+    arr.writeInt32LE = BufferWriteInt32LE
+    arr.writeInt32BE = BufferWriteInt32BE
+    arr.writeFloatLE = BufferWriteFloatLE
+    arr.writeFloatBE = BufferWriteFloatBE
+    arr.writeDoubleLE = BufferWriteDoubleLE
+    arr.writeDoubleBE = BufferWriteDoubleBE
+    arr.fill = BufferFill
+    arr.inspect = BufferInspect
+    arr.toArrayBuffer = BufferToArrayBuffer
+    arr._isBuffer = true
+
+    if (arr.byteLength !== 0)
+      arr._dataview = new DataView(arr.buffer, arr.byteOffset, arr.byteLength)
+
+    return arr
+
+  } else {
+    // This is a browser that doesn't support augmenting the `Uint8Array`
+    // instance (*ahem* Firefox) so use an ES6 `Proxy`.
+    var proxyBuffer = new ProxyBuffer(arr)
+    var proxy = new Proxy(proxyBuffer, ProxyHandler)
+    proxyBuffer._proxy = proxy
+    return proxy
+  }
 }
 
 // slice(start, end)
