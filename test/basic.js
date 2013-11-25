@@ -38,7 +38,7 @@ test('buffer toJSON()', function (t) {
     var data = [1, 2, 3, 4]
     t.deepEqual(
       new B(data).toJSON(),
-      new Buffer(data).toJSON()
+      { type: 'Buffer', data: [1,2,3,4] }
     )
     t.end()
 })
