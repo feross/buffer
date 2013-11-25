@@ -233,7 +233,9 @@ function BufferWrite (string, offset, length, encoding) {
 function BufferToString (encoding, start, end) {
   encoding = String(encoding || 'utf8').toLowerCase()
   start = Number(start) || 0
-  end = Number(end) || this.length
+  end = (end !== undefined)
+    ? Number(end)
+    : end = this.length
 
   // Fastpath empty strings
   if (end === start)
