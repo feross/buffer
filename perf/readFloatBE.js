@@ -1,7 +1,7 @@
 var benchmark = require('benchmark')
 var suite = new benchmark.Suite()
 
-global.NewBuffer = require('../').Buffer // buffer-browserify-fast
+global.NewBuffer = require('../').Buffer // native-buffer-browserify
 global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
 
 var LENGTH = 10

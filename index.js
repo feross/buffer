@@ -818,7 +818,6 @@ function stringtrim (str) {
 function augment (arr) {
   // Augment the Uint8Array *instance* (not the class!) with Buffer methods
   arr.write = BufferWrite
-
   arr.toString = BufferToString
   arr.toLocaleString = BufferToString
   arr.toJSON = BufferToJSON
