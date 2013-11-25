@@ -18,7 +18,7 @@ It will also be loaded if you use the global `Buffer` variable.
 - Square-bracket `buf[4]` notation works!
 - Does not modify any browser prototypes.
 - All tests from the original `buffer-browserify` project pass.
-- Requires browsers to have `Uint8Array` support (IE9 and up)
+- Requires browsers to have `Uint8Array` and `DataView` support (all modern browsers, IE10+)
 
 
 ## How does it work?
@@ -27,7 +27,6 @@ The `Buffer` constructor returns instances of `Uint8Array` that are augmented wi
 
 By augmenting the instances, we can avoid modifying the Uint8Array prototype.
 
-For browsers that don't support `Uint8Array`, we fallback to the (old) `buffer-browserify`.
 
 
 ## Performance
