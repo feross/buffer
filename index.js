@@ -24,31 +24,42 @@ var browserSupport
 function Buffer (subject, encoding) {
   if (!assert) assert = require('assert')
 
+  var type = typeof subject
+  var length
+  var buf
+
   // Work-around: node's base64 implementation
   // allows for non-padded strings while base64-js
   // does not..
-  if (encoding == "base64" && typeof subject == "string") {
+  if (encoding === 'base64' && type === 'string') {
     subject = stringtrim(subject)
     while (subject.length % 4 !== 0) {
-      subject = subject + "="
+      subject = subject + '='
     }
   }
 
   // Find the length
-  var type = typeof subject
-  var length
   if (type === 'number')
     length = coerce(subject)
   else if (type === 'string')
     length = Buffer.byteLength(subject, encoding)
   else if (type === 'object')
-    length = coerce(subject.length); // Assume object is an array
+    length = coerce(subject.length) // Assume object is an array
   else
     throw new Error('First argument needs to be a number, array or string.')
 
-  var buf = augment(new Uint8Array(length))
+  if (subject instanceof ArrayBuffer) {
+    // API Addition: do something reasonable with an ArrayBuffer. Use it as
+    // backing buffer for the Uint8Array.
+    buf = augment(new Uint8Array(subject))
+  } else {
+    buf = augment(new Uint8Array(length))
+  }
 
-  if (isArrayIsh(subject)) {
+  if (subject instanceof Uint8Array) {
+    // Speed optimization -- use set if we're copying from a Uint8Array
+    buf.set(subject, 0)
+  } else if (isArrayIsh(subject)) {
     // Treat array-ish objects as a byte array.
     for (var i = 0; i < length; i++) {
       if (Buffer.isBuffer(subject))
@@ -56,7 +67,7 @@ function Buffer (subject, encoding) {
       else
         buf[i] = subject[i]
     }
-  } else if (type == 'string') {
+  } else if (type === 'string') {
     buf.write(subject, 0, encoding)
   }
 
@@ -91,7 +102,7 @@ Buffer.isBuffer = function isBuffer (b) {
 }
 
 Buffer.byteLength = function (str, encoding) {
-  switch (encoding || "utf8") {
+  switch (encoding || 'utf8') {
     case 'hex':
       return str.length / 2
 
@@ -815,7 +826,7 @@ function BufferInspect () {
   var len = this.length
   for (var i = 0; i < len; i++) {
     out[i] = toHex(this[i])
-    if (i == exports.INSPECT_MAX_BYTES) {
+    if (i === exports.INSPECT_MAX_BYTES) {
       out[i + 1] = '...'
       break
     }
@@ -823,7 +834,7 @@ function BufferInspect () {
   return '<Buffer ' + out.join(' ') + '>'
 }
 
-// Creates a new `ArrayBuffer` with the copied memory of the buffer instance.
+// Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
 // Added in Node 0.12.
 function BufferToArrayBuffer () {
   return (new Buffer(this)).buffer
@@ -1081,7 +1092,7 @@ function decodeUtf8Char (str) {
   try {
     return decodeURIComponent(str)
   } catch (err) {
-    return String.fromCharCode(0xFFFD); // UTF 8 invalid char
+    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
   }
 }
 
