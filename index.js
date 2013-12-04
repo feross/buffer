@@ -53,9 +53,9 @@ function Buffer (subject, encoding) {
     buf = augment(new Uint8Array(length))
   }
 
-  if (subject instanceof Uint8Array) {
+  if (Buffer.isBuffer(subject)) {
     // Speed optimization -- use set if we're copying from a Uint8Array
-    buf.set(subject, 0)
+    buf.set(subject)
   } else if (isArrayIsh(subject)) {
     // Treat array-ish objects as a byte array.
     for (var i = 0; i < length; i++) {
