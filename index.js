@@ -3,7 +3,6 @@ exports.SlowBuffer = Buffer
 exports.INSPECT_MAX_BYTES = 50
 Buffer.poolSize = 8192
 
-var assert
 var browserSupport
 
 /**
@@ -22,8 +21,6 @@ var browserSupport
  * instances. See `ProxyBuffer` below for more details.
  */
 function Buffer (subject, encoding) {
-  if (!assert) assert = require('assert')
-
   var type = typeof subject
   var length
   var buf
@@ -394,8 +391,8 @@ function BufferSlice (start, end) {
 function BufferReadUInt8 (offset, noAssert) {
   var buf = this
   if (!noAssert) {
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset < buf.length, 'Trying to read beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset < buf.length, 'Trying to read beyond buffer length')
   }
 
   if (offset >= buf.length)
@@ -406,10 +403,10 @@ function BufferReadUInt8 (offset, noAssert) {
 
 function _readUInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 1 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 1 < buf.length, 'Trying to read beyond buffer length')
   }
 
   var len = buf.length
@@ -434,10 +431,10 @@ function BufferReadUInt16BE (offset, noAssert) {
 
 function _readUInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
   }
 
   var len = buf.length
@@ -465,9 +462,9 @@ function BufferReadUInt32BE (offset, noAssert) {
 function BufferReadInt8 (offset, noAssert) {
   var buf = this
   if (!noAssert) {
-    assert.ok(offset !== undefined && offset !== null,
+    assert(offset !== undefined && offset !== null,
         'missing offset')
-    assert.ok(offset < buf.length, 'Trying to read beyond buffer length')
+    assert(offset < buf.length, 'Trying to read beyond buffer length')
   }
 
   if (offset >= buf.length)
@@ -478,11 +475,11 @@ function BufferReadInt8 (offset, noAssert) {
 
 function _readInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null,
+    assert(offset !== undefined && offset !== null,
         'missing offset')
-    assert.ok(offset + 1 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset + 1 < buf.length, 'Trying to read beyond buffer length')
   }
 
   var len = buf.length
@@ -507,10 +504,10 @@ function BufferReadInt16BE (offset, noAssert) {
 
 function _readInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
   }
 
   var len = buf.length
@@ -537,9 +534,9 @@ function BufferReadInt32BE (offset, noAssert) {
 
 function _readFloat (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset + 3 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
   }
 
   return buf._dataview.getFloat32(offset, littleEndian)
@@ -555,9 +552,9 @@ function BufferReadFloatBE (offset, noAssert) {
 
 function _readDouble (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset + 7 < buf.length, 'Trying to read beyond buffer length')
+    assert(offset + 7 < buf.length, 'Trying to read beyond buffer length')
   }
 
   return buf._dataview.getFloat64(offset, littleEndian)
@@ -574,9 +571,9 @@ function BufferReadDoubleBE (offset, noAssert) {
 function BufferWriteUInt8 (value, offset, noAssert) {
   var buf = this
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset < buf.length, 'trying to write beyond buffer length')
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset < buf.length, 'trying to write beyond buffer length')
     verifuint(value, 0xff)
   }
 
@@ -587,11 +584,11 @@ function BufferWriteUInt8 (value, offset, noAssert) {
 
 function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 1 < buf.length, 'trying to write beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 1 < buf.length, 'trying to write beyond buffer length')
     verifuint(value, 0xffff)
   }
 
@@ -617,11 +614,11 @@ function BufferWriteUInt16BE (value, offset, noAssert) {
 
 function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'trying to write beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 3 < buf.length, 'trying to write beyond buffer length')
     verifuint(value, 0xffffffff)
   }
 
@@ -650,9 +647,9 @@ function BufferWriteUInt32BE (value, offset, noAssert) {
 function BufferWriteInt8 (value, offset, noAssert) {
   var buf = this
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset < buf.length, 'Trying to write beyond buffer length')
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset < buf.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7f, -0x80)
   }
 
@@ -663,11 +660,11 @@ function BufferWriteInt8 (value, offset, noAssert) {
 
 function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 1 < buf.length, 'Trying to write beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 1 < buf.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7fff, -0x8000)
   }
 
@@ -693,11 +690,11 @@ function BufferWriteInt16BE (value, offset, noAssert) {
 
 function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'Trying to write beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 3 < buf.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7fffffff, -0x80000000)
   }
 
@@ -725,11 +722,11 @@ function BufferWriteInt32BE (value, offset, noAssert) {
 
 function _writeFloat (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 3 < buf.length, 'Trying to write beyond buffer length')
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 3 < buf.length, 'Trying to write beyond buffer length')
     verifIEEE754(value, 3.4028234663852886e+38, -3.4028234663852886e+38)
   }
 
@@ -757,11 +754,11 @@ function BufferWriteFloatBE (value, offset, noAssert) {
 
 function _writeDouble (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
-    assert.ok(value !== undefined && value !== null, 'missing value')
-    assert.ok(typeof (littleEndian) === 'boolean',
+    assert(value !== undefined && value !== null, 'missing value')
+    assert(typeof (littleEndian) === 'boolean',
         'missing or invalid endian')
-    assert.ok(offset !== undefined && offset !== null, 'missing offset')
-    assert.ok(offset + 7 < buf.length,
+    assert(offset !== undefined && offset !== null, 'missing offset')
+    assert(offset + 7 < buf.length,
         'Trying to write beyond buffer length')
     verifIEEE754(value, 1.7976931348623157E+308, -1.7976931348623157E+308)
   }
@@ -1106,25 +1103,29 @@ function decodeUtf8Char (str) {
  *      max             The maximum value
  */
 function verifuint (value, max) {
-  assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
-  assert.ok(value >= 0,
+  assert(typeof (value) == 'number', 'cannot write a non-number as a number')
+  assert(value >= 0,
       'specified a negative value for writing an unsigned value')
-  assert.ok(value <= max, 'value is larger than maximum value for type')
-  assert.ok(Math.floor(value) === value, 'value has a fractional component')
+  assert(value <= max, 'value is larger than maximum value for type')
+  assert(Math.floor(value) === value, 'value has a fractional component')
 }
 
 /*
  * A series of checks to make sure we actually have a signed 32-bit number
  */
 function verifsint(value, max, min) {
-  assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
-  assert.ok(value <= max, 'value larger than maximum allowed value')
-  assert.ok(value >= min, 'value smaller than minimum allowed value')
-  assert.ok(Math.floor(value) === value, 'value has a fractional component')
+  assert(typeof (value) == 'number', 'cannot write a non-number as a number')
+  assert(value <= max, 'value larger than maximum allowed value')
+  assert(value >= min, 'value smaller than minimum allowed value')
+  assert(Math.floor(value) === value, 'value has a fractional component')
 }
 
 function verifIEEE754(value, max, min) {
-  assert.ok(typeof (value) == 'number', 'cannot write a non-number as a number')
-  assert.ok(value <= max, 'value larger than maximum allowed value')
-  assert.ok(value >= min, 'value smaller than minimum allowed value')
+  assert(typeof (value) == 'number', 'cannot write a non-number as a number')
+  assert(value <= max, 'value larger than maximum allowed value')
+  assert(value >= min, 'value smaller than minimum allowed value')
+}
+
+function assert (test, message) {
+  if (!test) throw new Error(message || 'Failed assertion')
 }
