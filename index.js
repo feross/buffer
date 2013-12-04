@@ -22,8 +22,6 @@ var browserSupport
  */
 function Buffer (subject, encoding) {
   var type = typeof subject
-  var length
-  var buf
 
   // Work-around: node's base64 implementation
   // allows for non-padded strings while base64-js
@@ -36,6 +34,7 @@ function Buffer (subject, encoding) {
   }
 
   // Find the length
+  var length
   if (type === 'number')
     length = coerce(subject)
   else if (type === 'string')
@@ -45,14 +44,7 @@ function Buffer (subject, encoding) {
   else
     throw new Error('First argument needs to be a number, array or string.')
 
-  if (subject instanceof ArrayBuffer) {
-    // API Addition: do something reasonable with an ArrayBuffer. Use it as
-    // backing buffer for the Uint8Array.
-    buf = augment(new Uint8Array(subject))
-  } else {
-    buf = augment(new Uint8Array(length))
-  }
-
+  var buf = augment(new Uint8Array(length))
   if (Buffer.isBuffer(subject)) {
     // Speed optimization -- use set if we're copying from a Uint8Array
     buf.set(subject)
