@@ -27,8 +27,8 @@ test('buffer toArrayBuffer()', function (t) {
     t.plan(1)
     var data = [1, 2, 3, 4, 5, 6, 7, 8]
     t.equal(
-        arraybufferToString(new B(data).slice(4).toArrayBuffer()),
-        arraybufferToString(new Uint8Array(new Uint8Array(data).subarray(4)).buffer)
+        arraybufferToString(new B(data).toArrayBuffer()),
+        arraybufferToString(new Uint8Array(data).buffer)
     )
     t.end()
 })
