@@ -122,6 +122,6 @@ Buffer#writeFloatBE x 1,811,134 ops/sec ±0.67% (91 runs sampled)
 Fastest is Buffer#writeFloatBE
 ```
 
-## License
+## MIT License
 
-MIT
+Copyright (C) 2013 [Feross Aboukhadijeh](http://feross.org), Romain Beauxis, and other contributors.
