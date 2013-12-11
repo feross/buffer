@@ -899,49 +899,51 @@ function ProxyBuffer (arr) {
     this._dataview = new xDataView(arr.buffer, arr.byteOffset, arr.byteLength)
 }
 
-ProxyBuffer.prototype.write = BufferWrite
-ProxyBuffer.prototype.toString = BufferToString
-ProxyBuffer.prototype.toLocaleString = BufferToString
-ProxyBuffer.prototype.toJSON = BufferToJSON
-ProxyBuffer.prototype.copy = BufferCopy
-ProxyBuffer.prototype.slice = BufferSlice
-ProxyBuffer.prototype.readUInt8 = BufferReadUInt8
-ProxyBuffer.prototype.readUInt16LE = BufferReadUInt16LE
-ProxyBuffer.prototype.readUInt16BE = BufferReadUInt16BE
-ProxyBuffer.prototype.readUInt32LE = BufferReadUInt32LE
-ProxyBuffer.prototype.readUInt32BE = BufferReadUInt32BE
-ProxyBuffer.prototype.readInt8 = BufferReadInt8
-ProxyBuffer.prototype.readInt16LE = BufferReadInt16LE
-ProxyBuffer.prototype.readInt16BE = BufferReadInt16BE
-ProxyBuffer.prototype.readInt32LE = BufferReadInt32LE
-ProxyBuffer.prototype.readInt32BE = BufferReadInt32BE
-ProxyBuffer.prototype.readFloatLE = BufferReadFloatLE
-ProxyBuffer.prototype.readFloatBE = BufferReadFloatBE
-ProxyBuffer.prototype.readDoubleLE = BufferReadDoubleLE
-ProxyBuffer.prototype.readDoubleBE = BufferReadDoubleBE
-ProxyBuffer.prototype.writeUInt8 = BufferWriteUInt8
-ProxyBuffer.prototype.writeUInt16LE = BufferWriteUInt16LE
-ProxyBuffer.prototype.writeUInt16BE = BufferWriteUInt16BE
-ProxyBuffer.prototype.writeUInt32LE = BufferWriteUInt32LE
-ProxyBuffer.prototype.writeUInt32BE = BufferWriteUInt32BE
-ProxyBuffer.prototype.writeInt8 = BufferWriteInt8
-ProxyBuffer.prototype.writeInt16LE = BufferWriteInt16LE
-ProxyBuffer.prototype.writeInt16BE = BufferWriteInt16BE
-ProxyBuffer.prototype.writeInt32LE = BufferWriteInt32LE
-ProxyBuffer.prototype.writeInt32BE = BufferWriteInt32BE
-ProxyBuffer.prototype.writeFloatLE = BufferWriteFloatLE
-ProxyBuffer.prototype.writeFloatBE = BufferWriteFloatBE
-ProxyBuffer.prototype.writeDoubleLE = BufferWriteDoubleLE
-ProxyBuffer.prototype.writeDoubleBE = BufferWriteDoubleBE
-ProxyBuffer.prototype.fill = BufferFill
-ProxyBuffer.prototype.inspect = BufferInspect
-ProxyBuffer.prototype.toArrayBuffer = BufferToArrayBuffer
-ProxyBuffer.prototype._isBuffer = true
-ProxyBuffer.prototype.subarray = function () {
-  return this._arr.subarray.apply(this._arr, arguments)
-}
-ProxyBuffer.prototype.set = function () {
-  return this._arr.set.apply(this._arr, arguments)
+ProxyBuffer.prototype = {
+  _isBuffer: true,
+  write: BufferWrite,
+  toString: BufferToString,
+  toLocaleString: BufferToString,
+  toJSON: BufferToJSON,
+  copy: BufferCopy,
+  slice: BufferSlice,
+  readUInt8: BufferReadUInt8,
+  readUInt16LE: BufferReadUInt16LE,
+  readUInt16BE: BufferReadUInt16BE,
+  readUInt32LE: BufferReadUInt32LE,
+  readUInt32BE: BufferReadUInt32BE,
+  readInt8: BufferReadInt8,
+  readInt16LE: BufferReadInt16LE,
+  readInt16BE: BufferReadInt16BE,
+  readInt32LE: BufferReadInt32LE,
+  readInt32BE: BufferReadInt32BE,
+  readFloatLE: BufferReadFloatLE,
+  readFloatBE: BufferReadFloatBE,
+  readDoubleLE: BufferReadDoubleLE,
+  readDoubleBE: BufferReadDoubleBE,
+  writeUInt8: BufferWriteUInt8,
+  writeUInt16LE: BufferWriteUInt16LE,
+  writeUInt16BE: BufferWriteUInt16BE,
+  writeUInt32LE: BufferWriteUInt32LE,
+  writeUInt32BE: BufferWriteUInt32BE,
+  writeInt8: BufferWriteInt8,
+  writeInt16LE: BufferWriteInt16LE,
+  writeInt16BE: BufferWriteInt16BE,
+  writeInt32LE: BufferWriteInt32LE,
+  writeInt32BE: BufferWriteInt32BE,
+  writeFloatLE: BufferWriteFloatLE,
+  writeFloatBE: BufferWriteFloatBE,
+  writeDoubleLE: BufferWriteDoubleLE,
+  writeDoubleBE: BufferWriteDoubleBE,
+  fill: BufferFill,
+  inspect: BufferInspect,
+  toArrayBuffer: BufferToArrayBuffer,
+  subarray: function () {
+    return this._arr.subarray.apply(this._arr, arguments)
+  },
+  set: function () {
+    return this._arr.set.apply(this._arr, arguments)
+  }
 }
 
 var ProxyHandler = {
