@@ -40,7 +40,8 @@
   ],
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "contributors": [
-    "Romain Beauxis <toots@rastageeks.org>"
+    "Romain Beauxis <toots@rastageeks.org>",
+    "James Halliday <mail@substack.net>"
   ],
   "scripts": {
     "test": "tape test/*.js"
