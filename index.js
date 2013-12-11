@@ -21,7 +21,7 @@ var xUint8Array = typeof Uint8Array === 'undefined'
  */
 var browserSupport = (function () {
   try {
-    var arr = new Uint8Array(0)
+    var arr = new xUint8Array(0)
     arr.foo = function () { return 42 }
     return 42 === arr.foo()
   } catch (e) {
@@ -34,7 +34,7 @@ var browserSupport = (function () {
  * since they don't support Proxy. Without that, it is not possible to augment
  * native Uint8Array instances in Firefox.
  */
-if (xUint8Array === Uint8Array && !browserSupport) {
+if (xUint8Array !== TA.Uint8Array && !browserSupport) {
   xDataView = TA.DataView
   xArrayBuffer = TA.ArrayBuffer
   xUint8Array = TA.Uint8Array
