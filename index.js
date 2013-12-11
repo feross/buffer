@@ -971,6 +971,8 @@ var ProxyHandler = {
 
 function augment (arr) {
   if (browserSupport) {
+    arr._isBuffer = true
+
     // Augment the Uint8Array *instance* (not the class!) with Buffer methods
     arr.write = BufferWrite
     arr.toString = BufferToString
@@ -1008,8 +1010,11 @@ function augment (arr) {
     arr.writeDoubleBE = BufferWriteDoubleBE
     arr.fill = BufferFill
     arr.inspect = BufferInspect
-    arr.toArrayBuffer = BufferToArrayBuffer
-    arr._isBuffer = true
+
+    // Only add `toArrayBuffer` if we're using an augmented native Uint8Array
+    if (xUint8Array !== TA.Uint8Array) {
+      arr.toArrayBuffer = BufferToArrayBuffer
+    }
 
     if (arr.byteLength !== 0)
       arr._dataview = new xDataView(arr.buffer, arr.byteOffset, arr.byteLength)
