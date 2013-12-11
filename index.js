@@ -1038,7 +1038,7 @@ function coerce (length) {
 
 function isArray (subject) {
   return (Array.isArray || function (subject) {
-    Object.toString.apply(subject) === '[object Array]'
+    Object.prototype.toString.call(subject) === '[object Array]'
   })(subject)
 }
 
