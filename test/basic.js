@@ -10,7 +10,7 @@ test('new buffer from array', function (t) {
     t.plan(1)
     t.equal(
         new B([1, 2, 3]).toString(),
-        new Buffer([1, 2, 3]).toString()
+        '\u0001\u0002\u0003'
     )
     t.end()
 })
@@ -19,7 +19,7 @@ test('new buffer from string', function (t) {
     t.plan(1)
     t.equal(
         new B('hey', 'utf8').toString(),
-        new Buffer('hey', 'utf8').toString()
+        'hey'
     )
     t.end()
 })
