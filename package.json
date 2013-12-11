@@ -5,12 +5,12 @@
   "main": "index.js",
   "dependencies": {
     "base64-js": "~0.0.4",
-    "typedarray": "~0.0.0"
+    "typedarray": "~0.0.1"
   },
   "devDependencies": {
-    "tape": "~2.1.0",
     "benchmark": "~1.0.0",
-    "browserify": "~3.0.0"
+    "browserify": "*",
+    "tape": "~2.1.0"
   },
   "repository": {
     "type": "git",
