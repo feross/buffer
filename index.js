@@ -152,8 +152,8 @@ Buffer.concat = function (list, totalLength) {
   return buffer
 }
 
-// INSTANCE METHODS
-// ================
+// BUFFER INSTANCE METHODS
+// =======================
 
 function _hexWrite (buf, string, offset, length) {
   offset = Number(offset) || 0
@@ -292,7 +292,7 @@ function BufferToString (encoding, start, end) {
 function BufferToJSON () {
   return {
     type: 'Buffer',
-    data: Array.prototype.slice.call(this, 0)
+    data: Array.prototype.slice.call(this._arr || this, 0)
   }
 }
 
