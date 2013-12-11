@@ -1,4 +1,14 @@
 var TA = require('typedarray')
+
+exports.Buffer = Buffer
+exports.SlowBuffer = Buffer
+exports.INSPECT_MAX_BYTES = 50
+Buffer.poolSize = 8192
+
+/**
+ * Use a shim for browsers that lack Typed Array support (< IE 9, < FF 3.6,
+ * < Chrome 6, < Safari 5, < Opera 11.5, < iOS 4.1).
+ */
 var xDataView = typeof DataView === 'undefined'
   ? TA.DataView : DataView
 var xArrayBuffer = typeof ArrayBuffer === 'undefined'
@@ -6,12 +16,30 @@ var xArrayBuffer = typeof ArrayBuffer === 'undefined'
 var xUint8Array = typeof Uint8Array === 'undefined'
   ? TA.Uint8Array : Uint8Array
 
-exports.Buffer = Buffer
-exports.SlowBuffer = Buffer
-exports.INSPECT_MAX_BYTES = 50
-Buffer.poolSize = 8192
+/**
+ * Check to see if the browser supports augmenting a `Uint8Array` instance.
+ */
+var browserSupport = (function () {
+  try {
+    var arr = new Uint8Array(0)
+    arr.foo = function () { return 42 }
+    return 42 === arr.foo()
+  } catch (e) {
+    return false
+  }
+})()
 
-var browserSupport
+/**
+ * Also use the shim in Firefox 4-17 (even though they have native Uint8Array),
+ * since they don't support Proxy. Without that, it is not possible to augment
+ * native Uint8Array instances in Firefox.
+ */
+if (xUint8Array === Uint8Array && !browserSupport) {
+  xDataView = TA.DataView
+  xArrayBuffer = TA.ArrayBuffer
+  xUint8Array = TA.Uint8Array
+  browserSupport = true
+}
 
 /**
  * Class: Buffer
@@ -847,21 +875,6 @@ function stringtrim (str) {
 }
 
 /**
- * Check to see if the browser supports augmenting a `Uint8Array` instance.
- * @return {boolean}
- */
-function _browserSupport () {
-  var arr = new xUint8Array(0)
-  arr.foo = function () { return 42 }
-
-  try {
-    return (42 === arr.foo())
-  } catch (e) {
-    return false
-  }
-}
-
-/**
  * Class: ProxyBuffer
  * ==================
  *
@@ -957,10 +970,6 @@ var ProxyHandler = {
 }
 
 function augment (arr) {
-  if (browserSupport === undefined) {
-    browserSupport = _browserSupport()
-  }
-
   if (browserSupport) {
     // Augment the Uint8Array *instance* (not the class!) with Buffer methods
     arr.write = BufferWrite
