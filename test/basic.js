@@ -1,5 +1,10 @@
 var B = require('../index.js').Buffer
 var test = require('tape')
+var TA = require('typedarray')
+var xUint16Array = typeof Uint16Array === 'undefined'
+  ? TA.Uint16Array : Uint16Array
+var xUint8Array = typeof Uint8Array === 'undefined'
+  ? TA.Uint8Array : Uint8Array
 
 test('new buffer from array', function (t) {
     t.plan(1)
@@ -20,7 +25,7 @@ test('new buffer from string', function (t) {
 })
 
 function arraybufferToString (arraybuffer) {
-  return String.fromCharCode.apply(null, new Uint16Array(arraybuffer))
+  return String.fromCharCode.apply(null, new xUint16Array(arraybuffer))
 }
 
 test('buffer toArrayBuffer()', function (t) {
@@ -28,7 +33,7 @@ test('buffer toArrayBuffer()', function (t) {
     var data = [1, 2, 3, 4, 5, 6, 7, 8]
     t.equal(
         arraybufferToString(new B(data).toArrayBuffer()),
-        arraybufferToString(new Uint8Array(data).buffer)
+        arraybufferToString(new xUint8Array(data).buffer)
     )
     t.end()
 })

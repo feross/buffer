@@ -1,3 +1,11 @@
+var TA = require('typedarray')
+var xDataView = typeof DataView === 'undefined'
+  ? TA.DataView : DataView
+var xArrayBuffer = typeof ArrayBuffer === 'undefined'
+  ? TA.ArrayBuffer : ArrayBuffer
+var xUint8Array = typeof Uint8Array === 'undefined'
+  ? TA.Uint8Array : Uint8Array
+
 exports.Buffer = Buffer
 exports.SlowBuffer = Buffer
 exports.INSPECT_MAX_BYTES = 50
@@ -44,7 +52,7 @@ function Buffer (subject, encoding) {
   else
     throw new Error('First argument needs to be a number, array or string.')
 
-  var buf = augment(new Uint8Array(length))
+  var buf = augment(new xUint8Array(length))
   if (Buffer.isBuffer(subject)) {
     // Speed optimization -- use set if we're copying from a Uint8Array
     buf.set(subject)
@@ -405,7 +413,7 @@ function _readUInt16 (buf, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 1 === len) {
-    var dv = new DataView(new ArrayBuffer(2))
+    var dv = new xDataView(new xArrayBuffer(2))
     dv.setUint8(0, buf[len - 1])
     return dv.getUint16(0, littleEndian)
   } else {
@@ -433,7 +441,7 @@ function _readUInt32 (buf, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 3 >= len) {
-    var dv = new DataView(new ArrayBuffer(4))
+    var dv = new xDataView(new xArrayBuffer(4))
     for (var i = 0; i + offset < len; i++) {
       dv.setUint8(i, buf[i + offset])
     }
@@ -478,7 +486,7 @@ function _readInt16 (buf, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 1 === len) {
-    var dv = new DataView(new ArrayBuffer(2))
+    var dv = new xDataView(new xArrayBuffer(2))
     dv.setUint8(0, buf[len - 1])
     return dv.getInt16(0, littleEndian)
   } else {
@@ -506,7 +514,7 @@ function _readInt32 (buf, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 3 >= len) {
-    var dv = new DataView(new ArrayBuffer(4))
+    var dv = new xDataView(new xArrayBuffer(4))
     for (var i = 0; i + offset < len; i++) {
       dv.setUint8(i, buf[i + offset])
     }
@@ -588,7 +596,7 @@ function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 1 === len) {
-    var dv = new DataView(new ArrayBuffer(2))
+    var dv = new xDataView(new xArrayBuffer(2))
     dv.setUint16(0, value, littleEndian)
     buf[offset] = dv.getUint8(0)
   } else {
@@ -618,7 +626,7 @@ function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 3 >= len) {
-    var dv = new DataView(new ArrayBuffer(4))
+    var dv = new xDataView(new xArrayBuffer(4))
     dv.setUint32(0, value, littleEndian)
     for (var i = 0; i + offset < len; i++) {
       buf[i + offset] = dv.getUint8(i)
@@ -664,7 +672,7 @@ function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 1 === len) {
-    var dv = new DataView(new ArrayBuffer(2))
+    var dv = new xDataView(new xArrayBuffer(2))
     dv.setInt16(0, value, littleEndian)
     buf[offset] = dv.getUint8(0)
   } else {
@@ -694,7 +702,7 @@ function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 3 >= len) {
-    var dv = new DataView(new ArrayBuffer(4))
+    var dv = new xDataView(new xArrayBuffer(4))
     dv.setInt32(0, value, littleEndian)
     for (var i = 0; i + offset < len; i++) {
       buf[i + offset] = dv.getUint8(i)
@@ -726,7 +734,7 @@ function _writeFloat (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 3 >= len) {
-    var dv = new DataView(new ArrayBuffer(4))
+    var dv = new xDataView(new xArrayBuffer(4))
     dv.setFloat32(0, value, littleEndian)
     for (var i = 0; i + offset < len; i++) {
       buf[i + offset] = dv.getUint8(i)
@@ -759,7 +767,7 @@ function _writeDouble (buf, value, offset, littleEndian, noAssert) {
   if (offset >= len) {
     return
   } else if (offset + 7 >= len) {
-    var dv = new DataView(new ArrayBuffer(8))
+    var dv = new xDataView(new xArrayBuffer(8))
     dv.setFloat64(0, value, littleEndian)
     for (var i = 0; i + offset < len; i++) {
       buf[i + offset] = dv.getUint8(i)
@@ -843,7 +851,7 @@ function stringtrim (str) {
  * @return {boolean}
  */
 function _browserSupport () {
-  var arr = new Uint8Array(0)
+  var arr = new xUint8Array(0)
   arr.foo = function () { return 42 }
 
   try {
@@ -888,7 +896,7 @@ function ProxyBuffer (arr) {
   this._arr = arr
 
   if (arr.byteLength !== 0)
-    this._dataview = new DataView(arr.buffer, arr.byteOffset, arr.byteLength)
+    this._dataview = new xDataView(arr.buffer, arr.byteOffset, arr.byteLength)
 }
 
 ProxyBuffer.prototype.write = BufferWrite
@@ -993,7 +1001,7 @@ function augment (arr) {
     arr._isBuffer = true
 
     if (arr.byteLength !== 0)
-      arr._dataview = new DataView(arr.buffer, arr.byteOffset, arr.byteLength)
+      arr._dataview = new xDataView(arr.buffer, arr.byteOffset, arr.byteLength)
 
     return arr
 
