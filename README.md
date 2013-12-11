@@ -1,14 +1,16 @@
 native-buffer-browserify
 ===============
 
-The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
+The buffer module from [node.js](http://nodejs.org/), but for browsers. This is
+a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
 [![build status](https://secure.travis-ci.org/feross/native-buffer-browserify.png)](http://travis-ci.org/feross/native-buffer-browserify)
+
 [![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
 
 When you `require('buffer')` in
-[browserify](http://github.com/substack/node-browserify),
-this module will be loaded.
+[browserify](http://github.com/substack/node-browserify), this module will be
+loaded.
 
 It will also be loaded if you use the global `Buffer` variable.
 
@@ -21,8 +23,8 @@ It will also be loaded if you use the global `Buffer` variable.
 - Square-bracket `buf[4]` notation works!
 - Does not modify any browser prototypes.
 - All tests from the original `buffer-browserify` project pass.
-- Requires browsers to have `Uint8Array` and `DataView` support (all modern browsers, IE10+)
-
+- Requires browsers to have `Uint8Array` and `DataView` support (all modern
+  browsers, IE10+, shim for older browsers included)
 
 ## How does it work?
 
