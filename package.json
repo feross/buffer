@@ -25,7 +25,8 @@
       "safari/5.1..latest",
       "opera/11.0..latest",
       "iphone/6",
-      "ipad/6"
+      "ipad/6",
+      "android-browser/4.2"
     ]
   },
   "keywords": [
