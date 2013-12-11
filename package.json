@@ -4,13 +4,13 @@
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
   "dependencies": {
-    "base64-js": "0.0.4",
+    "base64-js": "~0.0.4",
     "typedarray": "~0.0.0"
   },
   "devDependencies": {
     "tape": "~2.1.0",
     "benchmark": "~1.0.0",
-    "browserify": "~2.35.4"
+    "browserify": "~3.0.0"
   },
   "repository": {
     "type": "git",
@@ -32,7 +32,6 @@
     "buffer",
     "browserify",
     "compatible",
-    "meatless",
     "browser",
     "arraybuffer",
     "uint8array",
@@ -47,8 +46,5 @@
     "test": "tape test/*.js",
     "perf": "browserify --debug perf/concat.js > perf/bundle.js && open perf/index.html"
   },
-  "license": "MIT",
-  "engine": {
-    "node": ">=0.6"
-  }
+  "license": "MIT"
 }
