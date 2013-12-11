@@ -3,6 +3,9 @@ native-buffer-browserify
 
 The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
+[![build status](https://secure.travis-ci.org/feross/native-buffer-browserify.png)](http://travis-ci.org/feross/native-buffer-browserify)
+[![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
+
 When you `require('buffer')` in
 [browserify](http://github.com/substack/node-browserify),
 this module will be loaded.
