@@ -44,7 +44,8 @@
     "James Halliday <mail@substack.net>"
   ],
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "tape test/*.js",
+    "perf": "browserify --debug perf/concat.js > perf/bundle.js && open perf/index.html"
   },
   "license": "MIT",
   "engine": {
