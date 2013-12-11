@@ -120,7 +120,7 @@ Buffer.byteLength = function (str, encoding) {
 }
 
 Buffer.concat = function (list, totalLength) {
-  if (!Array.isArray(list)) {
+  if (!isArray(list)) {
     throw new Error('Usage: Buffer.concat(list, [totalLength])\n' +
         'list should be an Array.')
   }
@@ -1036,8 +1036,14 @@ function coerce (length) {
   return length < 0 ? 0 : length
 }
 
+function isArray (subject) {
+  return (Array.isArray || function (subject) {
+    Object.toString.apply(subject) === '[object Array]'
+  })(subject)
+}
+
 function isArrayIsh (subject) {
-  return Array.isArray(subject) || Buffer.isBuffer(subject) ||
+  return isArray(subject) || Buffer.isBuffer(subject) ||
       subject && typeof subject === 'object' &&
       typeof subject.length === 'number'
 }
