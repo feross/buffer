@@ -1,3 +1,11 @@
+var TA = require('typedarray')
+var xDataView = typeof DataView === 'undefined'
+  ? TA.DataView : DataView
+var xArrayBuffer = typeof ArrayBuffer === 'undefined'
+  ? TA.ArrayBuffer : ArrayBuffer
+var xUint8Array = typeof Uint8Array === 'undefined'
+  ? TA.Uint8Array : Uint8Array
+
 exports.Buffer = Buffer
 exports.SlowBuffer = Buffer
 exports.INSPECT_MAX_BYTES = 50
@@ -44,7 +52,7 @@ function Buffer (subject, encoding) {
   else
     throw new Error('First argument needs to be a number, array or string.')
 
-  var buf = augment(new Uint8Array(length))
+  var buf = augment(new xUint8Array(length))
   if (Buffer.isBuffer(subject)) {
     // Speed optimization -- use set if we're copying from a Uint8Array
     buf.set(subject)
@@ -843,7 +851,7 @@ function stringtrim (str) {
  * @return {boolean}
  */
 function _browserSupport () {
-  var arr = new Uint8Array(0)
+  var arr = new xUint8Array(0)
   arr.foo = function () { return 42 }
 
   try {
