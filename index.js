@@ -363,29 +363,28 @@ function _base64Slice (buf, start, end) {
 }
 
 function _utf8Slice (buf, start, end) {
-  var bytes = buf.slice(start, end)
   var res = ''
   var tmp = ''
-  var i = 0
-  while (i < bytes.length) {
-    if (bytes[i] <= 0x7F) {
-      res += decodeUtf8Char(tmp) + String.fromCharCode(bytes[i])
+  end = Math.min(buf.length, end);
+
+  for (var i = start; i < end; i++) {
+    if (buf[i] <= 0x7F) {
+      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
       tmp = ''
     } else {
-      tmp += '%' + bytes[i].toString(16)
+      tmp += '%' + buf[i].toString(16)
     }
-
-    i++
   }
 
   return res + decodeUtf8Char(tmp)
 }
 
 function _asciiSlice (buf, start, end) {
-  var bytes = buf.slice(start, end)
   var ret = ''
-  for (var i = 0; i < bytes.length; i++)
-    ret += String.fromCharCode(bytes[i])
+  end = Math.min(buf.length, end);
+
+  for (var i = start; i < end; i++)
+    ret += String.fromCharCode(buf[i])
   return ret
 }
 
