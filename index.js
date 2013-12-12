@@ -122,7 +122,7 @@ Buffer.isEncoding = function(encoding) {
   }
 }
 
-Buffer.isBuffer = function isBuffer (b) {
+Buffer.isBuffer = function (b) {
   return b && b._isBuffer
 }
 
