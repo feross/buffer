@@ -365,7 +365,7 @@ function _base64Slice (buf, start, end) {
 function _utf8Slice (buf, start, end) {
   var res = ''
   var tmp = ''
-  end = Math.min(buf.length, end);
+  end = Math.min(buf.length, end)
 
   for (var i = start; i < end; i++) {
     if (buf[i] <= 0x7F) {
@@ -381,7 +381,7 @@ function _utf8Slice (buf, start, end) {
 
 function _asciiSlice (buf, start, end) {
   var ret = ''
-  end = Math.min(buf.length, end);
+  end = Math.min(buf.length, end)
 
   for (var i = start; i < end; i++)
     ret += String.fromCharCode(buf[i])
