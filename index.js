@@ -1011,10 +1011,9 @@ function augment (arr) {
     arr.fill = BufferFill
     arr.inspect = BufferInspect
 
-    // Only add `toArrayBuffer` if we're using an augmented native Uint8Array
-    if (xUint8Array !== TA.Uint8Array) {
+    // Only add `toArrayBuffer` if the browser supports ArrayBuffer natively
+    if (xUint8Array !== TA.Uint8Array)
       arr.toArrayBuffer = BufferToArrayBuffer
-    }
 
     if (arr.byteLength !== 0)
       arr._dataview = new xDataView(arr.buffer, arr.byteOffset, arr.byteLength)
