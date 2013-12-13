@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "base64-js": "~0.0.4",
-    "typedarray": "0.0.3"
+    "typedarray": "~0.0.5"
   },
   "devDependencies": {
     "benchmark": "1.x",
