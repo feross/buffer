@@ -1,3 +1,4 @@
+var base64 = require('base64-js')
 var TA = require('typedarray')
 
 exports.Buffer = Buffer
@@ -359,7 +360,7 @@ function BufferCopy (target, target_start, start, end) {
 
 function _base64Slice (buf, start, end) {
   var bytes = buf.slice(start, end)
-  return require('base64-js').fromByteArray(bytes)
+  return base64.fromByteArray(bytes)
 }
 
 function _utf8Slice (buf, start, end) {
@@ -1090,7 +1091,7 @@ function asciiToBytes (str) {
 }
 
 function base64ToBytes (str) {
-  return require('base64-js').toByteArray(str)
+  return base64.toByteArray(str)
 }
 
 function blitBuffer (src, dst, offset, length) {
