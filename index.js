@@ -1095,13 +1095,11 @@ function base64ToBytes (str) {
 }
 
 function blitBuffer (src, dst, offset, length) {
-  var pos, i = 0
-  while (i < length) {
+  var pos
+  for (var i = 0; i < length; i++) {
     if ((i + offset >= dst.length) || (i >= src.length))
       break
-
     dst[i + offset] = src[i]
-    i++
   }
   return i
 }
