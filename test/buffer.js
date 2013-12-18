@@ -28,6 +28,24 @@ test('utf8 to utf8', function (t) {
     t.end();
 });
 
+test('utf16be to hexutf16', function (t) {
+    t.plan(1);
+    t.equal(
+        new B("abcd", "utf16be").toString('hex'),
+        '0061006200630064'
+    );
+    t.end();
+});
+
+test('utf16le to hex', function (t) {
+    t.plan(1);
+    t.equal(
+        new B("abcd", "utf16le").toString('hex'),
+        '6100620063006400'
+    );
+    t.end();
+});
+
 test('ascii buffer to base64', function (t) {
     t.plan(1);
     t.equal(

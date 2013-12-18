@@ -143,6 +143,14 @@ Buffer.byteLength = function (str, encoding) {
     case 'base64':
       return base64ToBytes(str).length
 
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+    case 'utf16be':
+    case 'utf-16be':
+      return str.length * 2
+
     default:
       throw new Error('Unknown encoding')
   }
@@ -232,6 +240,21 @@ function _base64Write (buf, string, offset, length) {
   return Buffer._charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
 }
 
+function _utf16leWrite (buf, string, offset, length) {
+  var bytes, pos
+  return Buffer._charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
+}
+
+function _utf16leWrite (buf, string, offset, length) {
+  var bytes, pos
+  return Buffer._charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
+}
+
+function _utf16beWrite (buf, string, offset, length) {
+  var bytes, pos
+  return Buffer._charsWritten = blitBuffer(utf16beToBytes(string), buf, offset, length)
+}
+
 function BufferWrite (string, offset, length, encoding) {
   // Support both (string, offset, length, encoding)
   // and the legacy (string, encoding, offset, length)
@@ -276,6 +299,16 @@ function BufferWrite (string, offset, length, encoding) {
     case 'base64':
       return _base64Write(this, string, offset, length)
 
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return _utf16leWrite(this, string, offset, length)
+
+    case 'utf16be':
+    case 'utf-16be':
+      return _utf16beWrite(this, string, offset, length)
+
     default:
       throw new Error('Unknown encoding')
   }
@@ -312,6 +345,16 @@ function BufferToString (encoding, start, end) {
 
     case 'base64':
       return _base64Slice(self, start, end)
+
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return _utf16leSlice(self, start, end)
+
+    case 'utf16be':
+    case 'utf-16be':
+      return _utf16beSlice(self, start, end)
 
     default:
       throw new Error('Unknown encoding')
@@ -404,6 +447,24 @@ function _hexSlice (buf, start, end) {
     out += toHex(buf[i])
   }
   return out
+}
+
+function _utf16leSlice (buf, start, end) {
+  var bytes = buf.slice(start, end)
+  var res = ''
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] + bytes[i+1] * 256)
+  }
+  return res
+}
+
+function _utf16beSlice (buf, start, end) {
+  var bytes = buf.slice(start, end)
+  var res = ''
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] * 256 + bytes[i+1])
+  }
+  return res
 }
 
 // TODO: add test that modifying the new buffer slice will modify memory in the
@@ -1085,6 +1146,34 @@ function asciiToBytes (str) {
   for (var i = 0; i < str.length; i++) {
     // Node's code seems to be doing this and not & 0x7F..
     byteArray.push(str.charCodeAt(i) & 0xFF)
+  }
+
+  return byteArray
+}
+
+function utf16leToBytes (str) {
+  var c, hi, lo
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    c = str.charCodeAt(i)
+    hi = c >> 8
+    lo = c % 256
+    byteArray.push(lo)
+    byteArray.push(hi)
+  }
+
+  return byteArray
+}
+
+function utf16beToBytes (str) {
+  var c, hi, lo
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    c = str.charCodeAt(i)
+    hi = c >> 8
+    lo = c % 256
+    byteArray.push(hi)
+    byteArray.push(lo)
   }
 
   return byteArray
