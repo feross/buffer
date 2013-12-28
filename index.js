@@ -25,7 +25,8 @@ var browserSupport = (function () {
   try {
     var arr = new Uint8Array(0)
     arr.foo = function () { return 42 }
-    return 42 === arr.foo()
+    return 42 === arr.foo() &&
+        typeof arr.subarray === 'function' // Chrome 9-10 lack `subarray`
   } catch (e) {
     return false
   }
