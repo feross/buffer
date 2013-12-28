@@ -33,7 +33,6 @@ The `Buffer` constructor returns instances of `Uint8Array` that are augmented wi
 By augmenting the instances, we can avoid modifying the Uint8Array prototype.
 
 
-
 ## Performance
 
 See perf tests in `/perf`.
