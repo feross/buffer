@@ -359,8 +359,11 @@ function BufferCopy (target, target_start, start, end) {
 }
 
 function _base64Slice (buf, start, end) {
-  var bytes = buf.slice(start, end)
-  return base64.fromByteArray(bytes)
+  if (start === 0 && end === buf.length) {
+    return base64.fromByteArray(buf)
+  } else {
+    return base64.fromByteArray(buf.slice(start, end))
+  }
 }
 
 function _utf8Slice (buf, start, end) {
