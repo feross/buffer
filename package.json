@@ -4,8 +4,7 @@
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
   "dependencies": {
-    "base64-js": "feross/base64-js",
-    "typedarray": "~0.0.5"
+    "base64-js": "feross/base64-js"
   },
   "devDependencies": {
     "benchmark": "*",
@@ -44,7 +43,7 @@
   ],
   "scripts": {
     "test": "tape test/*.js",
-    "perf": "cd perf/solo && browserify --debug concat.js > bundle.js && open index.html"
+    "perf": "cd perf/solo && browserify --debug bracket-notation.js > bundle.js && open index.html"
   },
   "license": "MIT"
 }
