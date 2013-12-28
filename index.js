@@ -901,7 +901,7 @@ Buffer.prototype.writeFloatBE = function (value, offset, noAssert) {
 function _writeDouble (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
-    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
+    assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
     assert(offset + 7 < buf.length,
         'Trying to write beyond buffer length')
