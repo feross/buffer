@@ -22,9 +22,9 @@ It will also be loaded if you use the global `Buffer` variable.
 - `.slice()` returns instances of the same type
 - Square-bracket `buf[4]` notation works!
 - Does not modify any browser prototypes.
+- Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS).
+- **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
 - All tests from the original `buffer-browserify` project pass.
-- Requires browsers to have `Uint8Array` and `DataView` support (all modern
-  browsers, IE10+, shim for older browsers included)
 
 ## How does it work?
 
