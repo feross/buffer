@@ -1,34 +1,34 @@
 var benchmark = require('benchmark')
 var suite = new benchmark.Suite()
 
-global.NewBuffer = require('../').Buffer // native-buffer-browserify
+global.NewBuffer = require('../../').Buffer // native-buffer-browserify
 global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
 
-var LENGTH = 10
+var LENGTH = 20
 
-var newTarget = NewBuffer(LENGTH * 8)
-var oldTarget = OldBuffer(LENGTH * 8)
-var nodeTarget = Buffer(LENGTH * 8)
+var newTarget = NewBuffer(LENGTH * 4)
+var oldTarget = OldBuffer(LENGTH * 4)
+var nodeTarget = Buffer(LENGTH * 4)
 
 ;[newTarget, oldTarget, nodeTarget].forEach(function (buf) {
   for (var i = 0; i < LENGTH; i++) {
-    buf.writeDoubleBE(97.1919 + i, i * 8)
+    buf.writeUInt32LE(7000 + i, i * 4)
   }
 })
 
-suite.add('NewBuffer#readDoubleBE', function () {
+suite.add('NewBuffer#readUInt32LE', function () {
   for (var i = 0; i < LENGTH; i++) {
-    var x = newTarget.readDoubleBE(i * 8)
+    var x = newTarget.readUInt32LE(i * 4)
   }
 })
-.add('OldBuffer#readDoubleBE', function () {
+.add('OldBuffer#readUInt32LE', function () {
   for (var i = 0; i < LENGTH; i++) {
-    var x = oldTarget.readDoubleBE(i * 8)
+    var x = oldTarget.readUInt32LE(i * 4)
   }
 })
-.add('Buffer#readDoubleBE', function () {
+.add('Buffer#readUInt32LE', function () {
   for (var i = 0; i < LENGTH; i++) {
-    var x = nodeTarget.readDoubleBE(i * 8)
+    var x = nodeTarget.readUInt32LE(i * 4)
   }
 })
 .on('error', function (event) {

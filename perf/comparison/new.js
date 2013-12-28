@@ -1,23 +1,22 @@
 var benchmark = require('benchmark')
 var suite = new benchmark.Suite()
 
-global.NewBuffer = require('../').Buffer // native-buffer-browserify
+global.NewBuffer = require('../../').Buffer // native-buffer-browserify
 global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
 
-var LENGTH = 16
+var LENGTH = 10
 
-var newBuf = NewBuffer(LENGTH)
-var oldBuf = OldBuffer(LENGTH)
-var nodeBuf = Buffer(LENGTH)
-
-suite.add('NewBuffer#slice', function () {
-  var x = newBuf.slice(4)
+suite.add('NewBuffer#new', function () {
+  var buf = NewBuffer(LENGTH)
 })
-.add('OldBuffer#slice', function () {
-  var x = oldBuf.slice(4)
+.add('Uint8Array#new', function () {
+  var buf = new Uint8Array(LENGTH)
 })
-.add('Buffer#slice', function () {
-  var x = nodeBuf.slice(4)
+.add('OldBuffer#new', function () {
+  var buf = OldBuffer(LENGTH)
+})
+.add('Buffer#new', function () {
+  var buf = Buffer(LENGTH)
 })
 .on('error', function (event) {
   console.error(event.target.error.stack)
