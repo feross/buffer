@@ -19,17 +19,14 @@ test('new buffer from string', function (t) {
     t.end()
 })
 
-function arraybufferToString (arraybuffer) {
-  return String.fromCharCode.apply(null, new Uint16Array(arraybuffer))
-}
-
 test('buffer toArrayBuffer()', function (t) {
   var data = [1, 2, 3, 4, 5, 6, 7, 8]
   if (typeof (new B(data)).toArrayBuffer === 'function') {
-    t.equal(
-        arraybufferToString(new B(data).toArrayBuffer()),
-        arraybufferToString(new Uint8Array(data).buffer)
-    )
+    var result = new B(data).toArrayBuffer()
+    var expected = new Uint8Array(data).buffer
+    for (var i = 0; i < expected.length; i++) {
+      t.equal(result[i], expected[i])
+    }
   } else {
     t.pass('No toArrayBuffer() method provided in old browsers')
   }
