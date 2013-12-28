@@ -8,9 +8,9 @@
     "typedarray": "~0.0.5"
   },
   "devDependencies": {
-    "benchmark": "1.x",
+    "benchmark": "*",
     "browserify": "*",
-    "tape": "2.x"
+    "tape": "*"
   },
   "repository": {
     "type": "git",
