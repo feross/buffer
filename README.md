@@ -16,12 +16,12 @@ It will also be loaded if you use the global `Buffer` variable.
 
 ## Features
 
-- **Backed by `ArrayBuffer` (not `Object`, so it's fast)**
+- **Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)**
 - **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
 - **Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS).**
 - Preserves Node API exactly.
 - Faster pretty much across the board (see perf results below)
-- `.slice()` returns instances of the same type
+- `.slice()` returns instances of the same type (Buffer)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
 - Does not modify any browser prototypes.
 - All tests from the original `buffer-browserify` project pass, plus additional ones.
@@ -32,6 +32,9 @@ The `Buffer` constructor returns instances of `Uint8Array` that are augmented wi
 
 By augmenting the instances, we can avoid modifying the Uint8Array prototype.
 
+## Important Differences
+
+- **Use `Buffer.isBuffer` instead of `instanceof Buffer`.** `instanceof Buffer` doesn’t work because the Buffer constructor returns a `Uint8Array` (as discussed above) for performance reasons. In node `Buffer.isBuffer` just does `instanceof Buffer`, but in browserify we use a `Buffer.isBuffer` shim that detects our special `Uint8Array`-based Buffers.
 
 ## Performance
 
