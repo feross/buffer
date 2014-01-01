@@ -12,9 +12,9 @@
     "browserify": "*",
     "tape": "*"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/feross/native-buffer-browserify.git"
+  "scripts": {
+    "test": "tape test/*.js",
+    "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html"
   },
   "testling": {
     "files": "test/*.js",
@@ -27,6 +27,10 @@
       "iphone/6",
       "ipad/6"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feross/native-buffer-browserify.git"
   },
   "keywords": [
     "buffer",
@@ -42,9 +46,5 @@
     "Romain Beauxis <toots@rastageeks.org>",
     "James Halliday <mail@substack.net>"
   ],
-  "scripts": {
-    "test": "tape test/*.js",
-    "perf": "cd perf/solo && browserify --debug bracket-notation.js > bundle.js && open index.html"
-  },
   "license": "MIT"
 }
