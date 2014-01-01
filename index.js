@@ -31,7 +31,6 @@ var browserSupport = (function () {
   }
 })()
 
-
 /**
  * Class: Buffer
  * =============
@@ -116,7 +115,6 @@ Buffer.isEncoding = function (encoding) {
     case 'base64':
     case 'raw':
       return true
-
     default:
       return false
   }
@@ -130,28 +128,22 @@ Buffer.byteLength = function (str, encoding) {
   switch (encoding || 'utf8') {
     case 'hex':
       return str.length / 2
-
     case 'utf8':
     case 'utf-8':
       return utf8ToBytes(str).length
-
     case 'ascii':
     case 'binary':
       return str.length
-
     case 'base64':
       return base64ToBytes(str).length
-
     default:
       throw new Error('Unknown encoding')
   }
 }
 
 Buffer.concat = function (list, totalLength) {
-  if (!isArray(list)) {
-    throw new Error('Usage: Buffer.concat(list, [totalLength])\n' +
-        'list should be an Array.')
-  }
+  assert(isArray(list), 'Usage: Buffer.concat(list, [totalLength])\n' +
+      'list should be an Array.')
 
   if (list.length === 0) {
     return new Buffer(0)
@@ -194,15 +186,14 @@ function _hexWrite (buf, string, offset, length) {
 
   // must be an even number of digits
   var strLen = string.length
-  if (strLen % 2 !== 0) {
-    throw new Error('Invalid hex string')
-  }
+  assert(strLen % 2 === 0, 'Invalid hex string')
+
   if (length > strLen / 2) {
     length = strLen / 2
   }
   for (var i = 0; i < length; i++) {
     var byte = parseInt(string.substr(i * 2, 2), 16)
-    if (isNaN(byte)) throw new Error('Invalid hex string')
+    assert(!isNaN(byte), 'Invalid hex string')
     buf[offset + i] = byte
   }
   Buffer._charsWritten = i * 2
@@ -258,20 +249,15 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
   switch (encoding) {
     case 'hex':
       return _hexWrite(this, string, offset, length)
-
     case 'utf8':
     case 'utf-8':
       return _utf8Write(this, string, offset, length)
-
     case 'ascii':
       return _asciiWrite(this, string, offset, length)
-
     case 'binary':
       return _binaryWrite(this, string, offset, length)
-
     case 'base64':
       return _base64Write(this, string, offset, length)
-
     default:
       throw new Error('Unknown encoding')
   }
@@ -293,20 +279,15 @@ Buffer.prototype.toString = function (encoding, start, end) {
   switch (encoding) {
     case 'hex':
       return _hexSlice(self, start, end)
-
     case 'utf8':
     case 'utf-8':
       return _utf8Slice(self, start, end)
-
     case 'ascii':
       return _asciiSlice(self, start, end)
-
     case 'binary':
       return _binarySlice(self, start, end)
-
     case 'base64':
       return _base64Slice(self, start, end)
-
     default:
       throw new Error('Unknown encoding')
   }
@@ -332,14 +313,11 @@ Buffer.prototype.copy = function (target, target_start, start, end) {
   if (target.length === 0 || source.length === 0) return
 
   // Fatal error conditions
-  if (end < start)
-    throw new Error('sourceEnd < sourceStart')
-  if (target_start < 0 || target_start >= target.length)
-    throw new Error('targetStart out of bounds')
-  if (start < 0 || start >= source.length)
-    throw new Error('sourceStart out of bounds')
-  if (end < 0 || end > source.length)
-    throw new Error('sourceEnd out of bounds')
+  assert(end >= start, 'sourceEnd < sourceStart')
+  assert(target_start >= 0 && target_start < target.length,
+      'targetStart out of bounds')
+  assert(start >= 0 && start < source.length, 'sourceStart out of bounds')
+  assert(end >= 0 && end <= source.length, 'sourceEnd out of bounds')
 
   // Are we oob?
   if (end > this.length)
@@ -816,23 +794,15 @@ Buffer.prototype.fill = function (value, start, end) {
     value = value.charCodeAt(0)
   }
 
-  if (typeof value !== 'number' || isNaN(value)) {
-    throw new Error('value is not a number')
-  }
-
-  if (end < start) throw new Error('end < start')
+  assert(typeof value === 'number' && !isNaN(value), 'value is not a number')
+  assert(end >= start, 'end < start')
 
   // Fill 0 bytes; we're done
   if (end === start) return
   if (this.length === 0) return
 
-  if (start < 0 || start >= this.length) {
-    throw new Error('start out of bounds')
-  }
-
-  if (end < 0 || end > this.length) {
-    throw new Error('end out of bounds')
-  }
+  assert(start >= 0 && start < this.length, 'start out of bounds')
+  assert(end >= 0 && end <= this.length, 'end out of bounds')
 
   for (var i = start; i < end; i++) {
     this[i] = value
