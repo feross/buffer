@@ -381,8 +381,6 @@ function _hexSlice (buf, start, end) {
   return out
 }
 
-// TODO: add test that modifying the new buffer slice will modify memory in the
-// original buffer! Use code from:
 // http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end
 Buffer.prototype.slice = function (start, end) {
   var len = this.length
@@ -392,8 +390,6 @@ Buffer.prototype.slice = function (start, end) {
   if (browserSupport) {
     return augment(this.subarray(start, end))
   } else {
-    // TODO: slicing works, with limitations (no parent tracking/update)
-    // https://github.com/feross/native-buffer-browserify/issues/9
     var sliceLen = end - start
     var newBuf = new Buffer(sliceLen, undefined, true)
     for (var i = 0; i < sliceLen; i++) {
