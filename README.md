@@ -16,15 +16,15 @@ It will also be loaded if you use the global `Buffer` variable.
 
 ## Features
 
-- Backed by `ArrayBuffer` (not `Object`, so it's fast)
-- Preserves Node API exactly
+- **Backed by `ArrayBuffer` (not `Object`, so it's fast)**
+- **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
+- **Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS).**
+- Preserves Node API exactly.
 - Faster pretty much across the board (see perf results below)
 - `.slice()` returns instances of the same type
-- Square-bracket `buf[4]` notation works!
+- Square-bracket `buf[4]` notation works, even in old browsers like IE6!
 - Does not modify any browser prototypes.
-- Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS).
-- **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
-- All tests from the original `buffer-browserify` project pass.
+- All tests from the original `buffer-browserify` project pass, plus additional ones.
 
 ## How does it work?
 
