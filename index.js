@@ -7,11 +7,11 @@ exports.INSPECT_MAX_BYTES = 50
 Buffer.poolSize = 8192
 
 /**
- * If `browserSupport`:
+ * If `Buffer._useTypedArrays`:
  *   === true    Use Uint8Array implementation (fastest)
  *   === false   Use Object implementation (compatible down to IE6)
  */
-var browserSupport = (function () {
+Buffer._useTypedArrays = (function () {
    // Detect if browser supports Typed Arrays. Supported browsers are IE 10+,
    // Firefox 4+, Chrome 7+, Safari 5.1+, Opera 11.6+, iOS 4.2+.
    if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined')
@@ -70,7 +70,7 @@ function Buffer (subject, encoding, noZero) {
     throw new Error('First argument needs to be a number, array or string.')
 
   var buf
-  if (browserSupport) {
+  if (Buffer._useTypedArrays) {
     // Preferred: Return an augmented `Uint8Array` instance for best performance
     buf = augment(new Uint8Array(length))
   } else {
@@ -93,7 +93,7 @@ function Buffer (subject, encoding, noZero) {
     }
   } else if (type === 'string') {
     buf.write(subject, 0, encoding)
-  } else if (type === 'number' && !browserSupport && !noZero) {
+  } else if (type === 'number' && !Buffer._useTypedArrays && !noZero) {
     for (i = 0; i < length; i++) {
       buf[i] = 0
     }
@@ -387,7 +387,7 @@ Buffer.prototype.slice = function (start, end) {
   start = clamp(start, len, 0)
   end = clamp(end, len, len)
 
-  if (browserSupport) {
+  if (Buffer._useTypedArrays) {
     return augment(this.subarray(start, end))
   } else {
     var sliceLen = end - start
