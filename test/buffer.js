@@ -261,3 +261,37 @@ test('base64 strings without padding', function (t) {
   t.equal((new B('YW9ldQ', 'base64').toString()), 'aoeu')
   t.end()
 })
+
+test('detect utf16 surrogate pairs', function(t) {
+  t.plan(1)
+  var text = 'Ì†ΩÌ∏∏Ì†ΩÌ≤≠Ì†ΩÌ±ç'
+  var buf = new B(text)
+  t.equal(text, buf.toString())
+  t.end()
+})
+
+test('throw on orphaned utf16 surrogate lead code point', function(t) {
+  t.plan(1)
+  var text = 'Ì†ΩÌ†ΩÌ≤≠Ì†ΩÌ±ç'
+  var err
+  try {
+    var buf = new B(text)
+  } catch (e) {
+    err = e
+  }
+  t.equal(err instanceof URIError, true)
+  t.end()
+})
+
+test('throw on orphaned utf16 surrogate trail code point', function(t) {
+  t.plan(1)
+  var text = 'Ì†ΩÌ∏∏Ì†ΩÌ≤≠Ì±ç'
+  var err
+  try {
+    var buf = new B(text)
+  } catch (e) {
+    err = e
+  }
+  t.equal(err instanceof URIError, true)
+  t.end()
+})
