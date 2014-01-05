@@ -920,14 +920,18 @@ function toHex (n) {
 
 function utf8ToBytes (str) {
   var byteArray = []
-  for (var i = 0; i < str.length; i++)
-    if (str.charCodeAt(i) <= 0x7F)
+  for (var i = 0; i < str.length; i++) {
+    var b = str.charCodeAt(i)
+    if (b <= 0x7F)
       byteArray.push(str.charCodeAt(i))
     else {
-      var h = encodeURIComponent(str.charAt(i)).substr(1).split('%')
+      var start = i
+      if (b >= 0xD800 && b <= 0xDFFF) i++
+      var h = encodeURIComponent(str.slice(start, i+1)).substr(1).split('%')
       for (var j = 0; j < h.length; j++)
         byteArray.push(parseInt(h[j], 16))
     }
+  }
   return byteArray
 }
 
