@@ -30,7 +30,7 @@ It will also be loaded if you use the global `Buffer` variable.
 
 The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the Buffer API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet.
 
-By augmenting the instances, we can avoid modifying the Uint8Array prototype.
+By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
 
 ## Important Differences
 
