@@ -264,7 +264,7 @@ test('base64 strings without padding', function (t) {
 
 test('detect utf16 surrogate pairs', function(t) {
   t.plan(1)
-  var text = 'Ì†ΩÌ∏∏Ì†ΩÌ≤≠Ì†ΩÌ±ç'
+  var text = '\uD83D\uDE38' + '\uD83D\uDCAD' + '\uD83D\uDC4D'
   var buf = new B(text)
   t.equal(text, buf.toString())
   t.end()
@@ -272,7 +272,7 @@ test('detect utf16 surrogate pairs', function(t) {
 
 test('throw on orphaned utf16 surrogate lead code point', function(t) {
   t.plan(1)
-  var text = 'Ì†ΩÌ†ΩÌ≤≠Ì†ΩÌ±ç'
+  var text = '\uD83D\uDE38' + '\uD83D' + '\uD83D\uDC4D'
   var err
   try {
     var buf = new B(text)
@@ -285,7 +285,7 @@ test('throw on orphaned utf16 surrogate lead code point', function(t) {
 
 test('throw on orphaned utf16 surrogate trail code point', function(t) {
   t.plan(1)
-  var text = 'Ì†ΩÌ∏∏Ì†ΩÌ≤≠Ì±ç'
+  var text = '\uD83D\uDE38' + '\uDCAD' + '\uD83D\uDC4D'
   var err
   try {
     var buf = new B(text)
