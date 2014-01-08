@@ -77,6 +77,7 @@ function Buffer (subject, encoding, noZero) {
     // Fallback: Return this instance of Buffer
     buf = this
     buf.length = length
+    buf._isBuffer = true
   }
 
   var i
@@ -121,7 +122,7 @@ Buffer.isEncoding = function (encoding) {
 }
 
 Buffer.isBuffer = function (b) {
-  return b && b._isBuffer
+  return (b != null && b._isBuffer) || false
 }
 
 Buffer.byteLength = function (str, encoding) {
