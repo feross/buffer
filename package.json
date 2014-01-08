@@ -4,7 +4,7 @@
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
   "main": "index.js",
   "dependencies": {
-    "base64-js": "0.0.5",
+    "base64-js": "~0.0.4",
     "ieee754": "~1.1.1"
   },
   "devDependencies": {
