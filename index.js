@@ -81,7 +81,7 @@ function Buffer (subject, encoding, noZero) {
   }
 
   var i
-  if (Buffer.isBuffer(subject)) {
+  if (subject instanceof Uint8Array) {
     // Speed optimization -- use set if we're copying from a Uint8Array
     buf.set(subject)
   } else if (isArrayish(subject)) {
