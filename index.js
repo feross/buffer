@@ -74,7 +74,7 @@ function Buffer (subject, encoding, noZero) {
     // Preferred: Return an augmented `Uint8Array` instance for best performance
     buf = augment(new Uint8Array(length))
   } else {
-    // Fallback: Return this instance of Buffer
+    // Fallback: Return THIS instance of Buffer (created by `new`)
     buf = this
     buf.length = length
     buf._isBuffer = true
@@ -414,16 +414,15 @@ Buffer.prototype.set = function (v, offset) {
 }
 
 Buffer.prototype.readUInt8 = function (offset, noAssert) {
-  var buf = this
   if (!noAssert) {
     assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < buf.length, 'Trying to read beyond buffer length')
+    assert(offset < this.length, 'Trying to read beyond buffer length')
   }
 
-  if (offset >= buf.length)
+  if (offset >= this.length)
     return
 
-  return buf[offset]
+  return this[offset]
 }
 
 function _readUInt16 (buf, offset, littleEndian, noAssert) {
@@ -499,21 +498,20 @@ Buffer.prototype.readUInt32BE = function (offset, noAssert) {
 }
 
 Buffer.prototype.readInt8 = function (offset, noAssert) {
-  var buf = this
   if (!noAssert) {
     assert(offset !== undefined && offset !== null,
         'missing offset')
-    assert(offset < buf.length, 'Trying to read beyond buffer length')
+    assert(offset < this.length, 'Trying to read beyond buffer length')
   }
 
-  if (offset >= buf.length)
+  if (offset >= this.length)
     return
 
-  var neg = buf[offset] & 0x80
+  var neg = this[offset] & 0x80
   if (neg)
-    return (0xff - buf[offset] + 1) * -1
+    return (0xff - this[offset] + 1) * -1
   else
-    return buf[offset]
+    return this[offset]
 }
 
 function _readInt16 (buf, offset, littleEndian, noAssert) {
@@ -605,17 +603,16 @@ Buffer.prototype.readDoubleBE = function (offset, noAssert) {
 }
 
 Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
-  var buf = this
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < buf.length, 'trying to write beyond buffer length')
+    assert(offset < this.length, 'trying to write beyond buffer length')
     verifuint(value, 0xff)
   }
 
-  if (offset >= buf.length) return
+  if (offset >= this.length) return
 
-  buf[offset] = value
+  this[offset] = value
 }
 
 function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
@@ -674,21 +671,20 @@ Buffer.prototype.writeUInt32BE = function (value, offset, noAssert) {
 }
 
 Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
-  var buf = this
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(offset !== undefined && offset !== null, 'missing offset')
-    assert(offset < buf.length, 'Trying to write beyond buffer length')
+    assert(offset < this.length, 'Trying to write beyond buffer length')
     verifsint(value, 0x7f, -0x80)
   }
 
-  if (offset >= buf.length)
+  if (offset >= this.length)
     return
 
   if (value >= 0)
-    buf.writeUInt8(value, offset, noAssert)
+    this.writeUInt8(value, offset, noAssert)
   else
-    buf.writeUInt8(0xff + value + 1, offset, noAssert)
+    this.writeUInt8(0xff + value + 1, offset, noAssert)
 }
 
 function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
