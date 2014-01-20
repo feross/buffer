@@ -84,7 +84,7 @@ function Buffer (subject, encoding, noZero) {
   if (Buffer._useTypedArrays && typeof Uint8Array === 'function' &&
       subject instanceof Uint8Array) {
     // Speed optimization -- use set if we're copying from a Uint8Array
-    Uint8Array.prototype.set.call(buf, subject)
+    buf._set(subject)
   } else if (isArrayish(subject)) {
     // Treat array-ish objects as a byte array
     for (i = 0; i < length; i++) {
@@ -857,8 +857,13 @@ var BP = Buffer.prototype
 function augment (arr) {
   arr._isBuffer = true
 
-  arr.get = BP.get // deprecated
-  arr.set = BP.set // deprecated
+  // save reference to original Uint8Array get/set methods before overwriting
+  arr._get = arr.get
+  arr._set = arr.set
+
+  // deprecated, will be removed in node 0.13+
+  arr.get = BP.get
+  arr.set = BP.set
 
   arr.write = BP.write
   arr.toString = BP.toString
