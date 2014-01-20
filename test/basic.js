@@ -20,10 +20,10 @@ test('new buffer from string', function (t) {
 
 test('buffer toArrayBuffer()', function (t) {
   var data = [1, 2, 3, 4, 5, 6, 7, 8]
-  if (typeof (new B(data)).toArrayBuffer === 'function') {
+  if (typeof Uint8Array === 'function') {
     var result = new B(data).toArrayBuffer()
     var expected = new Uint8Array(data).buffer
-    for (var i = 0; i < expected.length; i++) {
+    for (var i = 0; i < expected.byteLength; i++) {
       t.equal(result[i], expected[i])
     }
   } else {
