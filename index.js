@@ -834,11 +834,21 @@ Buffer.prototype.inspect = function () {
 
 /**
  * Creates a new `ArrayBuffer` with the *copied* memory of the buffer instance.
- * Added in Node 0.12. Not added to Buffer.prototype since it should only
- * be available in browsers that support ArrayBuffer.
+ * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
  */
-function BufferToArrayBuffer () {
-  return (new Buffer(this)).buffer
+Buffer.prototype.toArrayBuffer = function () {
+  if (typeof Uint8Array === 'function') {
+    if (Buffer._useTypedArrays) {
+      return (new Buffer(this)).buffer
+    } else {
+      var buf = new Uint8Array(this.length)
+      for (var i = 0, len = buf.length; i < len; i += 1)
+        buf[i] = this[i]
+      return buf.buffer
+    }
+  } else {
+    throw new Error('Buffer.toArrayBuffer not supported in this browser')
+  }
 }
 
 // HELPER FUNCTIONS
@@ -901,7 +911,7 @@ function augment (arr) {
   arr.writeDoubleBE = BP.writeDoubleBE
   arr.fill = BP.fill
   arr.inspect = BP.inspect
-  arr.toArrayBuffer = BufferToArrayBuffer
+  arr.toArrayBuffer = BP.toArrayBuffer
 
   return arr
 }
