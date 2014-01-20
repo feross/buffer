@@ -84,7 +84,7 @@ function Buffer (subject, encoding, noZero) {
   if (Buffer._useTypedArrays && typeof Uint8Array === 'function' &&
       subject instanceof Uint8Array) {
     // Speed optimization -- use set if we're copying from a Uint8Array
-    buf.set(subject)
+    Uint8Array.prototype.set.call(buf, subject)
   } else if (isArrayish(subject)) {
     // Treat array-ish objects as a byte array
     for (i = 0; i < length; i++) {
@@ -399,6 +399,18 @@ Buffer.prototype.slice = function (start, end) {
     }
     return newBuf
   }
+}
+
+// `get` will be removed in Node 0.13+
+Buffer.prototype.get = function (offset) {
+  console.log('.get() is deprecated. Access using array indexes instead.')
+  return this.readUInt8(offset)
+}
+
+// `set` will be removed in Node 0.13+
+Buffer.prototype.set = function (v, offset) {
+  console.log('.set() is deprecated. Access using array indexes instead.')
+  return this.writeUInt8(v, offset)
 }
 
 Buffer.prototype.readUInt8 = function (offset, noAssert) {
@@ -839,10 +851,15 @@ function stringtrim (str) {
 
 var BP = Buffer.prototype
 
+/**
+ * Augment the Uint8Array *instance* (not the class!) with Buffer methods
+ */
 function augment (arr) {
   arr._isBuffer = true
 
-  // Augment the Uint8Array *instance* (not the class!) with Buffer methods
+  arr.get = BP.get // deprecated
+  arr.set = BP.set // deprecated
+
   arr.write = BP.write
   arr.toString = BP.toString
   arr.toLocaleString = BP.toString
