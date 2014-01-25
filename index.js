@@ -123,7 +123,7 @@ Buffer.isEncoding = function (encoding) {
 }
 
 Buffer.isBuffer = function (b) {
-  return (b != null && b._isBuffer) || false
+  return !!(b !== null && b !== undefined && b._isBuffer)
 }
 
 Buffer.byteLength = function (str, encoding) {
@@ -203,12 +203,10 @@ function _hexWrite (buf, string, offset, length) {
 }
 
 function _utf8Write (buf, string, offset, length) {
-  var bytes, pos
   return Buffer._charsWritten = blitBuffer(utf8ToBytes(string), buf, offset, length)
 }
 
 function _asciiWrite (buf, string, offset, length) {
-  var bytes, pos
   return Buffer._charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
 }
 
@@ -217,7 +215,6 @@ function _binaryWrite (buf, string, offset, length) {
 }
 
 function _base64Write (buf, string, offset, length) {
-  var bytes, pos
   return Buffer._charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
 }
 
