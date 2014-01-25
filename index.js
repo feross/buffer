@@ -203,11 +203,15 @@ function _hexWrite (buf, string, offset, length) {
 }
 
 function _utf8Write (buf, string, offset, length) {
-  return Buffer._charsWritten = blitBuffer(utf8ToBytes(string), buf, offset, length)
+  var charsWritten = Buffer._charsWritten =
+    blitBuffer(utf8ToBytes(string), buf, offset, length)
+  return charsWritten
 }
 
 function _asciiWrite (buf, string, offset, length) {
-  return Buffer._charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
+  var charsWritten = Buffer._charsWritten =
+    blitBuffer(asciiToBytes(string), buf, offset, length)
+  return charsWritten
 }
 
 function _binaryWrite (buf, string, offset, length) {
@@ -215,7 +219,9 @@ function _binaryWrite (buf, string, offset, length) {
 }
 
 function _base64Write (buf, string, offset, length) {
-  return Buffer._charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
+  var charsWritten = Buffer._charsWritten =
+    blitBuffer(base64ToBytes(string), buf, offset, length)
+  return charsWritten
 }
 
 Buffer.prototype.write = function (string, offset, length, encoding) {
