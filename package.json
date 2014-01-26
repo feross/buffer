@@ -9,10 +9,12 @@
   },
   "devDependencies": {
     "benchmark": "*",
+    "browserify": "3.x",
     "tape": "*"
   },
   "scripts": {
     "test": "tape test/*.js",
+    "prepublish": "./bundle.js",
     "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html"
   },
   "testling": {
