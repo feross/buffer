@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "benchmark": "*",
-    "browserify": "*",
     "tape": "*"
   },
   "scripts": {
