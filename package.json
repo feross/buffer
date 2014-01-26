@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "tape test/*.js",
-    "prepublish": "./bundle.js",
+    "prepublish": "./bundle.sh",
     "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html"
   },
   "testling": {
