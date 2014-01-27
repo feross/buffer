@@ -8,6 +8,8 @@ a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
 [![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
 
+[![NPM](https://nodei.co/npm/native-buffer-browserify.png?downloads=true)](https://npmjs.org/package/native-buffer-browserify)
+
 When you `require('buffer')` in
 [browserify](http://github.com/substack/node-browserify), this module will be
 loaded.
