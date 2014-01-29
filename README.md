@@ -1,22 +1,24 @@
-native-buffer-browserify
-===============
+# native-buffer-browserify
+[![Build Status](http://img.shields.io/travis/feross/native-buffer-browserify.svg)](https://travis-ci.org/feross/native-buffer-browserify)
+[![NPM Version](http://img.shields.io/npm/v/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
+[![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
+[![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
-The buffer module from [node.js](http://nodejs.org/), but for browsers. This is
-a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
-
-[![build status](https://secure.travis-ci.org/feross/native-buffer-browserify.png)](http://travis-ci.org/feross/native-buffer-browserify)
+The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
 [![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
 
-[![NPM](https://nodei.co/npm/native-buffer-browserify.png?downloads=true)](https://npmjs.org/package/native-buffer-browserify)
+## usage
 
-When you `require('buffer')` in
-[browserify](http://github.com/substack/node-browserify), this module will be
-loaded.
+When you `require('buffer')` or reference the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically be loaded.
 
-It will also be loaded if you use the global `Buffer` variable.
+If you want to manually install it for some reason, do:
 
-## Features
+```
+npm install native-buffer-browserify
+```
+
+## features
 
 - **Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)**
 - **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
@@ -28,18 +30,23 @@ It will also be loaded if you use the global `Buffer` variable.
 - Does not modify any browser prototypes.
 - All tests from the original `buffer-browserify` project pass, plus additional ones.
 
-## How does it work?
+## how does it work?
 
 The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the Buffer API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet.
 
 By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
 
-## Important Differences
+## important Differences
 
-- **Use `Buffer.isBuffer` instead of `instanceof Buffer`.** The Buffer constructor returns a `Uint8Array` (as discussed above) for performance reasons, so `instanceof Buffer` won't work. In node `Buffer.isBuffer` just does `instanceof Buffer`, but in browserify we use a `Buffer.isBuffer` shim that detects our special `Uint8Array`-based Buffers.
-- **Don't rely on `slice()` to modify the memory of the parent buffer.** If the browser is using the Typed Array implementation then modifying a buffer created by `slice()` will modify the original memory, [just like in Node](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end). But for the Object implementation (used in unsupported browsers), this is not possible. Therefore, do not rely on this behavior until browser support gets better. (Note: currently even Firefox isn't using the Typed Array implementation because of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403).)
+### Use `Buffer.isBuffer` instead of `instanceof Buffer`.
 
-## Performance
+The Buffer constructor returns a `Uint8Array` (as discussed above) for performance reasons, so `instanceof Buffer` won't work. In node `Buffer.isBuffer` just does `instanceof Buffer`, but in browserify we use a `Buffer.isBuffer` shim that detects our special `Uint8Array`-based Buffers.
+
+### Don't rely on `slice()` to modify the memory of the parent buffer.
+
+If the browser is using the Typed Array implementation then modifying a buffer created by `slice()` will modify the original memory, [just like in Node](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end). But for the Object implementation (used in unsupported browsers), this is not possible. Therefore, do not rely on this behavior until browser support gets better. (Note: currently even Firefox isn't using the Typed Array implementation because of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403).)
+
+## performance
 
 See perf tests in `/perf`.
 
@@ -132,6 +139,6 @@ Buffer#writeFloatBE x 1,811,134 ops/sec ±0.67% (91 runs sampled)
 Fastest is Buffer#writeFloatBE
 ```
 
-## MIT License
+## license
 
-Copyright (C) 2013 [Feross Aboukhadijeh](http://feross.org), Romain Beauxis, and other contributors.
+MIT. Copyright (C) [Feross Aboukhadijeh](http://feross.org), Romain Beauxis, and other contributors.
