@@ -36,13 +36,13 @@ The `Buffer` constructor returns instances of `Uint8Array` that are augmented wi
 
 By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
 
-## important Differences
+## important differences
 
-### Use `Buffer.isBuffer` instead of `instanceof Buffer`.
+### use `Buffer.isBuffer` instead of `instanceof Buffer`
 
 The Buffer constructor returns a `Uint8Array` (as discussed above) for performance reasons, so `instanceof Buffer` won't work. In node `Buffer.isBuffer` just does `instanceof Buffer`, but in browserify we use a `Buffer.isBuffer` shim that detects our special `Uint8Array`-based Buffers.
 
-### Don't rely on `slice()` to modify the memory of the parent buffer.
+### don't rely on `slice()` to modify the memory of the parent buffer
 
 If the browser is using the Typed Array implementation then modifying a buffer created by `slice()` will modify the original memory, [just like in Node](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end). But for the Object implementation (used in unsupported browsers), this is not possible. Therefore, do not rely on this behavior until browser support gets better. (Note: currently even Firefox isn't using the Typed Array implementation because of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403).)
 
