@@ -116,6 +116,10 @@ Buffer.isEncoding = function (encoding) {
     case 'binary':
     case 'base64':
     case 'raw':
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
       return true
     default:
       return false
@@ -127,20 +131,34 @@ Buffer.isBuffer = function (b) {
 }
 
 Buffer.byteLength = function (str, encoding) {
+  var ret
+  str = str + ''
   switch (encoding || 'utf8') {
     case 'hex':
-      return str.length / 2
+      ret = str.length / 2
+      break
     case 'utf8':
     case 'utf-8':
-      return utf8ToBytes(str).length
+      ret = utf8ToBytes(str).length
+      break
     case 'ascii':
     case 'binary':
-      return str.length
+    case 'raw':
+      ret = str.length
+      break
     case 'base64':
-      return base64ToBytes(str).length
+      ret = base64ToBytes(str).length
+      break
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      ret = str.length * 2
+      break
     default:
       throw new Error('Unknown encoding')
   }
+  return ret
 }
 
 Buffer.concat = function (list, totalLength) {
@@ -256,6 +274,10 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
       return _hexWrite(this, string, offset, length)
     case 'utf8':
     case 'utf-8':
+    case 'ucs2': // TODO: No support for ucs2 or utf16le encodings yet
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
       return _utf8Write(this, string, offset, length)
     case 'ascii':
       return _asciiWrite(this, string, offset, length)
@@ -286,6 +308,10 @@ Buffer.prototype.toString = function (encoding, start, end) {
       return _hexSlice(self, start, end)
     case 'utf8':
     case 'utf-8':
+    case 'ucs2': // TODO: No support for ucs2 or utf16le encodings yet
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
       return _utf8Slice(self, start, end)
     case 'ascii':
       return _asciiSlice(self, start, end)
