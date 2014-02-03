@@ -242,6 +242,11 @@ function _base64Write (buf, string, offset, length) {
   return charsWritten
 }
 
+function _utf16leWrite (buf, string, offset, length) {
+  var bytes, pos
+  return Buffer._charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
+}
+
 Buffer.prototype.write = function (string, offset, length, encoding) {
   // Support both (string, offset, length, encoding)
   // and the legacy (string, encoding, offset, length)
@@ -274,10 +279,6 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
       return _hexWrite(this, string, offset, length)
     case 'utf8':
     case 'utf-8':
-    case 'ucs2': // TODO: No support for ucs2 or utf16le encodings yet
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
       return _utf8Write(this, string, offset, length)
     case 'ascii':
       return _asciiWrite(this, string, offset, length)
@@ -285,6 +286,11 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
       return _binaryWrite(this, string, offset, length)
     case 'base64':
       return _base64Write(this, string, offset, length)
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return _utf16leWrite(this, string, offset, length)
     default:
       throw new Error('Unknown encoding')
   }
@@ -308,10 +314,6 @@ Buffer.prototype.toString = function (encoding, start, end) {
       return _hexSlice(self, start, end)
     case 'utf8':
     case 'utf-8':
-    case 'ucs2': // TODO: No support for ucs2 or utf16le encodings yet
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
       return _utf8Slice(self, start, end)
     case 'ascii':
       return _asciiSlice(self, start, end)
@@ -319,6 +321,11 @@ Buffer.prototype.toString = function (encoding, start, end) {
       return _binarySlice(self, start, end)
     case 'base64':
       return _base64Slice(self, start, end)
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return _utf16leSlice(self, start, end)
     default:
       throw new Error('Unknown encoding')
   }
@@ -412,7 +419,15 @@ function _hexSlice (buf, start, end) {
   return out
 }
 
-// http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end
+function _utf16leSlice (buf, start, end) {
+  var bytes = buf.slice(start, end)
+  var res = ''
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] + bytes[i+1] * 256)
+  }
+  return res
+}
+
 Buffer.prototype.slice = function (start, end) {
   var len = this.length
   start = clamp(start, len, 0)
@@ -1003,6 +1018,20 @@ function asciiToBytes (str) {
   return byteArray
 }
 
+function utf16leToBytes (str) {
+  var c, hi, lo
+  var byteArray = []
+  for (var i = 0; i < str.length; i++) {
+    c = str.charCodeAt(i)
+    hi = c >> 8
+    lo = c % 256
+    byteArray.push(lo)
+    byteArray.push(hi)
+  }
+
+  return byteArray
+}
+
 function base64ToBytes (str) {
   return base64.toByteArray(str)
 }
@@ -1038,14 +1067,14 @@ function verifuint (value, max) {
   assert(Math.floor(value) === value, 'value has a fractional component')
 }
 
-function verifsint(value, max, min) {
+function verifsint (value, max, min) {
   assert(typeof value == 'number', 'cannot write a non-number as a number')
   assert(value <= max, 'value larger than maximum allowed value')
   assert(value >= min, 'value smaller than minimum allowed value')
   assert(Math.floor(value) === value, 'value has a fractional component')
 }
 
-function verifIEEE754(value, max, min) {
+function verifIEEE754 (value, max, min) {
   assert(typeof value == 'number', 'cannot write a non-number as a number')
   assert(value <= max, 'value larger than maximum allowed value')
   assert(value >= min, 'value smaller than minimum allowed value')
