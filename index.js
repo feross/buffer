@@ -274,26 +274,34 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
   }
   encoding = String(encoding || 'utf8').toLowerCase()
 
+  var ret
   switch (encoding) {
     case 'hex':
-      return _hexWrite(this, string, offset, length)
+      ret = _hexWrite(this, string, offset, length)
+      break
     case 'utf8':
     case 'utf-8':
-      return _utf8Write(this, string, offset, length)
+      ret = _utf8Write(this, string, offset, length)
+      break
     case 'ascii':
-      return _asciiWrite(this, string, offset, length)
+      ret = _asciiWrite(this, string, offset, length)
+      break
     case 'binary':
-      return _binaryWrite(this, string, offset, length)
+      ret = _binaryWrite(this, string, offset, length)
+      break
     case 'base64':
-      return _base64Write(this, string, offset, length)
+      ret = _base64Write(this, string, offset, length)
+      break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      return _utf16leWrite(this, string, offset, length)
+      ret = _utf16leWrite(this, string, offset, length)
+      break
     default:
       throw new Error('Unknown encoding')
   }
+  return ret
 }
 
 Buffer.prototype.toString = function (encoding, start, end) {
@@ -309,26 +317,34 @@ Buffer.prototype.toString = function (encoding, start, end) {
   if (end === start)
     return ''
 
+  var ret
   switch (encoding) {
     case 'hex':
-      return _hexSlice(self, start, end)
+      ret = _hexSlice(self, start, end)
+      break
     case 'utf8':
     case 'utf-8':
-      return _utf8Slice(self, start, end)
+      ret = _utf8Slice(self, start, end)
+      break
     case 'ascii':
-      return _asciiSlice(self, start, end)
+      ret = _asciiSlice(self, start, end)
+      break
     case 'binary':
-      return _binarySlice(self, start, end)
+      ret = _binarySlice(self, start, end)
+      break
     case 'base64':
-      return _base64Slice(self, start, end)
+      ret = _base64Slice(self, start, end)
+      break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      return _utf16leSlice(self, start, end)
+      ret = _utf16leSlice(self, start, end)
+      break
     default:
       throw new Error('Unknown encoding')
   }
+  return ret
 }
 
 Buffer.prototype.toJSON = function () {
