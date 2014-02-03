@@ -1,8 +1,15 @@
 {
   "name": "native-buffer-browserify",
-  "version": "2.1.0",
   "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
-  "main": "index.js",
+  "version": "2.1.0",
+  "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
+  "bugs": {
+    "url": "https://github.com/feross/native-buffer-browserify/issues"
+  },
+  "contributors": [
+    "Romain Beauxis <toots@rastageeks.org>",
+    "James Halliday <mail@substack.net>"
+  ],
   "dependencies": {
     "base64-js": "~0.0.4",
     "ieee754": "~1.1.1"
@@ -11,6 +18,22 @@
     "benchmark": "*",
     "browserify": "3.x",
     "tape": "*"
+  },
+  "homepage": "http://feross.org",
+  "keywords": [
+    "buffer",
+    "browserify",
+    "compatible",
+    "browser",
+    "arraybuffer",
+    "uint8array",
+    "dataview"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feross/native-buffer-browserify.git"
   },
   "scripts": {
     "test": "tape test/*.js",
@@ -28,24 +51,5 @@
       "iphone/6",
       "ipad/6"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/feross/native-buffer-browserify.git"
-  },
-  "keywords": [
-    "buffer",
-    "browserify",
-    "compatible",
-    "browser",
-    "arraybuffer",
-    "uint8array",
-    "dataview"
-  ],
-  "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
-  "contributors": [
-    "Romain Beauxis <toots@rastageeks.org>",
-    "James Halliday <mail@substack.net>"
-  ],
-  "license": "MIT"
+  }
 }
