@@ -1,8 +1,8 @@
 # native-buffer-browserify
-[![Build Status](http://img.shields.io/travis/feross/native-buffer-browserify.png)](https://travis-ci.org/feross/native-buffer-browserify)
-[![NPM Version](http://img.shields.io/npm/v/native-buffer-browserify.png)](https://npmjs.org/package/native-buffer-browserify)
-[![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.png)](https://npmjs.org/package/native-buffer-browserify)
-[![Gittip](http://img.shields.io/gittip/feross.png)](https://www.gittip.com/feross/)
+[![Build Status](http://img.shields.io/travis/feross/native-buffer-browserify.svg)](https://travis-ci.org/feross/native-buffer-browserify)
+[![NPM Version](http://img.shields.io/npm/v/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
+[![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
+[![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
 The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
 
