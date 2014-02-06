@@ -14,8 +14,8 @@ Buffer.poolSize = 8192
 Buffer._useTypedArrays = (function () {
    // Detect if browser supports Typed Arrays. Supported browsers are IE 10+,
    // Firefox 4+, Chrome 7+, Safari 5.1+, Opera 11.6+, iOS 4.2+.
-   if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined')
-      return false
+  if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined')
+    return false
 
   // Does the browser support adding properties to `Uint8Array` instances? If
   // not, then that's the same as no `Uint8Array` support. We need to be able to
@@ -243,8 +243,9 @@ function _base64Write (buf, string, offset, length) {
 }
 
 function _utf16leWrite (buf, string, offset, length) {
-  var bytes, pos
-  return Buffer._charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
+  var charsWritten = Buffer._charsWritten =
+    blitBuffer(utf16leToBytes(string), buf, offset, length)
+  return charsWritten
 }
 
 Buffer.prototype.write = function (string, offset, length, encoding) {
@@ -1076,7 +1077,7 @@ function decodeUtf8Char (str) {
  * exceed the maximum allowed value.
  */
 function verifuint (value, max) {
-  assert(typeof value == 'number', 'cannot write a non-number as a number')
+  assert(typeof value === 'number', 'cannot write a non-number as a number')
   assert(value >= 0,
       'specified a negative value for writing an unsigned value')
   assert(value <= max, 'value is larger than maximum value for type')
@@ -1084,14 +1085,14 @@ function verifuint (value, max) {
 }
 
 function verifsint (value, max, min) {
-  assert(typeof value == 'number', 'cannot write a non-number as a number')
+  assert(typeof value === 'number', 'cannot write a non-number as a number')
   assert(value <= max, 'value larger than maximum allowed value')
   assert(value >= min, 'value smaller than minimum allowed value')
   assert(Math.floor(value) === value, 'value has a fractional component')
 }
 
 function verifIEEE754 (value, max, min) {
-  assert(typeof value == 'number', 'cannot write a non-number as a number')
+  assert(typeof value === 'number', 'cannot write a non-number as a number')
   assert(value <= max, 'value larger than maximum allowed value')
   assert(value >= min, 'value smaller than minimum allowed value')
 }
