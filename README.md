@@ -1,40 +1,44 @@
-# native-buffer-browserify
+# buffer (a.k.a. native-buffer-browserify)
 [![Build Status](http://img.shields.io/travis/feross/native-buffer-browserify.svg)](https://travis-ci.org/feross/native-buffer-browserify)
 [![NPM Version](http://img.shields.io/npm/v/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
 [![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
 [![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
-The buffer module from [node.js](http://nodejs.org/), but for browsers. This is a fork of [buffer-browserify](https://github.com/toots/buffer-browserify).
+The buffer module from [node.js](http://nodejs.org/), for node and the browser.
 
 [![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
 
-## usage
+## install
 
-When you `require('buffer')` or reference the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically be loaded.
+When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically be loaded.
 
 If you want to manually install it for some reason, do:
 
 ```
-npm install native-buffer-browserify
+npm install buffer
 ```
 
 ## features
 
 - **Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)**
-- **Bundle size is nearly half of the original `buffer-browserify` (35KB vs 65KB!)**
-- **Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS).**
+- **Small bundle size (35KB) (half the size of `buffer-browserify`)**
+- **Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.).**
 - Preserves Node API exactly.
 - Faster pretty much across the board (see perf results below)
 - `.slice()` returns instances of the same type (Buffer)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
 - Does not modify any browser prototypes.
-- All tests from the original `buffer-browserify` project pass, plus additional ones.
+- Comprehensive test suite.
 
-## how does it work?
 
-The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the Buffer API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet.
+## usage
 
-By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
+```
+var buffer = require('buffer/')   // use the npm module, not the core module!
+```
+
+The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read the [official docs](http://nodejs.org/api/buffer.html) for a full list of supported methods.
+
 
 ## important differences
 
@@ -45,6 +49,14 @@ The Buffer constructor returns a `Uint8Array` (as discussed above) for performan
 ### don't rely on `slice()` to modify the memory of the parent buffer
 
 If the browser is using the Typed Array implementation then modifying a buffer created by `slice()` will modify the original memory, [just like in Node](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end). But for the Object implementation (used in unsupported browsers), this is not possible. Therefore, do not rely on this behavior until browser support gets better. (Note: currently even Firefox isn't using the Typed Array implementation because of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403).)
+
+
+## how does it work?
+
+The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the Buffer API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet.
+
+By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
+
 
 ## performance
 
@@ -138,6 +150,12 @@ OldBuffer#writeFloatBE x 4,020 ops/sec ±1.04% (92 runs sampled)
 Buffer#writeFloatBE x 1,811,134 ops/sec ±0.67% (91 runs sampled)
 Fastest is Buffer#writeFloatBE
 ```
+
+
+## credit
+
+This was originally forked from [buffer-browserify](https://github.com/toots/buffer-browserify).
+
 
 ## license
 
