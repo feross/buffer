@@ -34,7 +34,7 @@ npm install buffer
 ## usage
 
 ```
-var buffer = require('buffer/').Buffer  // use the npm module, not the core module!
+var Buffer = require('buffer/').Buffer  // use the npm module, not the core module!
 ```
 
 The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read the [official docs](http://nodejs.org/api/buffer.html) for a full list of supported methods.
