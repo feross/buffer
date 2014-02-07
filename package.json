@@ -1,6 +1,6 @@
 {
   "name": "buffer",
-  "description": "Node.js buffer API that works in the browser",
+  "description": "Node.js Buffer API, for the browser",
   "version": "2.1.2",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "bugs": {

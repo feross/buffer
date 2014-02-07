@@ -1,16 +1,16 @@
-# buffer (a.k.a. native-buffer-browserify)
+# buffer (native-buffer-browserify)
 [![Build Status](http://img.shields.io/travis/feross/native-buffer-browserify.svg)](https://travis-ci.org/feross/native-buffer-browserify)
 [![NPM Version](http://img.shields.io/npm/v/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
 [![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.svg)](https://npmjs.org/package/native-buffer-browserify)
 [![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
-The buffer module from [node.js](http://nodejs.org/), for node and the browser.
+The buffer module from [node.js](http://nodejs.org/), for the browser.
 
 [![testling badge](https://ci.testling.com/feross/native-buffer-browserify.png)](https://ci.testling.com/feross/native-buffer-browserify)
 
 ## install
 
-When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically be loaded.
+When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically load.
 
 If you want to manually install it for some reason, do:
 
