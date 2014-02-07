@@ -1,7 +1,7 @@
 {
   "name": "buffer",
   "description": "Node.js Buffer API, for the browser",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "bugs": {
     "url": "https://github.com/feross/native-buffer-browserify/issues"
