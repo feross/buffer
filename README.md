@@ -1,7 +1,7 @@
 # buffer (native-buffer-browserify)
 [![Build Status](http://img.shields.io/travis/feross/buffer.svg)](https://travis-ci.org/feross/buffer)
 [![NPM Version](http://img.shields.io/npm/v/buffer.svg)](https://npmjs.org/package/buffer)
-[![NPM](http://img.shields.io/npm/dm/buffer.svg)](https://npmjs.org/package/buffer)
+[![NPM](http://img.shields.io/npm/dm/native-buffer-browserify.svg)](https://npmjs.org/package/buffer)
 [![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
 The buffer module from [node.js](http://nodejs.org/), for the browser.
@@ -34,7 +34,7 @@ npm install buffer
 ## usage
 
 ```
-var buffer = require('buffer/')   // use the npm module, not the core module!
+var buffer = require('buffer/').Buffer  // use the npm module, not the core module!
 ```
 
 The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read the [official docs](http://nodejs.org/api/buffer.html) for a full list of supported methods.
