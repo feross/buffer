@@ -1,6 +1,6 @@
 {
-  "name": "native-buffer-browserify",
-  "description": "buffer module compatibility for browserify (backed by ArrayBuffer so its fast!)",
+  "name": "buffer",
+  "description": "Node.js buffer API that works in the browser",
   "version": "2.1.1",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "bugs": {
