@@ -1,3 +1,12 @@
+/**
+ * The buffer module from node.js, for the browser.
+ *
+ * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * License:  MIT
+ *
+ * `npm install buffer`
+ */
+
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
 
