@@ -4,7 +4,7 @@
   "version": "2.1.4",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "bugs": {
-    "url": "https://github.com/feross/native-buffer-browserify/issues"
+    "url": "https://github.com/feross/buffer/issues"
   },
   "contributors": [
     "Romain Beauxis <toots@rastageeks.org>",
@@ -33,7 +33,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feross/native-buffer-browserify.git"
+    "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
     "test": "tape test/*.js",
