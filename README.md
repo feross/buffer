@@ -20,14 +20,14 @@ npm install buffer
 
 ## features
 
-- **Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)**
-- **Small bundle size (35KB) (half the size of `buffer-browserify`)**
-- **Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.).**
-- Preserves Node API exactly.
+- Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)
+- Extremely small bundle size (**5.04KB minified + gzipped**, 35.5KB with comments)
+- Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.)
+- Preserves Node API exactly, with one important difference (see below)
 - Faster pretty much across the board (see perf results below)
 - `.slice()` returns instances of the same type (Buffer)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
-- Does not modify any browser prototypes.
+- Does not modify any browser prototypes or put anything on `window`.
 - Comprehensive test suite.
 
 
@@ -40,15 +40,28 @@ var Buffer = require('buffer/').Buffer  // use the npm module, not the core modu
 The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read the [official docs](http://nodejs.org/api/buffer.html) for a full list of supported methods.
 
 
-## important differences
+## differences
 
-### use `Buffer.isBuffer` instead of `instanceof Buffer`
+#### important: you must use `Buffer.isBuffer` instead of `instanceof Buffer`
 
-The Buffer constructor returns a `Uint8Array` (as discussed above) for performance reasons, so `instanceof Buffer` won't work. In node `Buffer.isBuffer` just does `instanceof Buffer`, but in browserify we use a `Buffer.isBuffer` shim that detects our special `Uint8Array`-based Buffers.
+The Buffer constructor returns a `Uint8Array` (with all the Buffer methods added as
+properties on the instance) for performance reasons, so `instanceof Buffer` won't work. In
+node `Buffer.isBuffer` is the same as `instanceof Buffer`, but in the browser you must use
+`Buffer.isBuffer` to detect the special `Uint8Array`-based Buffers.
 
-### don't rely on `slice()` to modify the memory of the parent buffer
+#### minor: `slice()` does not modify the memory of the parent buffer in all browsers
 
-If the browser is using the Typed Array implementation then modifying a buffer created by `slice()` will modify the original memory, [just like in Node](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end). But for the Object implementation (used in unsupported browsers), this is not possible. Therefore, do not rely on this behavior until browser support gets better. (Note: currently even Firefox isn't using the Typed Array implementation because of [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403).)
+In node, the `slice()` method returns a new `Buffer` that shares underlying memory with
+the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
+
+In all browsers that support typed arrays (with the exception of Firefox 4-29), this behavior is preserved. Browsers that don't support typed arrays get an alternate buffer implementation based on `Object`, which is slower and lacks the correct `slice()` semantics.
+
+Firefox versions <= 29 get the `Object` implementation -- not the typed arrays one -- because of [this
+bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) that made it impossible to add properties to a typed array. Fortunatly, the good folks at Mozilla have since fixed this bug.
+
+If you only support the latest browsers and/or don't rely on this behavior of `slice()`,
+then you have nothing to worry about. If you do rely on this behavior then note that your
+code won't work in browsers without typed arrays and Firefox <= 29.
 
 
 ## how does it work?

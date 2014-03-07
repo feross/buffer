@@ -23,13 +23,13 @@ Buffer.poolSize = 8192
 Buffer._useTypedArrays = (function () {
    // Detect if browser supports Typed Arrays. Supported browsers are IE 10+,
    // Firefox 4+, Chrome 7+, Safari 5.1+, Opera 11.6+, iOS 4.2+.
-  if (typeof Uint8Array === 'undefined' || typeof ArrayBuffer === 'undefined')
+  if (typeof Uint8Array !== 'function' || typeof ArrayBuffer !== 'function')
     return false
 
   // Does the browser support adding properties to `Uint8Array` instances? If
   // not, then that's the same as no `Uint8Array` support. We need to be able to
   // add all the node Buffer API methods.
-  // Relevant Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=695438
+  // Bug in Firefox 4-29, now fixed: https://bugzilla.mozilla.org/show_bug.cgi?id=695438
   try {
     var arr = new Uint8Array(0)
     arr.foo = function () { return 42 }
@@ -1087,8 +1087,7 @@ function decodeUtf8Char (str) {
  */
 function verifuint (value, max) {
   assert(typeof value === 'number', 'cannot write a non-number as a number')
-  assert(value >= 0,
-      'specified a negative value for writing an unsigned value')
+  assert(value >= 0, 'specified a negative value for writing an unsigned value')
   assert(value <= max, 'value is larger than maximum value for type')
   assert(Math.floor(value) === value, 'value has a fractional component')
 }
