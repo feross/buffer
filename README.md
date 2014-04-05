@@ -8,15 +8,11 @@ The buffer module from [node.js](http://nodejs.org/), for the browser.
 
 [![testling badge](https://ci.testling.com/feross/buffer.png)](https://ci.testling.com/feross/buffer)
 
-## install
-
 When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically load.
 
-If you want to manually install it for some reason, do:
-
-```
-npm install buffer
-```
+The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read
+the [official node.js docs](http://nodejs.org/api/buffer.html) for a full list of
+supported methods.
 
 ## features
 
@@ -31,44 +27,57 @@ npm install buffer
 - Comprehensive test suite.
 
 
+## install
+
+If you want to use this module directly without browserify, install it:
+
+```
+npm install buffer
+```
+
 ## usage
+
+As mentioned before, when you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically
+be included in your bundle so you get a `Buffer` API that actually works in the browser.
+
+If you're depending on this module explicitly, then require it like this:
 
 ```
 var Buffer = require('buffer/').Buffer  // use the npm module, not the core module!
 ```
 
-The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read the [official docs](http://nodejs.org/api/buffer.html) for a full list of supported methods.
-
-
-## differences
-
-#### important: you must use `Buffer.isBuffer` instead of `instanceof Buffer`
-
-The Buffer constructor returns a `Uint8Array` (with all the Buffer methods added as
-properties on the instance) for performance reasons, so `instanceof Buffer` won't work. In
-node `Buffer.isBuffer` is the same as `instanceof Buffer`, but in the browser you must use
-`Buffer.isBuffer` to detect the special `Uint8Array`-based Buffers.
-
-#### minor: `slice()` does not modify the memory of the parent buffer in all browsers
-
-In node, the `slice()` method returns a new `Buffer` that shares underlying memory with
-the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
-
-In all browsers that support typed arrays (with the exception of Firefox 4-29), this behavior is preserved. Browsers that don't support typed arrays get an alternate buffer implementation based on `Object`, which is slower and lacks the correct `slice()` semantics.
-
-Firefox versions <= 29 get the `Object` implementation -- not the typed arrays one -- because of [this
-bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) that made it impossible to add properties to a typed array. Fortunatly, the good folks at Mozilla have since fixed this bug.
-
-If you only support the latest browsers and/or don't rely on this behavior of `slice()`,
-then you have nothing to worry about. If you do rely on this behavior then note that your
-code won't work in browsers without typed arrays and Firefox <= 29.
+The module's API is 100% identical to node's `Buffer` API. Read the
+[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
+instance methods, and class methods supported by `Buffer`.
 
 
 ## how does it work?
 
-The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the Buffer API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet.
+The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the `Buffer` API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet. By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
 
-By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
+
+## differences
+
+#### IMPORTANT: always use `Buffer.isBuffer` instead of `instanceof Buffer`
+
+The Buffer constructor returns a `Uint8Array` (with all the Buffer methods added as
+properties on the instance) for performance reasons, so `instanceof Buffer` won't work. In
+node, you can use either `Buffer.isBuffer` or `instanceof Buffer` to check if an object
+is a `Buffer`. But, in the browser you must use `Buffer.isBuffer` to detect the special
+`Uint8Array`-based Buffers.
+
+#### Minor: `buf.slice()` does not modify parent buffer's memory in all browsers
+
+If you only support modern browsers (specifically, those with typed array support), then
+this issue does not affect you.
+
+In node, the `slice()` method returns a new `Buffer` that shares underlying memory with
+the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
+
+This works correctly in browsers with typed array support (\* with the exception of Firefox older than version 30). Browsers that lack typed arrays get an alternate buffer implementation based on `Object` which has no mechanism to point separate `Buffer`s to the same underlying slab of memory.
+
+\* *Firefox older than version 30 gets the `Object` implementation -- not the typed arrays one -- because of [this
+bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) that made it impossible to add properties to a typed array.*
 
 
 ## performance
