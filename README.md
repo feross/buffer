@@ -31,9 +31,10 @@ supported methods.
 
 If you want to use this module directly without browserify, install it:
 
-```
+```bash
 npm install buffer
 ```
+
 
 ## usage
 
@@ -42,7 +43,7 @@ be included in your bundle so you get a `Buffer` API that actually works in the 
 
 If you're depending on this module explicitly, then require it like this:
 
-```
+```js
 var Buffer = require('buffer/').Buffer  // use the npm module, not the core module!
 ```
 
