@@ -1,10 +1,6 @@
-# buffer (native-buffer-browserify)
-[![Build Status](http://img.shields.io/travis/feross/buffer.svg)](https://travis-ci.org/feross/buffer)
-[![NPM Version](http://img.shields.io/npm/v/buffer.svg)](https://npmjs.org/package/buffer)
-[![NPM](http://img.shields.io/npm/dm/buffer.svg)](https://npmjs.org/package/buffer)
-[![Gittip](http://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
+# buffer [![build](https://img.shields.io/travis/feross/buffer.svg)](https://travis-ci.org/feross/buffer) [![npm](https://img.shields.io/npm/v/buffer.svg)](https://npmjs.org/package/buffer) [![npm downloads](https://img.shields.io/npm/dm/buffer.svg)](https://npmjs.org/package/buffer) [![gittip](https://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
 
-The buffer module from [node.js](http://nodejs.org/), for the browser.
+#### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
 [![testling badge](https://ci.testling.com/feross/buffer.png)](https://ci.testling.com/feross/buffer)
 
@@ -34,6 +30,9 @@ If you want to use this module directly without browserify, install it:
 ```bash
 npm install buffer
 ```
+
+This module was previously called **native-buffer-browserify**, but please use **buffer**
+from now on.
 
 
 ## usage
