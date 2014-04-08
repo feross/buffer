@@ -29,6 +29,91 @@ test('new buffer from uint8array', function (t) {
   if (typeof Uint8Array === 'function') {
     var b1 = new Uint8Array([0, 1, 2, 3])
     var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from uint16array', function (t) {
+  if (typeof Uint16Array === 'function') {
+    var b1 = new Uint16Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from uint32array', function (t) {
+  if (typeof Uint32Array === 'function') {
+    var b1 = new Uint32Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from int16array', function (t) {
+  if (typeof Int16Array === 'function') {
+    var b1 = new Int16Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from int32array', function (t) {
+  if (typeof Int32Array === 'function') {
+    var b1 = new Int32Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from float32array', function (t) {
+  if (typeof Float32Array === 'function') {
+    var b1 = new Float32Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
+test('new buffer from float64array', function (t) {
+  if (typeof Float64Array === 'function') {
+    var b1 = new Float64Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1.length, b2.length)
     t.equal(b1[0], 0)
     t.equal(b1[1], 1)
     t.equal(b1[2], 2)
