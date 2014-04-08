@@ -233,6 +233,22 @@ test('copy() empty buffer with sourceEnd=0', function (t) {
   t.end()
 })
 
+test('copy() after slice()', function(t) {
+  t.plan(1)
+  var source = new B(200)
+  var dest = new B(200)
+  var expected = new B(200)
+  for (var i = 0; i < 200; i++) {
+    source[i] = i
+    dest[i] = 0
+  }
+  
+  source.slice(2).copy(dest)
+  source.copy(expected, 0, 2)
+  t.deepEqual(dest, expected)
+  t.end()
+})
+
 test('base64 ignore whitespace', function(t) {
   t.plan(1)
   var text = '\n   YW9ldQ==  '
