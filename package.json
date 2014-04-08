@@ -54,7 +54,8 @@
       "safari/5.1..latest",
       "opera/12.0..latest",
       "iphone/6",
-      "ipad/6"
+      "ipad/6",
+      "android-browser/latest"
     ]
   }
 }
