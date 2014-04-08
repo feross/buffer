@@ -1,4 +1,4 @@
-var B = require('../index.js').Buffer
+var B = require('../').Buffer
 var test = require('tape')
 
 test('detect utf16 surrogate pairs', function(t) {

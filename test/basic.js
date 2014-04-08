@@ -1,4 +1,4 @@
-var B = require('../index.js').Buffer
+var B = require('../').Buffer
 var test = require('tape')
 
 test('new buffer from array', function (t) {
@@ -15,6 +15,26 @@ test('new buffer from string', function (t) {
     new B('hey', 'utf8').toString(),
     'hey'
   )
+  t.end()
+})
+
+test('new buffer from buffer', function (t) {
+  var b1 = new B('asdf')
+  var b2 = new B(b1)
+  t.equal(b1.toString('hex'), b2.toString('hex'))
+  t.end()
+})
+
+test('new buffer from uint8array', function (t) {
+  if (typeof Uint8Array === 'function') {
+    var b1 = new Uint8Array([0, 1, 2, 3])
+    var b2 = new B(b1)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
   t.end()
 })
 

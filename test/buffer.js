@@ -1,9 +1,9 @@
-var B = require('../index.js').Buffer
+var B = require('../').Buffer
 var test = require('tape')
 
 test('utf8 buffer to base64', function (t) {
   t.equal(
-    new B("Ձאab", "utf8").toString("base64"),
+    new B('Ձאab', 'utf8').toString('base64'),
     '1YHXkGFi'
   )
   t.end()
@@ -11,7 +11,7 @@ test('utf8 buffer to base64', function (t) {
 
 test('utf8 buffer to hex', function (t) {
   t.equal(
-    new B("Ձאab", "utf8").toString("hex"),
+    new B('Ձאab', 'utf8').toString('hex'),
     'd581d7906162'
   )
   t.end()
@@ -19,7 +19,7 @@ test('utf8 buffer to hex', function (t) {
 
 test('utf8 to utf8', function (t) {
   t.equal(
-    new B("öäüõÖÄÜÕ", "utf8").toString("utf8"),
+    new B('öäüõÖÄÜÕ', 'utf8').toString('utf8'),
     'öäüõÖÄÜÕ'
   )
   t.end()
@@ -28,7 +28,7 @@ test('utf8 to utf8', function (t) {
 test('utf16le to utf16', function (t) {
     t.plan(1);
     t.equal(
-        new B(new B("abcd", "utf8").toString("utf16le"), "utf16le").toString("utf8"),
+        new B(new B('abcd', 'utf8').toString('utf16le'), 'utf16le').toString('utf8'),
         'abcd'
     );
     t.end();
@@ -37,7 +37,7 @@ test('utf16le to utf16', function (t) {
 test('utf16le to hex', function (t) {
     t.plan(1);
     t.equal(
-        new B("abcd", "utf16le").toString('hex'),
+        new B('abcd', 'utf16le').toString('hex'),
         '6100620063006400'
     );
     t.end();
@@ -45,7 +45,7 @@ test('utf16le to hex', function (t) {
 
 test('ascii buffer to base64', function (t) {
   t.equal(
-    new B("123456!@#$%^", "ascii").toString("base64"),
+    new B('123456!@#$%^', 'ascii').toString('base64'),
     'MTIzNDU2IUAjJCVe'
   )
   t.end()
@@ -53,7 +53,7 @@ test('ascii buffer to base64', function (t) {
 
 test('ascii buffer to hex', function (t) {
   t.equal(
-    new B("123456!@#$%^", "ascii").toString("hex"),
+    new B('123456!@#$%^', 'ascii').toString('hex'),
     '31323334353621402324255e'
   )
   t.end()
@@ -61,7 +61,7 @@ test('ascii buffer to hex', function (t) {
 
 test('base64 buffer to utf8', function (t) {
   t.equal(
-    new B("1YHXkGFi", "base64").toString("utf8"),
+    new B('1YHXkGFi', 'base64').toString('utf8'),
     'Ձאab'
   )
   t.end()
@@ -69,7 +69,7 @@ test('base64 buffer to utf8', function (t) {
 
 test('hex buffer to utf8', function (t) {
   t.equal(
-    new B("d581d7906162", "hex").toString("utf8"),
+    new B('d581d7906162', 'hex').toString('utf8'),
     'Ձאab'
   )
   t.end()
@@ -77,7 +77,7 @@ test('hex buffer to utf8', function (t) {
 
 test('base64 buffer to ascii', function (t) {
   t.equal(
-    new B("MTIzNDU2IUAjJCVe", "base64").toString("ascii"),
+    new B('MTIzNDU2IUAjJCVe', 'base64').toString('ascii'),
     '123456!@#$%^'
   )
   t.end()
@@ -85,7 +85,7 @@ test('base64 buffer to ascii', function (t) {
 
 test('hex buffer to ascii', function (t) {
   t.equal(
-    new B("31323334353621402324255e", "hex").toString("ascii"),
+    new B('31323334353621402324255e', 'hex').toString('ascii'),
     '123456!@#$%^'
   )
   t.end()
@@ -93,7 +93,7 @@ test('hex buffer to ascii', function (t) {
 
 test('base64 buffer to binary', function (t) {
   t.equal(
-    new B("MTIzNDU2IUAjJCVe", "base64").toString("binary"),
+    new B('MTIzNDU2IUAjJCVe', 'base64').toString('binary'),
     '123456!@#$%^'
   )
   t.end()
@@ -101,7 +101,7 @@ test('base64 buffer to binary', function (t) {
 
 test('hex buffer to binary', function (t) {
   t.equal(
-    new B("31323334353621402324255e", "hex").toString("binary"),
+    new B('31323334353621402324255e', 'hex').toString('binary'),
     '123456!@#$%^'
   )
   t.end()
@@ -109,38 +109,38 @@ test('hex buffer to binary', function (t) {
 
 test('utf8 to binary', function (t) {
   t.equal(
-    new B("öäüõÖÄÜÕ", "utf8").toString("binary"),
-    "Ã¶Ã¤Ã¼ÃµÃÃÃÃ"
+    new B('öäüõÖÄÜÕ', 'utf8').toString('binary'),
+    'Ã¶Ã¤Ã¼ÃµÃÃÃÃ'
   )
   t.end()
 })
 
-test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function (t) {
+test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
   t.plan(2*(2*2*2+2))
   var hex = [
-    "03", "0300", "0003", "03000000", "00000003",
-    "fd", "fdff", "fffd", "fdffffff", "fffffffd"
+    '03', '0300', '0003', '03000000', '00000003',
+    'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
   ]
   var reads = [ 3, 3, 3, 3, 3, -3, -3, -3, -3, -3 ]
-  var xs = ["UInt","Int"]
+  var xs = ['UInt','Int']
   var ys = [8,16,32]
   for (var i = 0; i < xs.length; i++) {
     var x = xs[i]
     for (var j = 0; j < ys.length; j++) {
       var y = ys[j]
-      var endianesses = (y === 8) ? [""] : ["LE","BE"]
+      var endianesses = (y === 8) ? [''] : ['LE','BE']
       for (var k = 0; k < endianesses.length; k++) {
         var z = endianesses[k]
 
         var v1  = new B(y / 8)
-        var writefn  = "write" + x + y + z
-        var val = (x === "Int") ? -3 : 3
+        var writefn  = 'write' + x + y + z
+        var val = (x === 'Int') ? -3 : 3
         v1[writefn](val, 0)
         t.equal(
-          v1.toString("hex"),
+          v1.toString('hex'),
           hex.shift()
         )
-        var readfn = "read" + x + y + z
+        var readfn = 'read' + x + y + z
         t.equal(
           v1[readfn](0),
           reads.shift()
@@ -151,41 +151,41 @@ test("hex of write{Uint,Int}{8,16,32}{LE,BE}", function (t) {
   t.end()
 })
 
-test("hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow", function (t) {
+test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
     t.plan(3*(2*2*2+2))
     var hex = [
-      "", "03", "00", "030000", "000000",
-      "", "fd", "ff", "fdffff", "ffffff"
+      '', '03', '00', '030000', '000000',
+      '', 'fd', 'ff', 'fdffff', 'ffffff'
     ]
     var reads = [
       undefined, 3, 0, 3, 0,
       undefined, 253, -256, 16777213, -256
     ]
-    var xs = ["UInt","Int"]
+    var xs = ['UInt','Int']
     var ys = [8,16,32]
     for (var i = 0; i < xs.length; i++) {
       var x = xs[i]
       for (var j = 0; j < ys.length; j++) {
         var y = ys[j]
-        var endianesses = (y === 8) ? [""] : ["LE","BE"]
+        var endianesses = (y === 8) ? [''] : ['LE','BE']
         for (var k = 0; k < endianesses.length; k++) {
           var z = endianesses[k]
 
           var v1  = new B(y / 8 - 1)
           var next = new B(4)
           next.writeUInt32BE(0, 0)
-          var writefn  = "write" + x + y + z
-          var val = (x === "Int") ? -3 : 3
+          var writefn  = 'write' + x + y + z
+          var val = (x === 'Int') ? -3 : 3
           v1[writefn](val, 0, true)
           t.equal(
-            v1.toString("hex"),
+            v1.toString('hex'),
             hex.shift()
           )
           // check that nothing leaked to next buffer.
           t.equal(next.readUInt32BE(0), 0)
           // check that no bytes are read from next buffer.
           next.writeInt32BE(~0, 0)
-          var readfn = "read" + x + y + z
+          var readfn = 'read' + x + y + z
           t.equal(
             v1[readfn](0, true),
             reads.shift()
@@ -196,7 +196,7 @@ test("hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow", function (t) {
     t.end()
 })
 
-test("concat() a varying number of buffers", function (t) {
+test('concat() a varying number of buffers', function (t) {
   t.plan(5)
   var zero = []
   var one  = [ new B('asdf') ]
@@ -216,27 +216,7 @@ test("concat() a varying number of buffers", function (t) {
   t.end()
 })
 
-test("new buffer from buffer", function (t) {
-  var b1 = new B('asdf')
-  var b2 = new B(b1)
-  t.equal(b1.toString('hex'), b2.toString('hex'))
-  t.end()
-})
-
-test("new buffer from uint8array", function (t) {
-  if (typeof Uint8Array === 'function') {
-    var b1 = new Uint8Array([0, 1, 2, 3])
-    var b2 = new B(b1)
-    t.equal(b1[0], 0)
-    t.equal(b1[1], 1)
-    t.equal(b1[2], 2)
-    t.equal(b1[3], 3)
-    t.equal(b1[4], undefined)
-  }
-  t.end()
-})
-
-test("fill", function(t) {
+test('fill', function(t) {
   t.plan(1)
   var b = new B(10)
   b.fill(2)
@@ -255,7 +235,7 @@ test('copy() empty buffer with sourceEnd=0', function (t) {
 
 test('base64 ignore whitespace', function(t) {
   t.plan(1)
-  var text = "\n   YW9ldQ==  "
+  var text = '\n   YW9ldQ==  '
   var buf = new B(text, 'base64')
   t.equal(buf.toString(), 'aoeu')
   t.end()
