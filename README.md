@@ -182,4 +182,4 @@ This was originally forked from [buffer-browserify](https://github.com/toots/buf
 
 ## license
 
-MIT. Copyright (C) [Feross Aboukhadijeh](http://feross.org), Romain Beauxis, and other contributors.
+MIT. Copyright (C) [Feross Aboukhadijeh](http://feross.org), and other contributors. Originally forked from an MIT-licensed module by Romain Beauxis.
