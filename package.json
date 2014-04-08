@@ -19,9 +19,9 @@
     "ieee754": "~1.1.1"
   },
   "devDependencies": {
-    "benchmark": "*",
+    "benchmark": "1.x",
     "browserify": "3.x",
-    "tape": "*"
+    "tape": "2.x"
   },
   "homepage": "http://feross.org",
   "keywords": [
