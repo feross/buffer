@@ -10,7 +10,6 @@ test('new buffer from array', function (t) {
 })
 
 test('new buffer from string', function (t) {
-  t.plan(1)
   t.equal(
     new B('hey', 'utf8').toString(),
     'hey'
@@ -138,7 +137,6 @@ test('buffer toArrayBuffer()', function (t) {
 })
 
 test('buffer toJSON()', function (t) {
-  t.plan(1)
   var data = [1, 2, 3, 4]
   t.deepEqual(
     new B(data).toJSON(),
@@ -148,10 +146,8 @@ test('buffer toJSON()', function (t) {
 })
 
 test('buffer copy example', function (t) {
-  t.plan(1)
-
-  buf1 = new B(26)
-  buf2 = new B(26)
+  var buf1 = new B(26)
+  var buf2 = new B(26)
 
   for (var i = 0 ; i < 26 ; i++) {
     buf1[i] = i + 97; // 97 is ASCII a

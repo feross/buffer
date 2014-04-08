@@ -26,22 +26,20 @@ test('utf8 to utf8', function (t) {
 })
 
 test('utf16le to utf16', function (t) {
-    t.plan(1);
     t.equal(
         new B(new B('abcd', 'utf8').toString('utf16le'), 'utf16le').toString('utf8'),
         'abcd'
-    );
-    t.end();
-});
+    )
+    t.end()
+})
 
 test('utf16le to hex', function (t) {
-    t.plan(1);
     t.equal(
         new B('abcd', 'utf16le').toString('hex'),
         '6100620063006400'
-    );
-    t.end();
-});
+    )
+    t.end()
+})
 
 test('ascii buffer to base64', function (t) {
   t.equal(
@@ -197,7 +195,6 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
 })
 
 test('concat() a varying number of buffers', function (t) {
-  t.plan(5)
   var zero = []
   var one  = [ new B('asdf') ]
   var long = []
@@ -217,7 +214,6 @@ test('concat() a varying number of buffers', function (t) {
 })
 
 test('fill', function(t) {
-  t.plan(1)
   var b = new B(10)
   b.fill(2)
   t.equal(b.toString('hex'), '02020202020202020202')
@@ -225,7 +221,6 @@ test('fill', function(t) {
 })
 
 test('copy() empty buffer with sourceEnd=0', function (t) {
-  t.plan(1)
   var source = new B([42])
   var destination = new B([43])
   source.copy(destination, 0, 0, 0)
@@ -234,7 +229,6 @@ test('copy() empty buffer with sourceEnd=0', function (t) {
 })
 
 test('copy() after slice()', function(t) {
-  t.plan(1)
   var source = new B(200)
   var dest = new B(200)
   var expected = new B(200)
@@ -242,7 +236,7 @@ test('copy() after slice()', function(t) {
     source[i] = i
     dest[i] = 0
   }
-  
+
   source.slice(2).copy(dest)
   source.copy(expected, 0, 2)
   t.deepEqual(dest, expected)
@@ -250,7 +244,6 @@ test('copy() after slice()', function(t) {
 })
 
 test('base64 ignore whitespace', function(t) {
-  t.plan(1)
   var text = '\n   YW9ldQ==  '
   var buf = new B(text, 'base64')
   t.equal(buf.toString(), 'aoeu')
@@ -258,7 +251,6 @@ test('base64 ignore whitespace', function(t) {
 })
 
 test('buffer.slice sets indexes', function (t) {
-  t.plan(1)
   t.equal((new B('hallo')).slice(0, 5).toString(), 'hallo')
   t.end()
 })
@@ -271,7 +263,6 @@ test('buffer.slice out of range', function (t) {
 })
 
 test('base64 strings without padding', function (t) {
-  t.plan(1)
   t.equal((new B('YW9ldQ', 'base64').toString()), 'aoeu')
   t.end()
 })
