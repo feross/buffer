@@ -90,10 +90,7 @@ function Buffer (subject, encoding, noZero) {
   }
 
   var i
-  if (Buffer._useTypedArrays && (subject instanceof Uint8Array
-      || subject instanceof Uint16Array || subject instanceof Int16Array
-      || subject instanceof Uint32Array || subject instanceof Int32Array
-      || subject instanceof Float32Array || subject instanceof Float64Array)) {
+  if (Buffer._useTypedArrays && typeof subject.byteLength === 'number') {
     // Speed optimization -- use set if we're copying from a typed array
     buf._set(subject)
   } else if (isArrayish(subject)) {
