@@ -42,7 +42,8 @@
   "scripts": {
     "test": "tape test/*.js",
     "prepublish": "./bundle.sh",
-    "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html"
+    "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html",
+    "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c"
   },
   "testling": {
     "files": "test/*.js",
