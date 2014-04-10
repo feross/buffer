@@ -90,7 +90,7 @@ function Buffer (subject, encoding, noZero) {
   }
 
   var i
-  if (Buffer._useTypedArrays && typeof subject.byteLength === 'number') {
+  if (Buffer._useTypedArrays && typeof subject.byteLength === 'number') {
     // Speed optimization -- use set if we're copying from a typed array
     buf._set(subject)
   } else if (isArrayish(subject)) {
