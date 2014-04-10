@@ -25,7 +25,7 @@ test('new buffer from buffer', function (t) {
 })
 
 test('new buffer from uint8array', function (t) {
-  if (typeof Uint8Array === 'function') {
+  if (typeof Uint8Array !== 'undefined') {
     var b1 = new Uint8Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -39,7 +39,7 @@ test('new buffer from uint8array', function (t) {
 })
 
 test('new buffer from uint16array', function (t) {
-  if (typeof Uint16Array === 'function') {
+  if (typeof Uint16Array !== 'undefined') {
     var b1 = new Uint16Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -53,7 +53,7 @@ test('new buffer from uint16array', function (t) {
 })
 
 test('new buffer from uint32array', function (t) {
-  if (typeof Uint32Array === 'function') {
+  if (typeof Uint32Array !== 'undefined') {
     var b1 = new Uint32Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -67,7 +67,7 @@ test('new buffer from uint32array', function (t) {
 })
 
 test('new buffer from int16array', function (t) {
-  if (typeof Int16Array === 'function') {
+  if (typeof Int16Array !== 'undefined') {
     var b1 = new Int16Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -81,7 +81,7 @@ test('new buffer from int16array', function (t) {
 })
 
 test('new buffer from int32array', function (t) {
-  if (typeof Int32Array === 'function') {
+  if (typeof Int32Array !== 'undefined') {
     var b1 = new Int32Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -95,7 +95,7 @@ test('new buffer from int32array', function (t) {
 })
 
 test('new buffer from float32array', function (t) {
-  if (typeof Float32Array === 'function') {
+  if (typeof Float32Array !== 'undefined') {
     var b1 = new Float32Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -109,7 +109,7 @@ test('new buffer from float32array', function (t) {
 })
 
 test('new buffer from float64array', function (t) {
-  if (typeof Float64Array === 'function') {
+  if (typeof Float64Array !== 'undefined') {
     var b1 = new Float64Array([0, 1, 2, 3])
     var b2 = new B(b1)
     t.equal(b1.length, b2.length)
@@ -124,7 +124,7 @@ test('new buffer from float64array', function (t) {
 
 test('buffer toArrayBuffer()', function (t) {
   var data = [1, 2, 3, 4, 5, 6, 7, 8]
-  if (typeof Uint8Array === 'function') {
+  if (typeof Uint8Array !== 'undefined') {
     var result = new B(data).toArrayBuffer()
     var expected = new Uint8Array(data).buffer
     for (var i = 0; i < expected.byteLength; i++) {

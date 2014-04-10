@@ -904,7 +904,7 @@ Buffer.prototype.inspect = function () {
  * Added in Node 0.12. Only available in browsers that support ArrayBuffer.
  */
 Buffer.prototype.toArrayBuffer = function () {
-  if (typeof Uint8Array === 'function') {
+  if (typeof Uint8Array !== 'undefined') {
     if (Buffer._useTypedArrays) {
       return (new Buffer(this)).buffer
     } else {
