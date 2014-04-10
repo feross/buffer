@@ -4,7 +4,7 @@ var test = require('tape')
 test('modifying buffer created by .slice() modifies original memory', function (t) {
   if (!B._useTypedArrays) return t.end()
 
-  var buf1 = new Buffer(26)
+  var buf1 = new B(26)
   for (var i = 0 ; i < 26 ; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
   }
@@ -21,7 +21,7 @@ test('modifying buffer created by .slice() modifies original memory', function (
 test('modifying parent buffer modifies .slice() buffer\'s memory', function (t) {
   if (!B._useTypedArrays) return t.end()
 
-  var buf1 = new Buffer(26)
+  var buf1 = new B(26)
   for (var i = 0 ; i < 26 ; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
   }
