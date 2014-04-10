@@ -6,7 +6,7 @@
 
 When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically load.
 
-The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read
+The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read
 the [official node.js docs](http://nodejs.org/api/buffer.html) for a full list of
 supported methods.
 

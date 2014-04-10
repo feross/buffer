@@ -145,7 +145,7 @@ test('buffer toJSON()', function (t) {
   t.end()
 })
 
-test('buffer copy example', function (t) {
+test('buffer copy example', function (t) {
   var buf1 = new B(26)
   var buf2 = new B(26)
 
