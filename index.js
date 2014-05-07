@@ -911,6 +911,8 @@ Buffer.prototype.fill = function (value, start, end) {
   for (var i = start; i < end; i++) {
     this[i] = value
   }
+
+  return this
 }
 
 Buffer.prototype.inspect = function () {
@@ -947,11 +949,6 @@ Buffer.prototype.toArrayBuffer = function () {
 
 // HELPER FUNCTIONS
 // ================
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
-}
 
 var BP = Buffer.prototype
 
@@ -1010,6 +1007,11 @@ Buffer._augment = function (arr) {
   arr.toArrayBuffer = BP.toArrayBuffer
 
   return arr
+}
+
+function stringtrim (str) {
+  if (str.trim) return str.trim()
+  return str.replace(/^\s+|\s+$/g, '')
 }
 
 // slice(start, end)
