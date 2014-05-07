@@ -212,7 +212,7 @@ Buffer.compare = function (a, b) {
 // BUFFER INSTANCE METHODS
 // =======================
 
-function _hexWrite (buf, string, offset, length) {
+function hexWrite (buf, string, offset, length) {
   offset = Number(offset) || 0
   var remaining = buf.length - offset
   if (!length) {
@@ -240,29 +240,29 @@ function _hexWrite (buf, string, offset, length) {
   return i
 }
 
-function _utf8Write (buf, string, offset, length) {
+function utf8Write (buf, string, offset, length) {
   var charsWritten = Buffer._charsWritten =
     blitBuffer(utf8ToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _asciiWrite (buf, string, offset, length) {
+function asciiWrite (buf, string, offset, length) {
   var charsWritten = Buffer._charsWritten =
     blitBuffer(asciiToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _binaryWrite (buf, string, offset, length) {
-  return _asciiWrite(buf, string, offset, length)
+function binaryWrite (buf, string, offset, length) {
+  return asciiWrite(buf, string, offset, length)
 }
 
-function _base64Write (buf, string, offset, length) {
+function base64Write (buf, string, offset, length) {
   var charsWritten = Buffer._charsWritten =
     blitBuffer(base64ToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _utf16leWrite (buf, string, offset, length) {
+function utf16leWrite (buf, string, offset, length) {
   var charsWritten = Buffer._charsWritten =
     blitBuffer(utf16leToBytes(string), buf, offset, length)
   return charsWritten
@@ -298,26 +298,26 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
   var ret
   switch (encoding) {
     case 'hex':
-      ret = _hexWrite(this, string, offset, length)
+      ret = hexWrite(this, string, offset, length)
       break
     case 'utf8':
     case 'utf-8':
-      ret = _utf8Write(this, string, offset, length)
+      ret = utf8Write(this, string, offset, length)
       break
     case 'ascii':
-      ret = _asciiWrite(this, string, offset, length)
+      ret = asciiWrite(this, string, offset, length)
       break
     case 'binary':
-      ret = _binaryWrite(this, string, offset, length)
+      ret = binaryWrite(this, string, offset, length)
       break
     case 'base64':
-      ret = _base64Write(this, string, offset, length)
+      ret = base64Write(this, string, offset, length)
       break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      ret = _utf16leWrite(this, string, offset, length)
+      ret = utf16leWrite(this, string, offset, length)
       break
     default:
       throw new Error('Unknown encoding')
@@ -339,26 +339,26 @@ Buffer.prototype.toString = function (encoding, start, end) {
   var ret
   switch (encoding) {
     case 'hex':
-      ret = _hexSlice(self, start, end)
+      ret = hexSlice(self, start, end)
       break
     case 'utf8':
     case 'utf-8':
-      ret = _utf8Slice(self, start, end)
+      ret = utf8Slice(self, start, end)
       break
     case 'ascii':
-      ret = _asciiSlice(self, start, end)
+      ret = asciiSlice(self, start, end)
       break
     case 'binary':
-      ret = _binarySlice(self, start, end)
+      ret = binarySlice(self, start, end)
       break
     case 'base64':
-      ret = _base64Slice(self, start, end)
+      ret = base64Slice(self, start, end)
       break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      ret = _utf16leSlice(self, start, end)
+      ret = utf16leSlice(self, start, end)
       break
     default:
       throw new Error('Unknown encoding')
@@ -420,7 +420,7 @@ Buffer.prototype.copy = function (target, target_start, start, end) {
   }
 }
 
-function _base64Slice (buf, start, end) {
+function base64Slice (buf, start, end) {
   if (start === 0 && end === buf.length) {
     return base64.fromByteArray(buf)
   } else {
@@ -428,7 +428,7 @@ function _base64Slice (buf, start, end) {
   }
 }
 
-function _utf8Slice (buf, start, end) {
+function utf8Slice (buf, start, end) {
   var res = ''
   var tmp = ''
   end = Math.min(buf.length, end)
@@ -445,7 +445,7 @@ function _utf8Slice (buf, start, end) {
   return res + decodeUtf8Char(tmp)
 }
 
-function _asciiSlice (buf, start, end) {
+function asciiSlice (buf, start, end) {
   var ret = ''
   end = Math.min(buf.length, end)
 
@@ -455,11 +455,11 @@ function _asciiSlice (buf, start, end) {
   return ret
 }
 
-function _binarySlice (buf, start, end) {
-  return _asciiSlice(buf, start, end)
+function binarySlice (buf, start, end) {
+  return asciiSlice(buf, start, end)
 }
 
-function _hexSlice (buf, start, end) {
+function hexSlice (buf, start, end) {
   var len = buf.length
 
   if (!start || start < 0) start = 0
@@ -472,7 +472,7 @@ function _hexSlice (buf, start, end) {
   return out
 }
 
-function _utf16leSlice (buf, start, end) {
+function utf16leSlice (buf, start, end) {
   var bytes = buf.slice(start, end)
   var res = ''
   for (var i = 0; i < bytes.length; i += 2) {
@@ -522,7 +522,7 @@ Buffer.prototype.readUInt8 = function (offset, noAssert) {
   return this[offset]
 }
 
-function _readUInt16 (buf, offset, littleEndian, noAssert) {
+function readUInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -547,14 +547,14 @@ function _readUInt16 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readUInt16LE = function (offset, noAssert) {
-  return _readUInt16(this, offset, true, noAssert)
+  return readUInt16(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readUInt16BE = function (offset, noAssert) {
-  return _readUInt16(this, offset, false, noAssert)
+  return readUInt16(this, offset, false, noAssert)
 }
 
-function _readUInt32 (buf, offset, littleEndian, noAssert) {
+function readUInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -587,11 +587,11 @@ function _readUInt32 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readUInt32LE = function (offset, noAssert) {
-  return _readUInt32(this, offset, true, noAssert)
+  return readUInt32(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readUInt32BE = function (offset, noAssert) {
-  return _readUInt32(this, offset, false, noAssert)
+  return readUInt32(this, offset, false, noAssert)
 }
 
 Buffer.prototype.readInt8 = function (offset, noAssert) {
@@ -611,7 +611,7 @@ Buffer.prototype.readInt8 = function (offset, noAssert) {
     return this[offset]
 }
 
-function _readInt16 (buf, offset, littleEndian, noAssert) {
+function readInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -622,7 +622,7 @@ function _readInt16 (buf, offset, littleEndian, noAssert) {
   if (offset >= len)
     return
 
-  var val = _readUInt16(buf, offset, littleEndian, true)
+  var val = readUInt16(buf, offset, littleEndian, true)
   var neg = val & 0x8000
   if (neg)
     return (0xffff - val + 1) * -1
@@ -631,14 +631,14 @@ function _readInt16 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readInt16LE = function (offset, noAssert) {
-  return _readInt16(this, offset, true, noAssert)
+  return readInt16(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readInt16BE = function (offset, noAssert) {
-  return _readInt16(this, offset, false, noAssert)
+  return readInt16(this, offset, false, noAssert)
 }
 
-function _readInt32 (buf, offset, littleEndian, noAssert) {
+function readInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -649,7 +649,7 @@ function _readInt32 (buf, offset, littleEndian, noAssert) {
   if (offset >= len)
     return
 
-  var val = _readUInt32(buf, offset, littleEndian, true)
+  var val = readUInt32(buf, offset, littleEndian, true)
   var neg = val & 0x80000000
   if (neg)
     return (0xffffffff - val + 1) * -1
@@ -658,14 +658,14 @@ function _readInt32 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readInt32LE = function (offset, noAssert) {
-  return _readInt32(this, offset, true, noAssert)
+  return readInt32(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readInt32BE = function (offset, noAssert) {
-  return _readInt32(this, offset, false, noAssert)
+  return readInt32(this, offset, false, noAssert)
 }
 
-function _readFloat (buf, offset, littleEndian, noAssert) {
+function readFloat (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
@@ -675,14 +675,14 @@ function _readFloat (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readFloatLE = function (offset, noAssert) {
-  return _readFloat(this, offset, true, noAssert)
+  return readFloat(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readFloatBE = function (offset, noAssert) {
-  return _readFloat(this, offset, false, noAssert)
+  return readFloat(this, offset, false, noAssert)
 }
 
-function _readDouble (buf, offset, littleEndian, noAssert) {
+function readDouble (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset + 7 < buf.length, 'Trying to read beyond buffer length')
@@ -692,11 +692,11 @@ function _readDouble (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readDoubleLE = function (offset, noAssert) {
-  return _readDouble(this, offset, true, noAssert)
+  return readDouble(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readDoubleBE = function (offset, noAssert) {
-  return _readDouble(this, offset, false, noAssert)
+  return readDouble(this, offset, false, noAssert)
 }
 
 Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
@@ -712,7 +712,7 @@ Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
   this[offset] = value
 }
 
-function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
+function writeUInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -733,14 +733,14 @@ function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.writeUInt16LE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, true, noAssert)
+  writeUInt16(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeUInt16BE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, false, noAssert)
+  writeUInt16(this, value, offset, false, noAssert)
 }
 
-function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
+function writeUInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -760,11 +760,11 @@ function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.writeUInt32LE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, true, noAssert)
+  writeUInt32(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeUInt32BE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, false, noAssert)
+  writeUInt32(this, value, offset, false, noAssert)
 }
 
 Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
@@ -784,7 +784,7 @@ Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
     this.writeUInt8(0xff + value + 1, offset, noAssert)
 }
 
-function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
+function writeInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -798,20 +798,20 @@ function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
     return
 
   if (value >= 0)
-    _writeUInt16(buf, value, offset, littleEndian, noAssert)
+    writeUInt16(buf, value, offset, littleEndian, noAssert)
   else
-    _writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert)
+    writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert)
 }
 
 Buffer.prototype.writeInt16LE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, true, noAssert)
+  writeInt16(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeInt16BE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, false, noAssert)
+  writeInt16(this, value, offset, false, noAssert)
 }
 
-function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
+function writeInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -825,20 +825,20 @@ function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
     return
 
   if (value >= 0)
-    _writeUInt32(buf, value, offset, littleEndian, noAssert)
+    writeUInt32(buf, value, offset, littleEndian, noAssert)
   else
-    _writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert)
+    writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert)
 }
 
 Buffer.prototype.writeInt32LE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, true, noAssert)
+  writeInt32(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeInt32BE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, false, noAssert)
+  writeInt32(this, value, offset, false, noAssert)
 }
 
-function _writeFloat (buf, value, offset, littleEndian, noAssert) {
+function writeFloat (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -855,14 +855,14 @@ function _writeFloat (buf, value, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.writeFloatLE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, true, noAssert)
+  writeFloat(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeFloatBE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, false, noAssert)
+  writeFloat(this, value, offset, false, noAssert)
 }
 
-function _writeDouble (buf, value, offset, littleEndian, noAssert) {
+function writeDouble (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -880,11 +880,11 @@ function _writeDouble (buf, value, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.writeDoubleLE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, true, noAssert)
+  writeDouble(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeDoubleBE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, false, noAssert)
+  writeDouble(this, value, offset, false, noAssert)
 }
 
 // fill(value, start=0, end=buffer.length)
