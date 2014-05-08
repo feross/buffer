@@ -114,7 +114,7 @@ test('utf8 to binary', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
-  t.plan(2*(2*2*2+2))
+  t.plan(2 * (2 * 2 * 2 + 2))
   var hex = [
     '03', '0300', '0003', '03000000', '00000003',
     'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
@@ -150,7 +150,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
-    t.plan(3*(2*2*2+2))
+    t.plan(3 * (2 * 2 * 2 + 2))
     var hex = [
       '', '03', '00', '030000', '000000',
       '', 'fd', 'ff', 'fdffff', 'ffffff'
@@ -198,7 +198,9 @@ test('concat() a varying number of buffers', function (t) {
   var zero = []
   var one  = [ new B('asdf') ]
   var long = []
-  for (var i = 0; i < 10; i++) long.push(new B('asdf'))
+  for (var i = 0; i < 10; i++) {
+    long.push(new B('asdf'))
+  }
 
   var flatZero = B.concat(zero)
   var flatOne = B.concat(one)
@@ -213,10 +215,20 @@ test('concat() a varying number of buffers', function (t) {
   t.end()
 })
 
-test('fill', function(t) {
+test('fill', function (t) {
   var b = new B(10)
   b.fill(2)
   t.equal(b.toString('hex'), '02020202020202020202')
+  t.end()
+})
+
+test('fill (string)', function (t) {
+  var b = new B(10)
+  b.fill('abc')
+  t.equal(b.toString(), 'abcabcabca')
+  b.fill('է')
+  console.log(b[0], b[1], b[2], b[3], b[4])
+  t.equal(b.toString(), 'էէէէէ')
   t.end()
 })
 
@@ -228,7 +240,7 @@ test('copy() empty buffer with sourceEnd=0', function (t) {
   t.end()
 })
 
-test('copy() after slice()', function(t) {
+test('copy() after slice()', function (t) {
   var source = new B(200)
   var dest = new B(200)
   var expected = new B(200)
@@ -243,7 +255,7 @@ test('copy() after slice()', function(t) {
   t.end()
 })
 
-test('base64 ignore whitespace', function(t) {
+test('base64 ignore whitespace', function (t) {
   var text = '\n   YW9ldQ==  '
   var buf = new B(text, 'base64')
   t.equal(buf.toString(), 'aoeu')
