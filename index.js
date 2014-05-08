@@ -370,7 +370,6 @@ Buffer.prototype.toJSON = function () {
 
 Buffer.prototype.equals = function (b) {
   assert(Buffer.isBuffer(b), 'Argument must be a Buffer')
-  console.log(this, b)
   return Buffer.compare(this, b) === 0
 }
 
