@@ -194,6 +194,16 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
     t.end()
 })
 
+test('test offset returns are correct', function (t) {
+  var b = new B(16)
+  t.equal(4, b.writeUInt32LE(0, 0))
+  t.equal(6, b.writeUInt16LE(0, 4))
+  t.equal(7, b.writeUInt8(0, 6))
+  t.equal(8, b.writeInt8(0, 7))
+  t.equal(16, b.writeDoubleLE(0, 8))
+  t.end()
+})
+
 test('concat() a varying number of buffers', function (t) {
   var zero = []
   var one  = [ new B('asdf') ]
