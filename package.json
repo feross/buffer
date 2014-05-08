@@ -21,8 +21,7 @@
   "devDependencies": {
     "benchmark": "^1.0.0",
     "browserify": "^3.46.0",
-    "tape": "^2.12.3",
-    "useragent": "^2.0.8"
+    "tape": "^2.12.3"
   },
   "homepage": "http://feross.org",
   "keywords": [
