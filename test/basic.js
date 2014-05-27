@@ -9,6 +9,14 @@ test('new buffer from array', function (t) {
   t.end()
 })
 
+test('new buffer from array w/ negatives', function (t) {
+  t.equal(
+    new B([-1, -2, -3]).toString('hex'),
+    'fffefd'
+  )
+  t.end()
+})
+
 test('new buffer from string', function (t) {
   t.equal(
     new B('hey', 'utf8').toString(),

@@ -94,7 +94,7 @@ function Buffer (subject, encoding, noZero) {
       if (Buffer.isBuffer(subject))
         buf[i] = subject.readUInt8(i)
       else
-        buf[i] = subject[i]
+        buf.writeInt8(subject[i], i)
     }
   } else if (type === 'string') {
     buf.write(subject, 0, encoding)
