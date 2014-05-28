@@ -94,10 +94,7 @@ function Buffer (subject, encoding, noZero) {
       if (Buffer.isBuffer(subject))
         buf[i] = subject.readUInt8(i)
       else {
-        if (subject[i] < 0)
-          buf[i] = subject[i] + 256
-        else
-          buf[i] = subject[i]
+        buf[i] = ((subject[i] % 256) + 256) % 256
       }
     }
   } else if (type === 'string') {
