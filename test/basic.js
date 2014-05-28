@@ -17,6 +17,14 @@ test('new buffer from array w/ negatives', function (t) {
   t.end()
 })
 
+test('new buffer from array with mixed signed input', function (t) {
+  t.equal(
+    new B([-255, 255, -128, 128, 512, -512, 511, -511]).toString('hex'),
+    '01ff80800000ff01'
+  )
+  t.end()
+})
+
 test('new buffer from string', function (t) {
   t.equal(
     new B('hey', 'utf8').toString(),

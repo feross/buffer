@@ -93,8 +93,12 @@ function Buffer (subject, encoding, noZero) {
     for (i = 0; i < length; i++) {
       if (Buffer.isBuffer(subject))
         buf[i] = subject.readUInt8(i)
-      else
-        buf.writeInt8(subject[i], i)
+      else {
+        if (subject[i] < 0)
+          buf[i] = subject[i] + 256
+        else
+          buf[i] = subject[i]
+      }
     }
   } else if (type === 'string') {
     buf.write(subject, 0, encoding)
