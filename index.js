@@ -90,12 +90,12 @@ function Buffer (subject, encoding, noZero) {
     buf._set(subject)
   } else if (isArrayish(subject)) {
     // Treat array-ish objects as a byte array
-    for (i = 0; i < length; i++) {
-      if (Buffer.isBuffer(subject))
+    if (Buffer.isBuffer(subject)) {
+      for (i = 0; i < length; i++)
         buf[i] = subject.readUInt8(i)
-      else {
+    } else {
+      for (i = 0; i < length; i++)
         buf[i] = ((subject[i] % 256) + 256) % 256
-      }
     }
   } else if (type === 'string') {
     buf.write(subject, 0, encoding)
