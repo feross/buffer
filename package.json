@@ -23,7 +23,7 @@
     "browserify": "^3.46.0",
     "tape": "^2.12.3"
   },
-  "homepage": "http://feross.org",
+  "homepage": "https://github.com/feross/buffer",
   "keywords": [
     "buffer",
     "browserify",
