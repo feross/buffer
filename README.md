@@ -80,6 +80,15 @@ This works correctly in browsers with typed array support (\* with the exception
 bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) that made it impossible to add properties to a typed array.*
 
 
+## tracking the node api
+
+This module tracks the Buffer API in the latest (unstable) version of node.js. The Buffer
+API is considered **stable** in the
+[node stability index](http://nodejs.org/docs/latest/api/documentation.html#documentation_stability_index),
+so it is unlikely that there will ever be breaking changes.
+Nonetheless, when/if the Buffer API changes in node, this module's API will change
+accordingly.
+
 ## performance
 
 See perf tests in `/perf`.
