@@ -4,28 +4,28 @@
 
 [![testling badge](https://ci.testling.com/feross/buffer.png)](https://ci.testling.com/feross/buffer)
 
-When you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically load.
+With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
 
-The goal is to provide a Buffer API that is 100% identical to node's Buffer API. Read
-the [official node.js docs](http://nodejs.org/api/buffer.html) for a full list of
-supported methods.
+The goal is to provide an API that is 100% identical to
+[node's Buffer API](http://nodejs.org/api/buffer.html). Read the
+[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
+instance methods, and class methods that are supported.
 
 ## features
 
-- Backed by Typed Arrays (`Uint8Array` and `ArrayBuffer`) (not `Object`, so it's fast)
+- Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
 - Extremely small bundle size (**5.04KB minified + gzipped**, 35.5KB with comments)
 - Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.)
 - Preserves Node API exactly, with one important difference (see below)
-- Faster pretty much across the board (see perf results below)
 - `.slice()` returns instances of the same type (Buffer)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
-- Does not modify any browser prototypes or put anything on `window`.
-- Comprehensive test suite.
+- Does not modify any browser prototypes or put anything on `window`
+- Comprehensive test suite
 
 
 ## install
 
-If you want to use this module directly without browserify, install it:
+To use this module directly (without browserify), install it:
 
 ```bash
 npm install buffer
@@ -37,18 +37,24 @@ from now on.
 
 ## usage
 
-As mentioned before, when you `require('buffer')` or use the `Buffer` global in [browserify](http://github.com/substack/node-browserify), this module will automatically
-be included in your bundle so you get a `Buffer` API that actually works in the browser.
+The module's API is identical to node's `Buffer` API. Read the
+[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
+instance methods, and class methods that are supported.
 
-If you're depending on this module explicitly, then require it like this:
+As mentioned above, `require('buffer')` or use the `Buffer` global with
+[browserify](http://browserify.org) and this module will automatically be included
+in your bundle. Almost any npm module will work in the browser, even if it assumes that
+the node `Buffer` API will be available.
+
+To depend on this module explicitly (without browserify), require it like this:
 
 ```js
-var Buffer = require('buffer/').Buffer  // use the npm module, not the core module!
+var Buffer = require('buffer/').Buffer  // note: the trailing slash is important!
 ```
 
-The module's API is 100% identical to node's `Buffer` API. Read the
-[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
-instance methods, and class methods supported by `Buffer`.
+To require this module explicitly, use `require('buffer/')` which tells the node.js module
+lookup algorithm (also used by browserify) to use the **npm module** named `buffer`
+instead of the **node.js core** module named `buffer`!
 
 
 ## how does it work?
@@ -66,7 +72,7 @@ node, you can use either `Buffer.isBuffer` or `instanceof Buffer` to check if an
 is a `Buffer`. But, in the browser you must use `Buffer.isBuffer` to detect the special
 `Uint8Array`-based Buffers.
 
-#### Minor: `buf.slice()` does not modify parent buffer's memory in all browsers
+#### Minor: `buf.slice()` does not modify parent buffer's memory in old browsers
 
 If you only support modern browsers (specifically, those with typed array support), then
 this issue does not affect you.
@@ -77,10 +83,10 @@ the original Buffer. When you modify one buffer, you modify the other. [Read mor
 This works correctly in browsers with typed array support (\* with the exception of Firefox older than version 30). Browsers that lack typed arrays get an alternate buffer implementation based on `Object` which has no mechanism to point separate `Buffer`s to the same underlying slab of memory.
 
 \* *Firefox older than version 30 gets the `Object` implementation -- not the typed arrays one -- because of [this
-bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) that made it impossible to add properties to a typed array.*
+bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) (now fixed!) that made it impossible to add properties to a typed array.*
 
 
-## tracking the node api
+## tracking the latest node api
 
 This module tracks the Buffer API in the latest (unstable) version of node.js. The Buffer
 API is considered **stable** in the
