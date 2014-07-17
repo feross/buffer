@@ -474,9 +474,9 @@ function utf16leSlice (buf, start, end) {
 if (Buffer._useTypedArrays) {
 
   Buffer.prototype.slice = function (start, end) {
-    var len = this.length
-    start = clamp(start, len, 0)
-    end = clamp(end, len, len)
+    var len = this.length;
+    start = clamp(start, len, 0);
+    end = clamp(end, len, len);
 
     return Buffer._augment(this.subarray(start, end))
   };
@@ -484,6 +484,11 @@ if (Buffer._useTypedArrays) {
 } else {
 
   Buffer.prototype.slice = function (start, end) {
+
+    var len = this.length;
+    start = clamp(start, len, 0);
+    end = clamp(end, len, len);
+
     var sliceLen = end - start;
     var newBuf   = new Buffer(sliceLen, undefined, true);
 
