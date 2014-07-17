@@ -161,6 +161,15 @@ test('buffer toJSON()', function (t) {
   t.end()
 })
 
+test('new buffer from buffer.toJSON() output', function (t) {
+  var buf = new B('test')
+  var json = JSON.stringify(buf)
+  var obj = JSON.parse(json)
+  var copy = new B(obj)
+  t.ok(buf.equals(copy))
+  t.end()
+})
+
 test('buffer copy example', function (t) {
   var buf1 = new B(26)
   var buf2 = new B(26)
