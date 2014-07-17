@@ -61,9 +61,11 @@ function Buffer (subject, encoding, noZero) {
     if (encoding === 'base64')
       subject = base64clean(subject)
     length = Buffer.byteLength(subject, encoding)
-  } else if (type === 'object') // assume object is array-like
+  } else if (type === 'object' && subject !== null) { // assume object is array-like
+    if (subject.type === 'Buffer' && Array.isArray(subject.data))
+      subject = subject.data
     length = +subject.length > 0 ? Math.floor(+subject.length) : 0
-  else
+  } else
     throw new Error('First argument needs to be a number, array or string.')
 
   var buf
