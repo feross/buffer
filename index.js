@@ -471,21 +471,30 @@ function utf16leSlice (buf, start, end) {
   return res
 }
 
-Buffer.prototype.slice = function (start, end) {
-  var len = this.length
-  start = clamp(start, len, 0)
-  end = clamp(end, len, len)
+if (Buffer._useTypedArrays) {
 
-  if (Buffer._useTypedArrays) {
+  Buffer.prototype.slice = function (start, end) {
+    var len = this.length
+    start = clamp(start, len, 0)
+    end = clamp(end, len, len)
+
     return Buffer._augment(this.subarray(start, end))
-  } else {
-    var sliceLen = end - start
-    var newBuf = new Buffer(sliceLen, undefined, true)
+  };
+
+} else {
+
+  Buffer.prototype.slice = function (start, end) {
+    var sliceLen = end - start;
+    var newBuf   = new Buffer(sliceLen, undefined, true);
+
     for (var i = 0; i < sliceLen; i++) {
-      newBuf[i] = this[i + start]
+      newBuf[i] = this[i + start];
     }
-    return newBuf
-  }
+
+    return newBuf;
+
+  };
+
 }
 
 // `get` will be removed in Node 0.13+
