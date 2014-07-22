@@ -162,6 +162,11 @@ test('buffer toJSON()', function (t) {
 })
 
 test('new buffer from buffer.toJSON() output', function (t) {
+  if (typeof JSON === 'undefined') {
+    // ie6, ie7 lack support
+    t.end()
+    return
+  }
   var buf = new B('test')
   var json = JSON.stringify(buf)
   var obj = JSON.parse(json)
