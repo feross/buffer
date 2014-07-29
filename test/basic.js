@@ -40,6 +40,20 @@ test('new buffer from buffer', function (t) {
   t.end()
 })
 
+test('new buffer from arrayBuffer', function (t) {
+  if (typeof Uint8Array !== 'undefined') {
+    var b1 = new Uint8Array([0, 1, 2, 3])
+    var b2 = new B(b1.buffer)
+    t.equal(b1.length, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+    t.equal(b1[2], 2)
+    t.equal(b1[3], 3)
+    t.equal(b1[4], undefined)
+  }
+  t.end()
+})
+
 test('new buffer from uint8array', function (t) {
   if (typeof Uint8Array !== 'undefined') {
     var b1 = new Uint8Array([0, 1, 2, 3])
