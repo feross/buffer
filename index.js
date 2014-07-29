@@ -77,7 +77,8 @@ function Buffer (subject, encoding, noZero) {
   } else if (type === 'object' && subject !== null) { // assume object is array-like
     if (subject.type === 'Buffer' && isArray(subject.data))
       subject = subject.data
-    length = +subject.length > 0 ? Math.floor(+subject.length) : 0
+    length = +subject.length > 0 ? Math.floor(+subject.length) : 
+      +subject.byteLength > 0 ? Math.floor(+subject.byteLength) : 0
   } else
     throw new Error('First argument needs to be a number, array or string.')
 
