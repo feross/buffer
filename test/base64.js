@@ -1,28 +1,39 @@
 var B = require('../').Buffer
 var test = require('tape')
 
-var data = [
-  '',
-  ''
-]
+test('base64: ignore whitespace', function (t) {
+  var text = '\n   YW9ldQ==  '
+  var buf = new B(text, 'base64')
+  t.equal(buf.toString(), 'aoeu')
+  t.end()
+})
 
-test('base64 strings with newlines / invalid charaters', function (t) {
-  // newline in utf8 -- should not be an issue
+test('base64: strings without padding', function (t) {
+  t.equal((new B('YW9ldQ', 'base64').toString()), 'aoeu')
+  t.end()
+})
+
+test('base64: newline in utf8 -- should not be an issue', function (t) {
   t.equal(
     new B('LS0tCnRpdGxlOiBUaHJlZSBkYXNoZXMgbWFya3MgdGhlIHNwb3QKdGFnczoK', 'base64').toString('utf8'),
     '---\ntitle: Three dashes marks the spot\ntags:\n'
   )
+  t.end()
+})
 
-  // newline in base64 -- should get stripped
+test('base64: newline in base64 -- should get stripped', function (t) {
   t.equal(
     new B('LS0tCnRpdGxlOiBUaHJlZSBkYXNoZXMgbWFya3MgdGhlIHNwb3QKdGFnczoK\nICAtIHlhbWwKICAtIGZyb250LW1hdHRlcgogIC0gZGFzaGVzCmV4cGFuZWQt', 'base64').toString('utf8'),
     '---\ntitle: Three dashes marks the spot\ntags:\n  - yaml\n  - front-matter\n  - dashes\nexpaned-'
   )
+  t.end()
+})
 
-  // tab characters in base64 - should get stripped
+test('base64: tab characters in base64 - should get stripped', function (t) {
   t.equal(
     new B('LS0tCnRpdGxlOiBUaHJlZSBkYXNoZXMgbWFya3MgdGhlIHNwb3QKdGFnczoK\t\t\t\tICAtIHlhbWwKICAtIGZyb250LW1hdHRlcgogIC0gZGFzaGVzCmV4cGFuZWQt', 'base64').toString('utf8'),
     '---\ntitle: Three dashes marks the spot\ntags:\n  - yaml\n  - front-matter\n  - dashes\nexpaned-'
   )
   t.end()
 })
+

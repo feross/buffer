@@ -1,7 +1,7 @@
 var B = require('../').Buffer
 var test = require('tape')
 
-test('compare', function (t) {
+test('buffer.compare', function (t) {
   var b = new B(1).fill('a')
   var c = new B(1).fill('c')
   var d = new B(2).fill('aa')
@@ -19,11 +19,7 @@ test('compare', function (t) {
   t.end()
 })
 
-test('compare argument validation', function (t) {
-  var b = new B(1).fill('a')
-  var c = new B(1).fill('c')
-  var d = new B(2).fill('aa')
-
+test('buffer.compare argument validation', function (t) {
   t.throws(function () {
     var b = new B(1)
     B.compare(b, 'abc')
@@ -41,7 +37,7 @@ test('compare argument validation', function (t) {
   t.end()
 })
 
-test('equals', function (t) {
+test('buffer.equals', function (t) {
   var b = new B(5).fill('abcdf')
   var c = new B(5).fill('abcdf')
   var d = new B(5).fill('abcde')
@@ -53,12 +49,7 @@ test('equals', function (t) {
   t.end()
 })
 
-test('equals argument validation', function (t) {
-  var b = new B(5).fill('abcdf')
-  var c = new B(5).fill('abcdf')
-  var d = new B(5).fill('abcde')
-  var e = new B(6).fill('abcdef')
-
+test('buffer.equals argument validation', function (t) {
   t.throws(function () {
     var b = new B(1)
     b.equals('abc')
