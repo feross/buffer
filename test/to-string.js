@@ -1,5 +1,7 @@
 var B = require('../').Buffer
 var test = require('tape')
+if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
+
 
 test('utf8 buffer to base64', function (t) {
   t.equal(

@@ -1,5 +1,7 @@
 var B = require('../').Buffer
 var test = require('tape')
+if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
+
 
 test('indexes from a string', function(t) {
   var buf = new B('abc')
@@ -27,3 +29,21 @@ test('setting index value should modify buffer contents', function(t) {
   t.equal(buf.toString(), 'abm')
   t.end()
 })
+
+test('storing negative number should cast to unsigned', function (t) {
+  var buf = new B(1)
+
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // This does not work with the object implementation -- nothing we can do!
+    buf[0] = -3
+    t.equal(buf[0], 253)
+  }
+
+  buf = new B(1)
+  buf.writeInt8(-3, 0)
+  t.equal(buf[0], 253)
+
+  t.end()
+})
+
+// TODO: test write negative with

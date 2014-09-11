@@ -40,7 +40,7 @@
     "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
-    "test": "tape test/*.js",
+    "test": "tape test/*.js && OBJECT_IMPL=true tape test/*.js",
     "prepublish": "./bundle.sh",
     "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c"

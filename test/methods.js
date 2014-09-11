@@ -1,5 +1,7 @@
 var B = require('../').Buffer
 var test = require('tape')
+if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
+
 
 test('buffer.toJSON', function (t) {
   var data = [1, 2, 3, 4]
@@ -27,87 +29,6 @@ test('buffer.copy', function (t) {
     '!!!!!!!!qrst!!!!!!!!!!!!!'
   )
   t.end()
-})
-
-test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
-  t.plan(2 * (2 * 2 * 2 + 2))
-  var hex = [
-    '03', '0300', '0003', '03000000', '00000003',
-    'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
-  ]
-  var reads = [ 3, 3, 3, 3, 3, -3, -3, -3, -3, -3 ]
-  var xs = ['UInt','Int']
-  var ys = [8,16,32]
-  for (var i = 0; i < xs.length; i++) {
-    var x = xs[i]
-    for (var j = 0; j < ys.length; j++) {
-      var y = ys[j]
-      var endianesses = (y === 8) ? [''] : ['LE','BE']
-      for (var k = 0; k < endianesses.length; k++) {
-        var z = endianesses[k]
-
-        var v1  = new B(y / 8)
-        var writefn  = 'write' + x + y + z
-        var val = (x === 'Int') ? -3 : 3
-        v1[writefn](val, 0)
-        t.equal(
-          v1.toString('hex'),
-          hex.shift()
-        )
-        var readfn = 'read' + x + y + z
-        t.equal(
-          v1[readfn](0),
-          reads.shift()
-        )
-      }
-    }
-  }
-  t.end()
-})
-
-test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
-    t.plan(3 * (2 * 2 * 2 + 2))
-    var hex = [
-      '', '03', '00', '030000', '000000',
-      '', 'fd', 'ff', 'fdffff', 'ffffff'
-    ]
-    var reads = [
-      undefined, 3, 0, 3, 0,
-      undefined, 253, -256, 16777213, -256
-    ]
-    var xs = ['UInt','Int']
-    var ys = [8,16,32]
-    for (var i = 0; i < xs.length; i++) {
-      var x = xs[i]
-      for (var j = 0; j < ys.length; j++) {
-        var y = ys[j]
-        var endianesses = (y === 8) ? [''] : ['LE','BE']
-        for (var k = 0; k < endianesses.length; k++) {
-          var z = endianesses[k]
-
-          var v1  = new B(y / 8 - 1)
-          var next = new B(4)
-          next.writeUInt32BE(0, 0)
-          var writefn  = 'write' + x + y + z
-          var val = (x === 'Int') ? -3 : 3
-          v1[writefn](val, 0, true)
-          t.equal(
-            v1.toString('hex'),
-            hex.shift()
-          )
-          // check that nothing leaked to next buffer.
-          t.equal(next.readUInt32BE(0), 0)
-          // check that no bytes are read from next buffer.
-          next.writeInt32BE(~0, 0)
-          var readfn = 'read' + x + y + z
-          t.equal(
-            v1[readfn](0, true),
-            reads.shift()
-          )
-        }
-      }
-    }
-    t.end()
 })
 
 test('test offset returns are correct', function (t) {
