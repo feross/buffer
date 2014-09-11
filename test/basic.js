@@ -138,6 +138,19 @@ test('new buffer from float64array', function (t) {
   t.end()
 })
 
+test('new buffer from ArrayBuffer', function(t) {
+  if (typeof ArrayBuffer !== 'undefined' && typeof DataView !== 'undefined') {
+    var b1 = new ArrayBuffer(2)
+    var dataView = new DataView(b1)
+    dataView.setInt16(0, 256, true)
+    var b2 = new B(b1)
+    t.equal(b1.byteLength, b2.length)
+    t.equal(b1[0], 0)
+    t.equal(b1[1], 1)
+  }
+  t.end()
+})
+
 test('buffer toArrayBuffer()', function (t) {
   var data = [1, 2, 3, 4, 5, 6, 7, 8]
   if (typeof Uint8Array !== 'undefined') {
