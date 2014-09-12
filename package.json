@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "base64-js": "0.0.7",
-    "ieee754": "^1.1.4"
+    "ieee754": "^1.1.4",
+    "is-array": "^1.0.1"
   },
   "devDependencies": {
     "benchmark": "^1.0.0",
