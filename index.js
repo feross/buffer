@@ -175,7 +175,7 @@ Buffer.byteLength = function (str, encoding) {
 }
 
 Buffer.concat = function (list, totalLength) {
-  assert(isArray(list), 'Usage: Buffer.concat(list[, length])')
+  if (!isArray(list)) throw new Error('Usage: Buffer.concat(list[, length])')
 
   if (list.length === 0) {
     return new Buffer(0)
@@ -202,7 +202,7 @@ Buffer.concat = function (list, totalLength) {
 }
 
 Buffer.compare = function (a, b) {
-  assert(Buffer.isBuffer(a) && Buffer.isBuffer(b), 'Arguments must be Buffers')
+  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) throw new Error('Arguments must be Buffers')
   var x = a.length
   var y = b.length
   for (var i = 0, len = Math.min(x, y); i < len && a[i] === b[i]; i++) {}
@@ -236,14 +236,14 @@ function hexWrite (buf, string, offset, length) {
 
   // must be an even number of digits
   var strLen = string.length
-  assert(strLen % 2 === 0, 'Invalid hex string')
+  if (strLen % 2 !== 0) throw new Error('Invalid hex string')
 
   if (length > strLen / 2) {
     length = strLen / 2
   }
   for (var i = 0; i < length; i++) {
     var byte = parseInt(string.substr(i * 2, 2), 16)
-    assert(!isNaN(byte), 'Invalid hex string')
+    if (isNaN(byte)) throw new Error('Invalid hex string')
     buf[offset + i] = byte
   }
   return i
@@ -379,12 +379,12 @@ Buffer.prototype.toJSON = function () {
 }
 
 Buffer.prototype.equals = function (b) {
-  assert(Buffer.isBuffer(b), 'Argument must be a Buffer')
+  if(!Buffer.isBuffer(b)) throw new Error('Argument must be a Buffer')
   return Buffer.compare(this, b) === 0
 }
 
 Buffer.prototype.compare = function (b) {
-  assert(Buffer.isBuffer(b), 'Argument must be a Buffer')
+  if (!Buffer.isBuffer(b)) throw new Error('Argument must be a Buffer')
   return Buffer.compare(this, b)
 }
 
@@ -401,11 +401,11 @@ Buffer.prototype.copy = function (target, target_start, start, end) {
   if (target.length === 0 || source.length === 0) return
 
   // Fatal error conditions
-  assert(end >= start, 'sourceEnd < sourceStart')
-  assert(target_start >= 0 && target_start < target.length,
-      'targetStart out of bounds')
-  assert(start >= 0 && start < source.length, 'sourceStart out of bounds')
-  assert(end >= 0 && end <= source.length, 'sourceEnd out of bounds')
+  if (end < start) throw new Error('sourceEnd < sourceStart')
+  if (target_start < 0 || target_start >= target.length)
+    throw new Error('targetStart out of bounds')
+  if (start < 0 || start >= source.length) throw new Error('sourceStart out of bounds')
+  if (end < 0 || end > source.length) throw new Error('sourceEnd out of bounds')
 
   // Are we oob?
   if (end > this.length)
@@ -648,9 +648,9 @@ Buffer.prototype.readDoubleBE = function (offset, noAssert) {
 }
 
 function checkInt (buf, value, offset, ext, max, min) {
-  assert(Buffer.isBuffer(buf), 'buffer must be a Buffer instance')
-  assert(value <= max && value >= min, 'value is out of bounds')
-  assert(offset + ext <= buf.length, 'index out of range')
+  if (!Buffer.isBuffer(buf)) throw new Error('buffer must be a Buffer instance')
+  if (value > max || value < min) throw new Error('value is out of bounds')
+  if (offset + ext > buf.length) throw new Error('index out of range')
 }
 
 Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
@@ -795,8 +795,8 @@ Buffer.prototype.writeInt32BE = function (value, offset, noAssert) {
 }
 
 function checkIEEE754 (buf, value, offset, ext, max, min) {
-  assert(value <= max && value >= min, 'value is out of bounds')
-  assert(offset + ext <= buf.length, 'index out of range')
+  if (value > max || value < min) throw new Error('value is out of bounds')
+  if (offset + ext > buf.length) throw new Error('index out of range')
 }
 
 function writeFloat (buf, value, offset, littleEndian, noAssert) {
@@ -835,14 +835,14 @@ Buffer.prototype.fill = function (value, start, end) {
   if (!start) start = 0
   if (!end) end = this.length
 
-  assert(end >= start, 'end < start')
+  if (end < start) throw new Error('end < start')
 
   // Fill 0 bytes; we're done
   if (end === start) return
   if (this.length === 0) return
 
-  assert(start >= 0 && start < this.length, 'start out of bounds')
-  assert(end >= 0 && end <= this.length, 'end out of bounds')
+  if (start < 0 || start >= this.length) throw new Error('start out of bounds')
+  if (end < 0 || end > this.length) throw new Error('end out of bounds')
 
   var i
   if (typeof value === 'number') {
@@ -1043,8 +1043,4 @@ function decodeUtf8Char (str) {
   } catch (err) {
     return String.fromCharCode(0xFFFD) // UTF 8 invalid char
   }
-}
-
-function assert (test, message) {
-  if (!test) throw new Error(message || 'Failed assertion')
 }
