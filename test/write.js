@@ -1,5 +1,6 @@
 var B = require('../').Buffer
 var test = require('tape')
+var isnan = require('is-nan')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
 test('buffer.write string should get parsed as number', function (t) {
@@ -106,7 +107,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
         next.writeInt32BE(~0, 0)
         var readfn = 'read' + x + y + z
         var r = reads.shift()
-        if (Number.isNaN(r))
+        if (isnan(r))
           t.pass('equal')
         else
           t.equal(

@@ -21,6 +21,7 @@
   "devDependencies": {
     "benchmark": "^1.0.0",
     "browserify": "^5.11.1",
+    "is-nan": "^1.0.1",
     "tape": "^2.14.0"
   },
   "homepage": "https://github.com/feross/buffer",
