@@ -540,7 +540,6 @@ function checkOffset (offset, ext, length) {
     throw new RangeError('offset is not uint')
   if (offset + ext > length)
     throw new RangeError('Trying to access beyond buffer length')
-  console.log('suces')
 }
 
 Buffer.prototype.readUInt8 = function (offset, noAssert) {
