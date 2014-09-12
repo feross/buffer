@@ -43,6 +43,7 @@
     "test": "tape test/*.js && OBJECT_IMPL=true tape test/*.js",
     "prepublish": "./bundle.sh",
     "perf": "cd perf/solo && browserify --debug readUInt32BE.js > bundle.js && open index.html",
+    "perf-node": "node perf/comparison/bracket-notation.js && node perf/comparison/concat.js && node perf/comparison/copy-big.js && node perf/comparison/copy.js && node perf/comparison/new.js && node perf/comparison/readDoubleBE.js && node perf/comparison/readFloatBE.js && node perf/comparison/readUInt32LE.js && node perf/comparison/slice.js && node perf/comparison/writeFloatBE.js",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c"
   },
   "testling": {
