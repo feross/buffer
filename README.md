@@ -1,4 +1,4 @@
-# buffer [![build](https://img.shields.io/travis/feross/buffer.svg)](https://travis-ci.org/feross/buffer) [![npm](https://img.shields.io/npm/v/buffer.svg)](https://npmjs.org/package/buffer) [![npm downloads](https://img.shields.io/npm/dm/buffer.svg)](https://npmjs.org/package/buffer) [![gittip](https://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
+# buffer [![build](https://img.shields.io/travis/feross/buffer.svg?style=flat)](https://travis-ci.org/feross/buffer) [![npm](https://img.shields.io/npm/v/buffer.svg?style=flat)](https://npmjs.org/package/buffer) [![npm downloads](https://img.shields.io/npm/dm/buffer.svg?style=flat)](https://npmjs.org/package/buffer) [![gittip](https://img.shields.io/gittip/feross.svg?style=flat)](https://www.gittip.com/feross/)
 
 #### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
