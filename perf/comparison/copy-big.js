@@ -1,35 +1,26 @@
-var benchmark = require('benchmark')
-var suite = new benchmark.Suite()
+var BrowserBuffer = require('../../').Buffer // (this module)
+var util = require('./util')
+var suite = util.suite()
 
-global.NewBuffer = require('../../').Buffer // native-buffer-browserify
-global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
+var LENGTH = 16000
 
-var LENGTH = 10000
+var browserSubject = new BrowserBuffer(LENGTH)
+var typedarraySubject = new Uint8Array(LENGTH)
+var nodeSubject = new Buffer(LENGTH)
 
-var newSubject = NewBuffer(LENGTH)
-var oldSubject = OldBuffer(LENGTH)
-var nodeSubject = Buffer(LENGTH)
+var browserTarget = new BrowserBuffer(LENGTH)
+var typedarrayTarget = new Uint8Array(LENGTH)
+var nodeTarget = new Buffer(LENGTH)
 
-var newTarget = NewBuffer(LENGTH)
-var oldTarget = OldBuffer(LENGTH)
-var nodeTarget = Buffer(LENGTH)
+suite
+  .add('BrowserBuffer#copy (' + LENGTH + ')', function () {
+    browserSubject.copy(browserTarget)
+  })
+  .add('Uint8Array#copy (' + LENGTH + ')', function () {
+    typedarrayTarget.set(typedarraySubject, 0)
+  })
 
-suite.add('NewBuffer#copy', function () {
-  newSubject.copy(newTarget)
-})
-.add('OldBuffer#copy', function () {
-  oldSubject.copy(oldTarget)
-})
-.add('Buffer#copy', function () {
-  nodeSubject.copy(nodeTarget)
-})
-.on('error', function (event) {
-  console.error(event.target.error.stack)
-})
-.on('cycle', function (event) {
-  console.log(String(event.target))
-})
-.on('complete', function () {
-  console.log('Fastest is ' + this.filter('fastest').pluck('name'))
-})
-.run({ 'async': true })
+if (!process.browser) suite
+  .add('NodeBuffer#copy (' + LENGTH + ')', function () {
+    nodeSubject.copy(nodeTarget)
+  })

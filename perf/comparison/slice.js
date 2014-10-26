@@ -1,31 +1,22 @@
-var benchmark = require('benchmark')
-var suite = new benchmark.Suite()
+var BrowserBuffer = require('../../').Buffer // (this module)
+var util = require('./util')
+var suite = util.suite()
 
-global.NewBuffer = require('../../').Buffer // native-buffer-browserify
-global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
+var LENGTH = 160
 
-var LENGTH = 16
+var browserBuffer = new BrowserBuffer(LENGTH)
+var typedarray = new Uint8Array(LENGTH)
+var nodeBuffer = new Buffer(LENGTH)
 
-var newBuf = NewBuffer(LENGTH)
-var oldBuf = OldBuffer(LENGTH)
-var nodeBuf = Buffer(LENGTH)
+suite
+  .add('BrowserBuffer#slice', function () {
+    var x = browserBuffer.slice(4)
+  })
+  .add('Uint8Array#subarray', function () {
+    var x = typedarray.subarray(4)
+  })
 
-suite.add('NewBuffer#slice', function () {
-  var x = newBuf.slice(4)
-})
-.add('OldBuffer#slice', function () {
-  var x = oldBuf.slice(4)
-})
-.add('Buffer#slice', function () {
-  var x = nodeBuf.slice(4)
-})
-.on('error', function (event) {
-  console.error(event.target.error.stack)
-})
-.on('cycle', function (event) {
-  console.log(String(event.target))
-})
-.on('complete', function () {
-  console.log('Fastest is ' + this.filter('fastest').pluck('name'))
-})
-.run({ 'async': true })
+if (!process.browser) suite
+  .add('NodeBuffer#slice', function () {
+    var x = nodeBuffer.slice(4)
+  })

@@ -1,37 +1,29 @@
-var benchmark = require('benchmark')
-var suite = new benchmark.Suite()
+var BrowserBuffer = require('../../').Buffer // (this module)
+var util = require('./util')
+var suite = util.suite()
 
-global.NewBuffer = require('../../').Buffer // native-buffer-browserify
-global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
+var LENGTH = 160
 
-var LENGTH = 10
+var browserBuffer = new BrowserBuffer(LENGTH * 4)
+var typedarray = new Uint8Array(LENGTH * 4)
+var dataview = new DataView(typedarray.buffer)
+var nodeBuffer = new Buffer(LENGTH * 4)
 
-var newTarget = NewBuffer(LENGTH * 4)
-var oldTarget = OldBuffer(LENGTH * 4)
-var nodeTarget = Buffer(LENGTH * 4)
+suite
+  .add('BrowserBuffer#writeFloatBE', function () {
+    for (var i = 0; i < LENGTH; i++) {
+      browserBuffer.writeFloatBE(97.1919 + i, i * 4)
+    }
+  })
+  .add('DataView#setFloat32', function () {
+    for (var i = 0; i < LENGTH; i++) {
+      dataview.setFloat32(i * 4, 97.1919 + i)
+    }
+  })
 
-suite.add('NewBuffer#writeFloatBE', function () {
-  for (var i = 0; i < LENGTH; i++) {
-    newTarget.writeFloatBE(97.1919 + i, i * 4)
-  }
-})
-.add('OldBuffer#writeFloatBE', function () {
-  for (var i = 0; i < LENGTH; i++) {
-    oldTarget.writeFloatBE(97.1919 + i, i * 4)
-  }
-})
-.add('Buffer#writeFloatBE', function () {
-  for (var i = 0; i < LENGTH; i++) {
-    nodeTarget.writeFloatBE(97.1919 + i, i * 4)
-  }
-})
-.on('error', function (event) {
-  console.error(event.target.error.stack)
-})
-.on('cycle', function (event) {
-  console.log(String(event.target))
-})
-.on('complete', function () {
-  console.log('Fastest is ' + this.filter('fastest').pluck('name'))
-})
-.run({ 'async': true })
+if (!process.browser) suite
+  .add('NodeBuffer#writeFloatBE', function () {
+    for (var i = 0; i < LENGTH; i++) {
+      nodeBuffer.writeFloatBE(97.1919 + i, i * 4)
+    }
+  })

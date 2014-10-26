@@ -1,40 +1,32 @@
-var benchmark = require('benchmark')
-var suite = new benchmark.Suite()
+var BrowserBuffer = require('../../').Buffer // (this module)
+var util = require('./util')
+var suite = util.suite()
 
-global.NewBuffer = require('../../').Buffer // native-buffer-browserify
-global.OldBuffer = require('buffer-browserify').Buffer // buffer-browserify
+var LENGTH = 160
+var browserBuffer = new BrowserBuffer(LENGTH)
+var browserBuffer2 = new BrowserBuffer(LENGTH)
+var typedarray = new Uint8Array(LENGTH)
+var typedarray2 = new Uint8Array(LENGTH)
+var nodeBuffer = new Buffer(LENGTH)
+var nodeBuffer2 = new Buffer(LENGTH)
 
-var LENGTH = 16
-
-var newBuf = NewBuffer(LENGTH)
-var newBuf2 = NewBuffer(LENGTH)
-var oldBuf = OldBuffer(LENGTH)
-var oldBuf2 = OldBuffer(LENGTH)
-var nodeBuf = Buffer(LENGTH)
-var nodeBuf2 = Buffer(LENGTH)
-
-;[newBuf, newBuf2, oldBuf, oldBuf2, nodeBuf, nodeBuf2].forEach(function (buf) {
+;[browserBuffer, browserBuffer2, typedarray, typedarray2, nodeBuffer, nodeBuffer2].forEach(function (buf) {
   for (var i = 0; i < LENGTH; i++) {
-    buf[i] = 42
+    buf[i] = i + 97
   }
 })
 
-suite.add('NewBuffer#concat', function () {
-  var x = Buffer.concat([newBuf, newBuf2])
-})
-.add('OldBuffer#concat', function () {
-  var x = Buffer.concat([oldBuf, oldBuf2])
-})
-.add('Buffer#concat', function () {
-  var x = Buffer.concat([nodeBuf, nodeBuf2])
-})
-.on('error', function (event) {
-  console.error(event.target.error.stack)
-})
-.on('cycle', function (event) {
-  console.log(String(event.target))
-})
-.on('complete', function () {
-  console.log('Fastest is ' + this.filter('fastest').pluck('name'))
-})
-.run({ 'async': true })
+suite
+  .add('BrowserBuffer#concat', function () {
+    var x = BrowserBuffer.concat([browserBuffer, browserBuffer2], LENGTH * 2)
+  })
+  .add('Uint8Array#concat', function () {
+    var x = new Uint8Array(LENGTH * 2)
+    x.set(typedarray, 0)
+    x.set(typedarray2, typedarray.length)
+  })
+
+if (!process.browser) suite
+  .add('NodeBuffer#concat', function () {
+    var x = Buffer.concat([nodeBuffer, nodeBuffer2], LENGTH * 2)
+  })
