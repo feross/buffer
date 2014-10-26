@@ -1,4 +1,4 @@
-var BrowserBuffer = require('../../').Buffer // (this module)
+var BrowserBuffer = require('../').Buffer // (this module)
 var util = require('./util')
 var suite = util.suite()
 
