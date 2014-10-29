@@ -140,53 +140,62 @@ NewBuffer#writeFloatBE x 830,407 ops/sec ±3.09% (66 runs sampled)
 OldBuffer#writeFloatBE x 508,446 ops/sec ±0.49% (69 runs sampled)
 Fastest is NewBuffer#writeFloatBE
 
-# Node 0.11
+# Node 0.11.14
 
-NewBuffer#bracket-notation x 10,912,085 ops/sec ±0.89% (92 runs sampled)
-OldBuffer#bracket-notation x 9,051,638 ops/sec ±0.84% (92 runs sampled)
-Buffer#bracket-notation x 10,721,608 ops/sec ±0.63% (91 runs sampled)
-Fastest is NewBuffer#bracket-notation
+BrowserBuffer#bracket-notation x 10,489,828 ops/sec ±3.25% (90 runs sampled)
+Uint8Array#bracket-notation x 10,534,884 ops/sec ±0.81% (92 runs sampled)
+NodeBuffer#bracket-notation x 10,389,910 ops/sec ±0.97% (87 runs sampled)
+Fastest is Uint8Array#bracket-notation,BrowserBuffer#bracket-notation
 
-NewBuffer#concat x 1,438,825 ops/sec ±1.80% (91 runs sampled)
-OldBuffer#concat x 888,614 ops/sec ±2.09% (93 runs sampled)
-Buffer#concat x 1,832,307 ops/sec ±1.20% (90 runs sampled)
-Fastest is Buffer#concat
+BrowserBuffer#concat x 487,830 ops/sec ±2.58% (88 runs sampled)
+Uint8Array#concat x 1,814,327 ops/sec ±1.28% (88 runs sampled)
+NodeBuffer#concat x 1,636,523 ops/sec ±1.88% (73 runs sampled)
+Fastest is Uint8Array#concat
 
-NewBuffer#copy x 5,987,167 ops/sec ±0.85% (94 runs sampled)
-OldBuffer#copy x 3,892,165 ops/sec ±1.28% (93 runs sampled)
-Buffer#copy x 11,208,889 ops/sec ±0.76% (91 runs sampled)
-Fastest is Buffer#copy
+BrowserBuffer#copy(16000) x 1,073,665 ops/sec ±0.77% (90 runs sampled)
+Uint8Array#copy(16000) x 1,348,517 ops/sec ±0.84% (89 runs sampled)
+NodeBuffer#copy(16000) x 1,289,533 ops/sec ±0.82% (93 runs sampled)
+Fastest is Uint8Array#copy(16000)
 
-NewBuffer#readDoubleBE x 1,057,233 ops/sec ±1.28% (88 runs sampled)
-OldBuffer#readDoubleBE x 4,094 ops/sec ±1.09% (86 runs sampled)
-Buffer#readDoubleBE x 1,587,308 ops/sec ±0.87% (84 runs sampled)
-Fastest is Buffer#readDoubleBE
+BrowserBuffer#copy(16) x 12,782,706 ops/sec ±0.74% (85 runs sampled)
+Uint8Array#copy(16) x 14,180,427 ops/sec ±0.93% (92 runs sampled)
+NodeBuffer#copy(16) x 11,083,134 ops/sec ±1.06% (89 runs sampled)
+Fastest is Uint8Array#copy(16)
 
-NewBuffer#new x 739,791 ops/sec ±0.89% (89 runs sampled)
-Uint8Array#new x 2,745,243 ops/sec ±0.95% (91 runs sampled)
-OldBuffer#new x 2,604,537 ops/sec ±0.93% (88 runs sampled)
-Buffer#new x 1,836,218 ops/sec ±0.74% (92 runs sampled)
-Fastest is Uint8Array#new
+BrowserBuffer#new(16000) x 141,678 ops/sec ±3.30% (67 runs sampled)
+Uint8Array#new(16000) x 161,491 ops/sec ±2.96% (60 runs sampled)
+NodeBuffer#new(16000) x 292,699 ops/sec ±3.20% (55 runs sampled)
+Fastest is NodeBuffer#new(16000)
 
-NewBuffer#readFloatBE x 1,111,263 ops/sec ±0.41% (97 runs sampled)
-OldBuffer#readFloatBE x 4,026 ops/sec ±1.24% (90 runs sampled)
-Buffer#readFloatBE x 1,611,800 ops/sec ±0.58% (96 runs sampled)
-Fastest is Buffer#readFloatBE
+BrowserBuffer#new(16) x 1,655,466 ops/sec ±2.41% (82 runs sampled)
+Uint8Array#new(16) x 14,399,926 ops/sec ±0.91% (94 runs sampled)
+NodeBuffer#new(16) x 3,894,696 ops/sec ±0.88% (92 runs sampled)
+Fastest is Uint8Array#new(16)
 
-NewBuffer#readUInt32LE x 502,024 ops/sec ±0.59% (94 runs sampled)
-OldBuffer#readUInt32LE x 1,259,028 ops/sec ±0.79% (87 runs sampled)
-Buffer#readUInt32LE x 2,778,635 ops/sec ±0.46% (97 runs sampled)
-Fastest is Buffer#readUInt32LE
+BrowserBuffer#readDoubleBE x 109,582 ops/sec ±0.75% (93 runs sampled)
+DataView#getFloat64 x 91,235 ops/sec ±0.81% (90 runs sampled)
+NodeBuffer#readDoubleBE x 88,593 ops/sec ±0.96% (81 runs sampled)
+Fastest is BrowserBuffer#readDoubleBE
 
-NewBuffer#slice x 1,174,908 ops/sec ±1.47% (89 runs sampled)
-OldBuffer#slice x 2,396,302 ops/sec ±4.36% (86 runs sampled)
-Buffer#slice x 2,994,029 ops/sec ±0.79% (89 runs sampled)
-Fastest is Buffer#slice
+BrowserBuffer#readFloatBE x 139,854 ops/sec ±1.03% (85 runs sampled)
+DataView#getFloat32 x 98,744 ops/sec ±0.80% (89 runs sampled)
+NodeBuffer#readFloatBE x 92,769 ops/sec ±0.94% (93 runs sampled)
+Fastest is BrowserBuffer#readFloatBE
 
-NewBuffer#writeFloatBE x 721,081 ops/sec ±1.10% (86 runs sampled)
-OldBuffer#writeFloatBE x 4,020 ops/sec ±1.04% (92 runs sampled)
-Buffer#writeFloatBE x 1,811,134 ops/sec ±0.67% (91 runs sampled)
-Fastest is Buffer#writeFloatBE
+BrowserBuffer#readUInt32LE x 710,861 ops/sec ±0.82% (92 runs sampled)
+DataView#getUint32 x 117,893 ops/sec ±0.84% (91 runs sampled)
+NodeBuffer#readUInt32LE x 851,412 ops/sec ±0.72% (93 runs sampled)
+Fastest is NodeBuffer#readUInt32LE
+
+BrowserBuffer#slice x 1,673,877 ops/sec ±0.73% (94 runs sampled)
+Uint8Array#subarray x 6,919,243 ops/sec ±0.67% (90 runs sampled)
+NodeBuffer#slice x 4,617,604 ops/sec ±0.79% (93 runs sampled)
+Fastest is Uint8Array#subarray
+
+BrowserBuffer#writeFloatBE x 66,011 ops/sec ±0.75% (93 runs sampled)
+DataView#setFloat32 x 127,760 ops/sec ±0.72% (93 runs sampled)
+NodeBuffer#writeFloatBE x 103,352 ops/sec ±0.83% (93 runs sampled)
+Fastest is DataView#setFloat32
 ```
 
 
