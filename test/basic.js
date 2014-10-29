@@ -2,8 +2,20 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
+test('convert to Uint8Array in modern browsers', function (t) {
+  if (B.TYPED_ARRAY_SUPPORT) {
+    var buf = new B([1, 2])
+    var uint8array = new Uint8Array(buf.buffer)
+    t.ok(uint8array instanceof Uint8Array)
+    t.equal(uint8array[0], 1)
+    t.equal(uint8array[1], 2)
+  } else {
+    t.pass('object impl: skipping test')
+  }
+  t.end()
+})
 
-test('indexes from a string', function(t) {
+test('indexes from a string', function (t) {
   var buf = new B('abc')
   t.equal(buf[0], 97)
   t.equal(buf[1], 98)
@@ -11,7 +23,7 @@ test('indexes from a string', function(t) {
   t.end()
 })
 
-test('indexes from an array', function(t) {
+test('indexes from an array', function (t) {
   var buf = new B([ 97, 98, 99 ])
   t.equal(buf[0], 97)
   t.equal(buf[1], 98)
@@ -19,7 +31,7 @@ test('indexes from an array', function(t) {
   t.end()
 })
 
-test('setting index value should modify buffer contents', function(t) {
+test('setting index value should modify buffer contents', function (t) {
   var buf = new B([ 97, 98, 99 ])
   t.equal(buf[2], 99)
   t.equal(buf.toString(), 'abc')
