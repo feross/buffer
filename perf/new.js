@@ -11,6 +11,8 @@ suite
   .add('Uint8Array#new(' + LENGTH + ')', function () {
     var buf = new Uint8Array(LENGTH)
   })
+
+if (!process.browser) suite
   .add('NodeBuffer#new(' + LENGTH + ')', function () {
     var buf = new Buffer(LENGTH)
   })
