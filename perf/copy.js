@@ -13,14 +13,14 @@ var typedarrayTarget = new Uint8Array(LENGTH)
 var nodeTarget = new Buffer(LENGTH)
 
 suite
-  .add('BrowserBuffer#copy (' + LENGTH + ')', function () {
+  .add('BrowserBuffer#copy(' + LENGTH + ')', function () {
     browserSubject.copy(browserTarget)
   })
-  .add('Uint8Array#copy (' + LENGTH + ')', function () {
+  .add('Uint8Array#copy(' + LENGTH + ')', function () {
     typedarrayTarget.set(typedarraySubject, 0)
   })
 
 if (!process.browser) suite
-  .add('NodeBuffer#copy (' + LENGTH + ')', function () {
+  .add('NodeBuffer#copy(' + LENGTH + ')', function () {
     nodeSubject.copy(nodeTarget)
   })
