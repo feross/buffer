@@ -66,7 +66,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
-  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+  if (!B.TYPED_ARRAY_SUPPORT) {
     t.pass('object impl: skipping overflow test')
     t.end()
     return

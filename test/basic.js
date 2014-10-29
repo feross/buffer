@@ -45,7 +45,7 @@ test('setting index value should modify buffer contents', function (t) {
 test('storing negative number should cast to unsigned', function (t) {
   var buf = new B(1)
 
-  if (Buffer.TYPED_ARRAY_SUPPORT) {
+  if (B.TYPED_ARRAY_SUPPORT) {
     // This does not work with the object implementation -- nothing we can do!
     buf[0] = -3
     t.equal(buf[0], 253)
