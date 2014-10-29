@@ -21,9 +21,10 @@
   },
   "devDependencies": {
     "benchmark": "^1.0.0",
-    "browserify": "^5.11.1",
+    "browserify": "^6.2.0",
     "is-nan": "^1.0.1",
-    "tape": "^2.14.0"
+    "tape": "^3.0.1",
+    "zuul": "^1.12.0"
   },
   "homepage": "https://github.com/feross/buffer",
   "keywords": [
@@ -42,7 +43,10 @@
     "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
-    "test": "tape test/*.js && OBJECT_IMPL=true tape test/*.js",
+    "test": "npm run test-node && npm run test-browser",
+    "test-browser": "zuul -- test/*.js",
+    "test-browser-local": "zuul --local -- test/*.js",
+    "test-node": "tape test/*.js && OBJECT_IMPL=true tape test/*.js",
     "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",
     "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c"

@@ -2,6 +2,8 @@
 
 #### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/buffer.svg)](https://saucelabs.com/u/buffer)
+
 [![testling badge](https://ci.testling.com/feross/buffer.png)](https://ci.testling.com/feross/buffer)
 
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
