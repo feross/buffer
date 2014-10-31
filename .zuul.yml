@@ -3,7 +3,7 @@ browsers:
   - name: chrome
     version: 26..latest
   - name: firefox
-    version: 16..latest
+    version: 21..latest
   - name: safari
     version: 5..latest
   - name: ie

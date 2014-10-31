@@ -3,7 +3,6 @@
 #### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
 [![saucelabs][saucelabs-image]][saucelabs-url]
-[![testling][testling-image]][testling-url]
 
 [travis-image]: https://img.shields.io/travis/feross/buffer.svg?style=flat
 [travis-url]: https://travis-ci.org/feross/buffer
@@ -14,8 +13,6 @@
 [gratipay-url]: https://www.gittip.com/feross
 [saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
 [saucelabs-url]: https://saucelabs.com/u/buffer
-[testling-image]: https://ci.testling.com/feross/buffer.png
-[testling-url]: https://ci.testling.com/feross/buffer
 
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
 
