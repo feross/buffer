@@ -1,10 +1,21 @@
-# buffer [![build](https://img.shields.io/travis/feross/buffer.svg?style=flat)](https://travis-ci.org/feross/buffer) [![npm](https://img.shields.io/npm/v/buffer.svg?style=flat)](https://npmjs.org/package/buffer) [![npm downloads](https://img.shields.io/npm/dm/buffer.svg?style=flat)](https://npmjs.org/package/buffer) [![gittip](https://img.shields.io/gittip/feross.svg?style=flat)](https://www.gittip.com/feross/)
+# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][npm-url] [![gratipay][gratipay-image]][gratipay-url]
 
 #### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/buffer.svg)](https://saucelabs.com/u/buffer)
+[![saucelabs][saucelabs-image]][saucelabs-url]
+[![testling][testling-image]][testling-url]
 
-[![testling badge](https://ci.testling.com/feross/buffer.png)](https://ci.testling.com/feross/buffer)
+[travis-image]: https://img.shields.io/travis/feross/buffer.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/buffer.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/buffer.svg?style=flat
+[gratipay-image]: https://img.shields.io/gittip/feross.svg?style=flat
+[saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
+[testling-image]: https://ci.testling.com/feross/buffer.png
+[travis-url]: https://travis-ci.org/feross/buffer
+[npm-url]: https://npmjs.org/package/buffer
+[gratipay-url]: https://www.gittip.com/feross
+[saucelabs-url]: https://saucelabs.com/u/buffer
+[testling-url]: https://ci.testling.com/feross/buffer
 
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
 
