@@ -6,15 +6,15 @@
 [![testling][testling-image]][testling-url]
 
 [travis-image]: https://img.shields.io/travis/feross/buffer.svg?style=flat
+[travis-url]: https://travis-ci.org/feross/buffer
 [npm-image]: https://img.shields.io/npm/v/buffer.svg?style=flat
+[npm-url]: https://npmjs.org/package/buffer
 [downloads-image]: https://img.shields.io/npm/dm/buffer.svg?style=flat
 [gratipay-image]: https://img.shields.io/gittip/feross.svg?style=flat
-[saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
-[testling-image]: https://ci.testling.com/feross/buffer.png
-[travis-url]: https://travis-ci.org/feross/buffer
-[npm-url]: https://npmjs.org/package/buffer
 [gratipay-url]: https://www.gittip.com/feross
+[saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
 [saucelabs-url]: https://saucelabs.com/u/buffer
+[testling-image]: https://ci.testling.com/feross/buffer.png
 [testling-url]: https://ci.testling.com/feross/buffer
 
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
