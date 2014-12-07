@@ -33,3 +33,12 @@ test('throw on orphaned utf16 surrogate trail code point', function(t) {
   t.equal(err instanceof URIError, true)
   t.end()
 })
+
+test('do not write partial utf16 code units', function(t) {
+  var f = new B([0, 0, 0, 0, 0])
+  t.equal(f.length, 5)
+  var size = f.write('あいうえお', 'utf16le')
+  t.equal(size, 4)
+  t.deepEqual(f, new B([0x42, 0x30, 0x44, 0x30, 0x00]))
+  t.end()
+})
