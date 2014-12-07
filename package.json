@@ -43,7 +43,7 @@
     "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
-    "test": "npm run test-node && npm run test-browser",
+    "test": "node ./bin/test.js",
     "test-browser": "zuul -- test/*.js",
     "test-browser-local": "zuul --local -- test/*.js",
     "test-node": "tape test/*.js && OBJECT_IMPL=true tape test/*.js",
