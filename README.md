@@ -115,202 +115,166 @@ sanity check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Arra
 always be at least a bit faster). Finally, `NodeBuffer` is the node.js buffer module,
 which is included to compare against.
 
-```
-# Chrome 38
+### Chrome 38
 
-BrowserBuffer#bracket-notation x 11,457,464 ops/sec ±0.86% (66 runs sampled) bundle.js:5262
-Uint8Array#bracket-notation x 10,824,332 ops/sec ±0.74% (65 runs sampled) bundle.js:5262
-Fastest is BrowserBuffer#bracket-notation
+| Method | Operations | Accuracy | Sampled | Fastest |
+|:-------|:-----------|:---------|:--------|:-------:|
+| BrowserBuffer#bracket-notation | 11,457,464 ops/sec | ±0.86% | 66 | ✓ |
+| Uint8Array#bracket-notation | 10,824,332 ops/sec | ±0.74% | 65 | |
+| | | | |
+| BrowserBuffer#concat | 450,532 ops/sec | ±0.76% | 68 | |
+| Uint8Array#concat | 1,368,911 ops/sec | ±1.50% | 62 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16000) | 903,001 ops/sec | ±0.96% | 67 | |
+| Uint8Array#copy(16000) | 1,422,441 ops/sec | ±1.04% | 66 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16) | 11,431,358 ops/sec | ±0.46% | 69 | |
+| Uint8Array#copy(16) | 13,944,163 ops/sec | ±1.12% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#new(16000) | 106,329 ops/sec | ±6.70% | 44 | |
+| Uint8Array#new(16000) | 131,001 ops/sec | ±2.85% | 31 | ✓ |
+| | | | |
+| BrowserBuffer#new(16) | 1,554,491 ops/sec | ±1.60% | 65 | |
+| Uint8Array#new(16) | 6,623,930 ops/sec | ±1.66% | 65 | ✓ |
+| | | | |
+| BrowserBuffer#readDoubleBE | 112,830 ops/sec | ±0.51% | 69 | ✓ |
+| DataView#getFloat64 | 93,500 ops/sec | ±0.57% | 68 | |
+| | | | |
+| BrowserBuffer#readFloatBE | 146,678 ops/sec | ±0.95% | 68 | ✓ |
+| DataView#getFloat32 | 99,311 ops/sec | ±0.41% | 67 | |
+| | | | |
+| BrowserBuffer#readUInt32LE | 843,214 ops/sec | ±0.70% | 69 | ✓ |
+| DataView#getUint32 | 103,024 ops/sec | ±0.64% | 67 | |
+| | | | |
+| BrowserBuffer#slice | 1,013,941 ops/sec | ±0.75% | 67 | |
+| Uint8Array#subarray | 1,903,928 ops/sec | ±0.53% | 67 | ✓ |
+| | | | |
+| BrowserBuffer#writeFloatBE | 61,387 ops/sec | ±0.90% | 67 | |
+| DataView#setFloat32 | 141,249 ops/sec | ±0.40% | 66 | ✓ |
 
-BrowserBuffer#concat x 450,532 ops/sec ±0.76% (68 runs sampled) bundle.js:5267
-Uint8Array#concat x 1,368,911 ops/sec ±1.50% (62 runs sampled) bundle.js:5267
-Fastest is Uint8Array#concat
 
-BrowserBuffer#copy(16000) x 903,001 ops/sec ±0.96% (67 runs sampled) bundle.js:5261
-Uint8Array#copy(16000) x 1,422,441 ops/sec ±1.04% (66 runs sampled) bundle.js:5261
-Fastest is Uint8Array#copy(16000)
+### Firefox 33
 
-BrowserBuffer#copy(16) x 11,431,358 ops/sec ±0.46% (69 runs sampled) bundle.js:5261
-Uint8Array#copy(16) x 13,944,163 ops/sec ±1.12% (68 runs sampled) bundle.js:5261
-Fastest is Uint8Array#copy(16)
+| Method | Operations | Accuracy | Sampled | Fastest |
+|:-------|:-----------|:---------|:--------|:-------:|
+| BrowserBuffer#bracket-notation | 20,800,421 ops/sec | ±1.84% | 60 | |
+| Uint8Array#bracket-notation | 20,826,235 ops/sec | ±2.02% | 61 | ✓ |
+| | | | |
+| BrowserBuffer#concat | 153,076 ops/sec | ±2.32% | 61 | |
+| Uint8Array#concat | 1,255,674 ops/sec | ±8.65% | 52 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16000) | 1,105,312 ops/sec | ±1.16% | 63 | |
+| Uint8Array#copy(16000) | 1,615,911 ops/sec | ±0.55% | 66 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16) | 16,357,599 ops/sec | ±0.73% | 68 | |
+| Uint8Array#copy(16) | 31,436,281 ops/sec | ±1.05% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#new(16000) | 52,995 ops/sec | ±6.01% | 35 | |
+| Uint8Array#new(16000) | 87,686 ops/sec | ±5.68% | 45 | ✓ |
+| | | | |
+| BrowserBuffer#new(16) | 252,031 ops/sec | ±1.61% | 66 | |
+| Uint8Array#new(16) | 8,477,026 ops/sec | ±0.49% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#readDoubleBE | 99,871 ops/sec | ±0.41% | 69 | |
+| DataView#getFloat64 | 285,663 ops/sec | ±0.70% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#readFloatBE | 115,540 ops/sec | ±0.42% | 69 | |
+| DataView#getFloat32 | 288,722 ops/sec | ±0.82% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#readUInt32LE | 633,926 ops/sec | ±1.08% | 67 | ✓ |
+| DataView#getUint32 | 294,808 ops/sec | ±0.79% | 64 | |
+| | | | |
+| BrowserBuffer#slice | 349,425 ops/sec | ±0.46% | 69 | |
+| Uint8Array#subarray | 5,965,819 ops/sec | ±0.60% | 65 | ✓ |
+| | | | |
+| BrowserBuffer#writeFloatBE | 59,980 ops/sec | ±0.41% | 67 | |
+| DataView#setFloat32 | 317,634 ops/sec | ±0.63% | 68 | ✓ |
 
-BrowserBuffer#new(16000) x 106,329 ops/sec ±6.70% (44 runs sampled) bundle.js:5253
-Uint8Array#new(16000) x 131,001 ops/sec ±2.85% (31 runs sampled) bundle.js:5253
-Fastest is Uint8Array#new(16000)
+### Safari 8
 
-BrowserBuffer#new(16) x 1,554,491 ops/sec ±1.60% (65 runs sampled) bundle.js:5253
-Uint8Array#new(16) x 6,623,930 ops/sec ±1.66% (65 runs sampled) bundle.js:5253
-Fastest is Uint8Array#new(16)
+| Method | Operations | Accuracy | Sampled | Fastest |
+|:-------|:-----------|:---------|:--------|:-------:|
+| BrowserBuffer#bracket-notation | 10,279,729 ops/sec | ±2.25% | 56 | ✓ |
+| Uint8Array#bracket-notation | 10,030,767 ops/sec | ±2.23% | 59 | |
+| | | | |
+| BrowserBuffer#concat | 144,138 ops/sec | ±1.38% | 65 | |
+| Uint8Array#concat | 4,950,764 ops/sec | ±1.70% | 63 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16000) | 1,058,548 ops/sec | ±1.51% | 64 | |
+| Uint8Array#copy(16000) | 1,409,666 ops/sec | ±1.17% | 65 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16) | 6,282,529 ops/sec | ±1.88% | 58 | |
+| Uint8Array#copy(16) | 11,907,128 ops/sec | ±2.87% | 58 | ✓ |
+| | | | |
+| BrowserBuffer#new(16000) | 101,663 ops/sec | ±3.89% | 57 | |
+| Uint8Array#new(16000) | 22,050,818 ops/sec | ±6.51% | 46 | ✓ |
+| | | | |
+| BrowserBuffer#new(16) | 176,072 ops/sec | ±2.13% | 64 | |
+| Uint8Array#new(16) | 24,385,731 ops/sec | ±5.01% | 51 | ✓ |
+| | | | |
+| BrowserBuffer#readDoubleBE | 41,341 ops/sec | ±1.06% | 67 | |
+| DataView#getFloat64 | 322,280 ops/sec | ±0.84% | 68 | ✓ |
+| | | | |
+| BrowserBuffer#readFloatBE | 46,141 ops/sec | ±1.06% | 65 | |
+| DataView#getFloat32 | 337,025 ops/sec | ±0.43% | 69 | ✓ |
+| | | | |
+| BrowserBuffer#readUInt32LE | 151,551 ops/sec | ±1.02% | 66 | |
+| DataView#getUint32 | 308,278 ops/sec | ±0.94% | 67 | ✓ |
+| | | | |
+| BrowserBuffer#slice | 197,365 ops/sec | ±0.95% | 66 | |
+| Uint8Array#subarray | 9,558,024 ops/sec | ±3.08% | 58 | ✓ |
+| | | | |
+| BrowserBuffer#writeFloatBE | 17,518 ops/sec | ±1.03% | 63 | |
+| DataView#setFloat32 | 319,751 ops/sec | ±0.48% | 68 | ✓ |
 
-BrowserBuffer#readDoubleBE x 112,830 ops/sec ±0.51% (69 runs sampled) bundle.js:5274
-DataView#getFloat64 x 93,500 ops/sec ±0.57% (68 runs sampled) bundle.js:5274
-Fastest is BrowserBuffer#readDoubleBE
 
-BrowserBuffer#readFloatBE x 146,678 ops/sec ±0.95% (68 runs sampled) bundle.js:5274
-DataView#getFloat32 x 99,311 ops/sec ±0.41% (67 runs sampled) bundle.js:5274
-Fastest is BrowserBuffer#readFloatBE
+### Node 0.11.14
 
-BrowserBuffer#readUInt32LE x 843,214 ops/sec ±0.70% (69 runs sampled) bundle.js:5274
-DataView#getUint32 x 103,024 ops/sec ±0.64% (67 runs sampled) bundle.js:5274
-Fastest is BrowserBuffer#readUInt32LE
-
-BrowserBuffer#slice x 1,013,941 ops/sec ±0.75% (67 runs sampled) bundle.js:5257
-Uint8Array#subarray x 1,903,928 ops/sec ±0.53% (67 runs sampled) bundle.js:5257
-Fastest is Uint8Array#subarray
-
-BrowserBuffer#writeFloatBE x 61,387 ops/sec ±0.90% (67 runs sampled) bundle.js:5231
-DataView#setFloat32 x 141,249 ops/sec ±0.40% (66 runs sampled) bundle.js:5231
-Fastest is DataView#setFloat32
-
-# Firefox 33
-
-"BrowserBuffer#bracket-notation x 20,800,421 ops/sec ±1.84% (60 runs sampled)" bundle.js:5262
-"Uint8Array#bracket-notation x 20,826,235 ops/sec ±2.02% (61 runs sampled)" bundle.js:5262
-"Fastest is BrowserBuffer#bracket-notation,Uint8Array#bracket-notation"
-
-"BrowserBuffer#concat x 153,076 ops/sec ±2.32% (61 runs sampled)" bundle.js:5267
-"Uint8Array#concat x 1,255,674 ops/sec ±8.65% (52 runs sampled)" bundle.js:5267
-"Fastest is Uint8Array#concat"
-
-"BrowserBuffer#copy(16000) x 1,105,312 ops/sec ±1.16% (63 runs sampled)" bundle.js:5261
-"Uint8Array#copy(16000) x 1,615,911 ops/sec ±0.55% (66 runs sampled)" bundle.js:5261
-"Fastest is Uint8Array#copy(16000)"
-
-"BrowserBuffer#copy(16) x 16,357,599 ops/sec ±0.73% (68 runs sampled)" bundle.js:5261
-"Uint8Array#copy(16) x 31,436,281 ops/sec ±1.05% (68 runs sampled)" bundle.js:5261
-"Fastest is Uint8Array#copy(16)"
-
-"BrowserBuffer#new(16000) x 52,995 ops/sec ±6.01% (35 runs sampled)" bundle.js:5253
-"Uint8Array#new(16000) x 87,686 ops/sec ±5.68% (45 runs sampled)" bundle.js:5253
-"Fastest is Uint8Array#new(16000)"
-
-"BrowserBuffer#new(16) x 252,031 ops/sec ±1.61% (66 runs sampled)" bundle.js:5253
-"Uint8Array#new(16) x 8,477,026 ops/sec ±0.49% (68 runs sampled)" bundle.js:5253
-"Fastest is Uint8Array#new(16)"
-
-"BrowserBuffer#readDoubleBE x 99,871 ops/sec ±0.41% (69 runs sampled)" bundle.js:5274
-"DataView#getFloat64 x 285,663 ops/sec ±0.70% (68 runs sampled)" bundle.js:5274
-"Fastest is DataView#getFloat64"
-
-"BrowserBuffer#readFloatBE x 115,540 ops/sec ±0.42% (69 runs sampled)" bundle.js:5274
-"DataView#getFloat32 x 288,722 ops/sec ±0.82% (68 runs sampled)" bundle.js:5274
-"Fastest is DataView#getFloat32"
-
-"BrowserBuffer#readUInt32LE x 633,926 ops/sec ±1.08% (67 runs sampled)" bundle.js:5274
-"DataView#getUint32 x 294,808 ops/sec ±0.79% (64 runs sampled)" bundle.js:5274
-"Fastest is BrowserBuffer#readUInt32LE"
-
-"BrowserBuffer#slice x 349,425 ops/sec ±0.46% (69 runs sampled)" bundle.js:5257
-"Uint8Array#subarray x 5,965,819 ops/sec ±0.60% (65 runs sampled)" bundle.js:5257
-"Fastest is Uint8Array#subarray"
-
-"BrowserBuffer#writeFloatBE x 59,980 ops/sec ±0.41% (67 runs sampled)" bundle.js:5231
-"DataView#setFloat32 x 317,634 ops/sec ±0.63% (68 runs sampled)" bundle.js:5231
-"Fastest is DataView#setFloat32"
-
-# Safari 8
-
-[Log] BrowserBuffer#bracket-notation x 10,279,729 ops/sec ±2.25% (56 runs sampled) (bundle.js, line 5262)
-[Log] Uint8Array#bracket-notation x 10,030,767 ops/sec ±2.23% (59 runs sampled) (bundle.js, line 5262)
-[Log] Fastest is BrowserBuffer#bracket-notation,Uint8Array#bracket-notation (bundle.js, line 5265)
-
-[Log] BrowserBuffer#concat x 144,138 ops/sec ±1.38% (65 runs sampled) (bundle.js, line 5267)
-[Log] Uint8Array#concat x 4,950,764 ops/sec ±1.70% (63 runs sampled) (bundle.js, line 5267)
-[Log] Fastest is Uint8Array#concat (bundle.js, line 5270)
-
-[Log] BrowserBuffer#copy(16000) x 1,058,548 ops/sec ±1.51% (64 runs sampled) (bundle.js, line 5261)
-[Log] Uint8Array#copy(16000) x 1,409,666 ops/sec ±1.17% (65 runs sampled) (bundle.js, line 5261)
-[Log] Fastest is Uint8Array#copy(16000) (bundle.js, line 5264)
-
-[Log] BrowserBuffer#copy(16) x 6,282,529 ops/sec ±1.88% (58 runs sampled) (bundle.js, line 5261)
-[Log] Uint8Array#copy(16) x 11,907,128 ops/sec ±2.87% (58 runs sampled) (bundle.js, line 5261)
-[Log] Fastest is Uint8Array#copy(16) (bundle.js, line 5264)
-
-[Log] BrowserBuffer#new(16000) x 101,663 ops/sec ±3.89% (57 runs sampled) (bundle.js, line 5253)
-[Log] Uint8Array#new(16000) x 22,050,818 ops/sec ±6.51% (46 runs sampled) (bundle.js, line 5253)
-[Log] Fastest is Uint8Array#new(16000) (bundle.js, line 5256)
-
-[Log] BrowserBuffer#new(16) x 176,072 ops/sec ±2.13% (64 runs sampled) (bundle.js, line 5253)
-[Log] Uint8Array#new(16) x 24,385,731 ops/sec ±5.01% (51 runs sampled) (bundle.js, line 5253)
-[Log] Fastest is Uint8Array#new(16) (bundle.js, line 5256)
-
-[Log] BrowserBuffer#readDoubleBE x 41,341 ops/sec ±1.06% (67 runs sampled) (bundle.js, line 5274)
-[Log] DataView#getFloat64 x 322,280 ops/sec ±0.84% (68 runs sampled) (bundle.js, line 5274)
-[Log] Fastest is DataView#getFloat64 (bundle.js, line 5277)
-
-[Log] BrowserBuffer#readFloatBE x 46,141 ops/sec ±1.06% (65 runs sampled) (bundle.js, line 5274)
-[Log] DataView#getFloat32 x 337,025 ops/sec ±0.43% (69 runs sampled) (bundle.js, line 5274)
-[Log] Fastest is DataView#getFloat32 (bundle.js, line 5277)
-
-[Log] BrowserBuffer#readUInt32LE x 151,551 ops/sec ±1.02% (66 runs sampled) (bundle.js, line 5274)
-[Log] DataView#getUint32 x 308,278 ops/sec ±0.94% (67 runs sampled) (bundle.js, line 5274)
-[Log] Fastest is DataView#getUint32 (bundle.js, line 5277)
-
-[Log] BrowserBuffer#slice x 197,365 ops/sec ±0.95% (66 runs sampled) (bundle.js, line 5257)
-[Log] Uint8Array#subarray x 9,558,024 ops/sec ±3.08% (58 runs sampled) (bundle.js, line 5257)
-[Log] Fastest is Uint8Array#subarray (bundle.js, line 5260)
-
-[Log] BrowserBuffer#writeFloatBE x 17,518 ops/sec ±1.03% (63 runs sampled) (bundle.js, line 5231)
-[Log] DataView#setFloat32 x 319,751 ops/sec ±0.48% (68 runs sampled) (bundle.js, line 5231)
-[Log] Fastest is DataView#setFloat32 (bundle.js, line 5234)
-
-# Node 0.11.14
-
-BrowserBuffer#bracket-notation x 10,489,828 ops/sec ±3.25% (90 runs sampled)
-Uint8Array#bracket-notation x 10,534,884 ops/sec ±0.81% (92 runs sampled)
-NodeBuffer#bracket-notation x 10,389,910 ops/sec ±0.97% (87 runs sampled)
-Fastest is Uint8Array#bracket-notation,BrowserBuffer#bracket-notation
-
-BrowserBuffer#concat x 487,830 ops/sec ±2.58% (88 runs sampled)
-Uint8Array#concat x 1,814,327 ops/sec ±1.28% (88 runs sampled)
-NodeBuffer#concat x 1,636,523 ops/sec ±1.88% (73 runs sampled)
-Fastest is Uint8Array#concat
-
-BrowserBuffer#copy(16000) x 1,073,665 ops/sec ±0.77% (90 runs sampled)
-Uint8Array#copy(16000) x 1,348,517 ops/sec ±0.84% (89 runs sampled)
-NodeBuffer#copy(16000) x 1,289,533 ops/sec ±0.82% (93 runs sampled)
-Fastest is Uint8Array#copy(16000)
-
-BrowserBuffer#copy(16) x 12,782,706 ops/sec ±0.74% (85 runs sampled)
-Uint8Array#copy(16) x 14,180,427 ops/sec ±0.93% (92 runs sampled)
-NodeBuffer#copy(16) x 11,083,134 ops/sec ±1.06% (89 runs sampled)
-Fastest is Uint8Array#copy(16)
-
-BrowserBuffer#new(16000) x 141,678 ops/sec ±3.30% (67 runs sampled)
-Uint8Array#new(16000) x 161,491 ops/sec ±2.96% (60 runs sampled)
-NodeBuffer#new(16000) x 292,699 ops/sec ±3.20% (55 runs sampled)
-Fastest is NodeBuffer#new(16000)
-
-BrowserBuffer#new(16) x 1,655,466 ops/sec ±2.41% (82 runs sampled)
-Uint8Array#new(16) x 14,399,926 ops/sec ±0.91% (94 runs sampled)
-NodeBuffer#new(16) x 3,894,696 ops/sec ±0.88% (92 runs sampled)
-Fastest is Uint8Array#new(16)
-
-BrowserBuffer#readDoubleBE x 109,582 ops/sec ±0.75% (93 runs sampled)
-DataView#getFloat64 x 91,235 ops/sec ±0.81% (90 runs sampled)
-NodeBuffer#readDoubleBE x 88,593 ops/sec ±0.96% (81 runs sampled)
-Fastest is BrowserBuffer#readDoubleBE
-
-BrowserBuffer#readFloatBE x 139,854 ops/sec ±1.03% (85 runs sampled)
-DataView#getFloat32 x 98,744 ops/sec ±0.80% (89 runs sampled)
-NodeBuffer#readFloatBE x 92,769 ops/sec ±0.94% (93 runs sampled)
-Fastest is BrowserBuffer#readFloatBE
-
-BrowserBuffer#readUInt32LE x 710,861 ops/sec ±0.82% (92 runs sampled)
-DataView#getUint32 x 117,893 ops/sec ±0.84% (91 runs sampled)
-NodeBuffer#readUInt32LE x 851,412 ops/sec ±0.72% (93 runs sampled)
-Fastest is NodeBuffer#readUInt32LE
-
-BrowserBuffer#slice x 1,673,877 ops/sec ±0.73% (94 runs sampled)
-Uint8Array#subarray x 6,919,243 ops/sec ±0.67% (90 runs sampled)
-NodeBuffer#slice x 4,617,604 ops/sec ±0.79% (93 runs sampled)
-Fastest is Uint8Array#subarray
-
-BrowserBuffer#writeFloatBE x 66,011 ops/sec ±0.75% (93 runs sampled)
-DataView#setFloat32 x 127,760 ops/sec ±0.72% (93 runs sampled)
-NodeBuffer#writeFloatBE x 103,352 ops/sec ±0.83% (93 runs sampled)
-Fastest is DataView#setFloat32
-```
+| Method | Operations | Accuracy | Sampled | Fastest |
+|:-------|:-----------|:---------|:--------|:-------:|
+| BrowserBuffer#bracket-notation | 10,489,828 ops/sec | ±3.25% | 90 | |
+| Uint8Array#bracket-notation | 10,534,884 ops/sec | ±0.81% | 92 | ✓ |
+| NodeBuffer#bracket-notation | 10,389,910 ops/sec | ±0.97% | 87 | |
+| | | | |
+| BrowserBuffer#concat | 487,830 ops/sec | ±2.58% | 88 | |
+| Uint8Array#concat | 1,814,327 ops/sec | ±1.28% | 88 | ✓ |
+| NodeBuffer#concat | 1,636,523 ops/sec | ±1.88% | 73 | |
+| | | | |
+| BrowserBuffer#copy(16000) | 1,073,665 ops/sec | ±0.77% | 90 | |
+| Uint8Array#copy(16000) | 1,348,517 ops/sec | ±0.84% | 89 | ✓ |
+| NodeBuffer#copy(16000) | 1,289,533 ops/sec | ±0.82% | 93 | |
+| | | | |
+| BrowserBuffer#copy(16) | 12,782,706 ops/sec | ±0.74% | 85 | |
+| Uint8Array#copy(16) | 14,180,427 ops/sec | ±0.93% | 92 | ✓ |
+| NodeBuffer#copy(16) | 11,083,134 ops/sec | ±1.06% | 89 | |
+| | | | |
+| BrowserBuffer#new(16000) | 141,678 ops/sec | ±3.30% | 67 | |
+| Uint8Array#new(16000) | 161,491 ops/sec | ±2.96% | 60 | |
+| NodeBuffer#new(16000) | 292,699 ops/sec | ±3.20% | 55 | ✓ |
+| | | | |
+| BrowserBuffer#new(16) | 1,655,466 ops/sec | ±2.41% | 82 | |
+| Uint8Array#new(16) | 14,399,926 ops/sec | ±0.91% | 94 | ✓ |
+| NodeBuffer#new(16) | 3,894,696 ops/sec | ±0.88% | 92 | |
+| | | | |
+| BrowserBuffer#readDoubleBE | 109,582 ops/sec | ±0.75% | 93 | ✓ |
+| DataView#getFloat64 | 91,235 ops/sec | ±0.81% | 90 | |
+| NodeBuffer#readDoubleBE | 88,593 ops/sec | ±0.96% | 81 | |
+| | | | |
+| BrowserBuffer#readFloatBE | 139,854 ops/sec | ±1.03% | 85 | ✓ |
+| DataView#getFloat32 | 98,744 ops/sec | ±0.80% | 89 | |
+| NodeBuffer#readFloatBE | 92,769 ops/sec | ±0.94% | 93 | |
+| | | | |
+| BrowserBuffer#readUInt32LE | 710,861 ops/sec | ±0.82% | 92 | |
+| DataView#getUint32 | 117,893 ops/sec | ±0.84% | 91 | |
+| NodeBuffer#readUInt32LE | 851,412 ops/sec | ±0.72% | 93 | ✓ |
+| | | | |
+| BrowserBuffer#slice | 1,673,877 ops/sec | ±0.73% | 94 | |
+| Uint8Array#subarray | 6,919,243 ops/sec | ±0.67% | 90 | ✓ |
+| NodeBuffer#slice | 4,617,604 ops/sec | ±0.79% | 93 | |
+| | | | |
+| BrowserBuffer#writeFloatBE | 66,011 ops/sec | ±0.75% | 93 | |
+| DataView#setFloat32 | 127,760 ops/sec | ±0.72% | 93 | ✓ |
+| NodeBuffer#writeFloatBE | 103,352 ops/sec | ±0.83% | 93 | |
 
 
 ## credit
