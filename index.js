@@ -730,9 +730,9 @@ Buffer.prototype.writeUIntLE = function(value, offset, byteLength, noAssert) {
 
   var mul = 1
   var i = 0
-  this[offset] = value
+  this[offset] = value & 0xFF
   while (++i < byteLength && (mul *= 0x100))
-    this[offset + i] = (value / mul) >>> 0
+    this[offset + i] = (value / mul) >>> 0 & 0xFF
 
   return offset + byteLength
 }
@@ -746,9 +746,9 @@ Buffer.prototype.writeUIntBE = function(value, offset, byteLength, noAssert) {
 
   var i = byteLength - 1
   var mul = 1
-  this[offset + i] = value
+  this[offset + i] = value & 0xFF
   while (--i >= 0 && (mul *= 0x100))
-    this[offset + i] = (value / mul) >>> 0
+    this[offset + i] = (value / mul) >>> 0 & 0xFF
 
   return offset + byteLength
 }
@@ -845,9 +845,9 @@ Buffer.prototype.writeIntLE = function(value, offset, byteLength, noAssert) {
   var i = 0
   var mul = 1
   var sub = value < 0 ? 1 : 0
-  this[offset] = value
+  this[offset] = value & 0xFF
   while (++i < byteLength && (mul *= 0x100))
-    this[offset + i] = ((value / mul) >> 0) - sub
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
 
   return offset + byteLength
 }
@@ -867,9 +867,9 @@ Buffer.prototype.writeIntBE = function(value, offset, byteLength, noAssert) {
   var i = byteLength - 1
   var mul = 1
   var sub = value < 0 ? 1 : 0
-  this[offset + i] = value
+  this[offset + i] = value & 0xFF
   while (--i >= 0 && (mul *= 0x100))
-    this[offset + i] = ((value / mul) >> 0) - sub
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF
 
   return offset + byteLength
 }
