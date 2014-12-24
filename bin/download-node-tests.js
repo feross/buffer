@@ -51,26 +51,11 @@ function testfixer(filename) {
 
     if (firstline) {
 
-      // require buffer explicitly and wrap in tape test
+      // require buffer explicitly
       line = 'var Buffer = require(\'../\').Buffer\n' +
-             'var test = require(\'tape\')\n' +
-             'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' +
-             'test(\'' + filename + '\', function(t) {\n' + line
+             'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' + line
 
       firstline = false
-    }
-
-    // use tape not assert
-    if (/^var assert/.test(line)) {
-      line = line.replace(/(^var assert.*)/, '// $1')
-    }
-    else {
-
-      // use "ok" instead of shortcut
-      line = line.replace(/assert\(/, 'assert.ok(')
-
-      // use tape
-      line = line.replace(/assert/, 't')
     }
 
     // comment out require('common')
@@ -84,9 +69,6 @@ function testfixer(filename) {
 
     // comment out console logs
     line = line.replace(/(.*console\..*)/, '// $1')
-
-    // tape's equal can't compare strings and buffers
-    line = line.replace(/t.equal\(buf.slice\(([^\)]*)\), /, 't.equal(buf.slice($1).toString(), ')
 
     // we can't reliably test typed array max-sizes in the browser
     if (filename === 'test-buffer-big.js') {
@@ -110,11 +92,5 @@ function testfixer(filename) {
     }
 
     cb(null, line + '\n')
-  }, function(cb) {
-
-    // close tape wrapper
-    this.push('\nt.end()\n})')
-
-    cb()
   })
 }
