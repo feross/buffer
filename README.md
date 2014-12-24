@@ -31,7 +31,7 @@ instance methods, and class methods that are supported.
 - `.slice()` returns instances of the same type (Buffer)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
 - Does not modify any browser prototypes or put anything on `window`
-- Comprehensive test suite
+- Comprehensive test suite (including all buffer tests from node.js core)
 
 
 ## install
