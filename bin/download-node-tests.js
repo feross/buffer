@@ -87,7 +87,10 @@ function testfixer(filename) {
     // https://github.com/iojs/io.js/blob/v0.12/test/parallel/test-buffer.js#L1138
     // unfortunately we can't run this as it touches
     // node streams which do an instanceof check
+    // and crypto-browserify doesn't work in old
+    // versions of ie
     if (filename === 'test-buffer.js') {
+      line = line.replace(/^(var crypto = require.*)/, '// $1')
       line = line.replace(/(crypto.createHash.*\))/, '1 /*$1*/')
     }
 

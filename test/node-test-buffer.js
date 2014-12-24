@@ -1132,7 +1132,7 @@ assert.throws(function () {
 }, RangeError);
 
 // Test truncation after decode
-var crypto = require('crypto');
+// var crypto = require('crypto');
 
 var b1 = new Buffer('YW55=======', 'base64');
 var b2 = new Buffer('YW55', 'base64');
