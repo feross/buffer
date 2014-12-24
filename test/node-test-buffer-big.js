@@ -1,7 +1,5 @@
 var Buffer = require('../').Buffer
-var test = require('tape')
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-test('test-buffer-big.js', function(t) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,14 +22,11 @@ test('test-buffer-big.js', function(t) {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // var common = require('../common');
-// var assert = require('assert');
+var assert = require('assert');
 
 // The tests below should throw an error, not abort the process...
-t.throws(function() { new Buffer(0x3fffffff + 1) }, RangeError);
-// t.throws(function() { new Int8Array(0x3fffffff + 1) }, RangeError);
-// t.throws(function() { new ArrayBuffer(0x3fffffff + 1) }, RangeError);
-// t.throws(function() { new Float64Array(0x7ffffff + 1) }, RangeError);
+assert.throws(function() { new Buffer(0x3fffffff + 1) }, RangeError);
+// assert.throws(function() { new Int8Array(0x3fffffff + 1) }, RangeError);
+// assert.throws(function() { new ArrayBuffer(0x3fffffff + 1) }, RangeError);
+// assert.throws(function() { new Float64Array(0x7ffffff + 1) }, RangeError);
 
-
-t.end()
-})

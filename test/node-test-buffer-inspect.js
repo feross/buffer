@@ -1,7 +1,5 @@
 var Buffer = require('../').Buffer
-var test = require('tape')
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-test('test-buffer-inspect.js', function(t) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,7 +22,7 @@ test('test-buffer-inspect.js', function(t) {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // var common = require('../common');
-// var assert = require('assert');
+var assert = require('assert');
 
 var util = require('util');
 
@@ -40,8 +38,8 @@ s.fill('1234');
 
 var expected = '<Buffer 31 32 ... >';
 
-t.strictEqual(util.inspect(b), expected);
-t.strictEqual(util.inspect(s), expected);
+assert.strictEqual(util.inspect(b), expected);
+assert.strictEqual(util.inspect(s), expected);
 
 b = new Buffer(2);
 b.fill('12');
@@ -51,15 +49,12 @@ s.fill('12');
 
 expected = '<Buffer 31 32>';
 
-t.strictEqual(util.inspect(b), expected);
-t.strictEqual(util.inspect(s), expected);
+assert.strictEqual(util.inspect(b), expected);
+assert.strictEqual(util.inspect(s), expected);
 
 buffer.INSPECT_MAX_BYTES = Infinity;
 
-t.doesNotThrow(function() {
-  t.strictEqual(util.inspect(b), expected);
-  t.strictEqual(util.inspect(s), expected);
+assert.doesNotThrow(function() {
+  assert.strictEqual(util.inspect(b), expected);
+  assert.strictEqual(util.inspect(s), expected);
 });
-
-t.end()
-})

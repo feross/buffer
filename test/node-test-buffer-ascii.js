@@ -1,7 +1,5 @@
 var Buffer = require('../').Buffer
-var test = require('tape')
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-test('test-buffer-ascii.js', function(t) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,11 +22,11 @@ test('test-buffer-ascii.js', function(t) {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // var common = require('../common');
-// var assert = require('assert');
+var assert = require('assert');
 
 // ASCII conversion in node.js simply masks off the high bits,
 // it doesn't do transliteration.
-t.equal(Buffer('hérité').toString('ascii'), 'hC)ritC)');
+assert.equal(Buffer('hérité').toString('ascii'), 'hC)ritC)');
 
 // 71 characters, 78 bytes. The ’ character is a triple-byte sequence.
 var input = 'C’est, graphiquement, la réunion d’un accent aigu ' +
@@ -41,13 +39,10 @@ var expected = 'Cb\u0000\u0019est, graphiquement, la rC)union ' +
 var buf = Buffer(input);
 
 for (var i = 0; i < expected.length; ++i) {
-  t.equal(buf.slice(i).toString('ascii'), expected.slice(i));
+  assert.equal(buf.slice(i).toString('ascii'), expected.slice(i));
 
   // Skip remainder of multi-byte sequence.
   if (input.charCodeAt(i) > 65535) ++i;
   if (input.charCodeAt(i) > 127) ++i;
 }
 
-
-t.end()
-})

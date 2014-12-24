@@ -1,7 +1,5 @@
 var Buffer = require('../').Buffer
-var test = require('tape')
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-test('test-buffer-slice.js', function(t) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24,17 +22,14 @@ test('test-buffer-slice.js', function(t) {
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // var common = require('../common');
-// var assert = require('assert');
+var assert = require('assert');
 
 var Buffer = require('../').Buffer;
 
 var buff = new Buffer(Buffer.poolSize + 1);
 var slicedBuffer = buff.slice();
-t.equal(slicedBuffer.parent,
+assert.equal(slicedBuffer.parent,
              buff,
              "slicedBufffer should have its parent set to the original " +
              " buffer");
 
-
-t.end()
-})
