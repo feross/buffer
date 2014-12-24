@@ -281,7 +281,7 @@ Buffer.prototype.toString = function (encoding, start, end) {
 }
 
 Buffer.prototype.equals = function (b) {
-  if(!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
   return Buffer.compare(this, b) === 0
 }
 
@@ -550,7 +550,7 @@ function checkOffset (offset, ext, length) {
     throw new RangeError('Trying to access beyond buffer length')
 }
 
-Buffer.prototype.readUIntLE = function(offset, byteLength, noAssert) {
+Buffer.prototype.readUIntLE = function (offset, byteLength, noAssert) {
   offset = offset >>> 0
   byteLength = byteLength >>> 0
   if (!noAssert)
@@ -565,7 +565,7 @@ Buffer.prototype.readUIntLE = function(offset, byteLength, noAssert) {
   return val
 }
 
-Buffer.prototype.readUIntBE = function(offset, byteLength, noAssert) {
+Buffer.prototype.readUIntBE = function (offset, byteLength, noAssert) {
   offset = offset >>> 0
   byteLength = byteLength >>> 0
   if (!noAssert)
@@ -617,7 +617,7 @@ Buffer.prototype.readUInt32BE = function (offset, noAssert) {
       this[offset + 3])
 }
 
-Buffer.prototype.readIntLE = function(offset, byteLength, noAssert) {
+Buffer.prototype.readIntLE = function (offset, byteLength, noAssert) {
   offset = offset >>> 0
   byteLength = byteLength >>> 0
   if (!noAssert)
@@ -636,7 +636,7 @@ Buffer.prototype.readIntLE = function(offset, byteLength, noAssert) {
   return val
 }
 
-Buffer.prototype.readIntBE = function(offset, byteLength, noAssert) {
+Buffer.prototype.readIntBE = function (offset, byteLength, noAssert) {
   offset = offset >>> 0
   byteLength = byteLength >>> 0
   if (!noAssert)
@@ -727,7 +727,7 @@ function checkInt (buf, value, offset, ext, max, min) {
   if (offset + ext > buf.length) throw new RangeError('index out of range')
 }
 
-Buffer.prototype.writeUIntLE = function(value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntLE = function (value, offset, byteLength, noAssert) {
   value = +value
   offset = offset >>> 0
   byteLength = byteLength >>> 0
@@ -743,7 +743,7 @@ Buffer.prototype.writeUIntLE = function(value, offset, byteLength, noAssert) {
   return offset + byteLength
 }
 
-Buffer.prototype.writeUIntBE = function(value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntBE = function (value, offset, byteLength, noAssert) {
   value = +value
   offset = offset >>> 0
   byteLength = byteLength >>> 0
@@ -836,7 +836,7 @@ Buffer.prototype.writeUInt32BE = function (value, offset, noAssert) {
   return offset + 4
 }
 
-Buffer.prototype.writeIntLE = function(value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntLE = function (value, offset, byteLength, noAssert) {
   value = +value
   offset = offset >>> 0
   if (!noAssert) {
@@ -858,7 +858,7 @@ Buffer.prototype.writeIntLE = function(value, offset, byteLength, noAssert) {
   return offset + byteLength
 }
 
-Buffer.prototype.writeIntBE = function(value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntBE = function (value, offset, byteLength, noAssert) {
   value = +value
   offset = offset >>> 0
   if (!noAssert) {
@@ -981,7 +981,7 @@ Buffer.prototype.writeDoubleBE = function (value, offset, noAssert) {
 }
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
-Buffer.prototype.copy = function(target, target_start, start, end) {
+Buffer.prototype.copy = function (target, target_start, start, end) {
   var source = this
 
   if (!start) start = 0
@@ -1176,7 +1176,7 @@ function toHex (n) {
 function utf8ToBytes(string, units) {
   var codePoint, length = string.length
   var leadSurrogate = null
-  var units = units || Infinity
+  units = units || Infinity
   var bytes = []
   var i = 0
 
