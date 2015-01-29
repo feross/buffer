@@ -2,7 +2,6 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
 test('buffer.compare', function (t) {
   var b = new B(1).fill('a')
   var c = new B(1).fill('c')

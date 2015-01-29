@@ -2,7 +2,6 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
 test('utf8 buffer to base64', function (t) {
   t.equal(
     new B('Ձאab', 'utf8').toString('base64'),
@@ -28,19 +27,19 @@ test('utf8 to utf8', function (t) {
 })
 
 test('utf16le to utf16', function (t) {
-    t.equal(
-        new B(new B('abcd', 'utf8').toString('utf16le'), 'utf16le').toString('utf8'),
-        'abcd'
-    )
-    t.end()
+  t.equal(
+    new B(new B('abcd', 'utf8').toString('utf16le'), 'utf16le').toString('utf8'),
+    'abcd'
+  )
+  t.end()
 })
 
 test('utf16le to hex', function (t) {
-    t.equal(
-        new B('abcd', 'utf16le').toString('hex'),
-        '6100620063006400'
-    )
-    t.end()
+  t.equal(
+    new B('abcd', 'utf16le').toString('hex'),
+    '6100620063006400'
+  )
+  t.end()
 })
 
 test('ascii buffer to base64', function (t) {
@@ -108,9 +107,11 @@ test('hex buffer to binary', function (t) {
 })
 
 test('utf8 to binary', function (t) {
+  /* jshint -W100 */
   t.equal(
     new B('öäüõÖÄÜÕ', 'utf8').toString('binary'),
     'Ã¶Ã¤Ã¼ÃµÃÃÃÃ'
   )
+  /* jshint +W100 */
   t.end()
 })

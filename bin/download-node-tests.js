@@ -2,7 +2,7 @@
 
 var hyperquest = require('hyperquest')
 var concat = require('concat-stream')
-var split  = require('split')
+var split = require('split')
 var thru = require('through2')
 var fs = require('fs')
 
@@ -14,26 +14,24 @@ var dirs = [
 
 var httpOpts = {
   headers: {
-    'User-Agent': null,
-
+    'User-Agent': null
     // auth if github rate-limits you...
     // 'Authorization': 'Basic ' + Buffer('username:password').toString('base64'),
   }
 }
 
-dirs.forEach(function(dir) {
+dirs.forEach(function (dir) {
   var req = hyperquest(url + dir, httpOpts)
-  req.pipe(concat(function(data) {
+  req.pipe(concat(function (data) {
     if (req.response.statusCode !== 200) {
       throw new Error(url + dir + ': ' + data.toString())
     }
-
-    downloadBufferTests(dir, JSON.parse(data));
+    downloadBufferTests(dir, JSON.parse(data))
   }))
 })
 
-function downloadBufferTests(dir, files) {
-  files.forEach(function(file) {
+function downloadBufferTests (dir, files) {
+  files.forEach(function (file) {
     if (!/test-buffer.*/.test(file.name)) return
 
     hyperquest(file.download_url, httpOpts)
@@ -43,14 +41,13 @@ function downloadBufferTests(dir, files) {
   })
 }
 
-function testfixer(filename) {
+function testfixer (filename) {
   var firstline = true
 
-  return thru(function(line, enc, cb) {
+  return thru(function (line, enc, cb) {
     line = line.toString()
 
     if (firstline) {
-
       // require buffer explicitly
       line = 'var Buffer = require(\'../\').Buffer\n' +
              'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' + line

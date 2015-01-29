@@ -36,18 +36,18 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
     'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
   ]
   var reads = [ 3, 3, 3, 3, 3, -3, -3, -3, -3, -3 ]
-  var xs = ['UInt','Int']
-  var ys = [8,16,32]
+  var xs = ['UInt', 'Int']
+  var ys = [8, 16, 32]
   for (var i = 0; i < xs.length; i++) {
     var x = xs[i]
     for (var j = 0; j < ys.length; j++) {
       var y = ys[j]
-      var endianesses = (y === 8) ? [''] : ['LE','BE']
+      var endianesses = (y === 8) ? [''] : ['LE', 'BE']
       for (var k = 0; k < endianesses.length; k++) {
         var z = endianesses[k]
 
-        var v1  = new B(y / 8)
-        var writefn  = 'write' + x + y + z
+        var v1 = new B(y / 8)
+        var writefn = 'write' + x + y + z
         var val = (x === 'Int') ? -3 : 3
         v1[writefn](val, 0)
         t.equal(
@@ -81,20 +81,20 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
     undefined, 3, 0, NaN, 0,
     undefined, 253, -256, 16777213, -256
   ]
-  var xs = ['UInt','Int']
-  var ys = [8,16,32]
+  var xs = ['UInt', 'Int']
+  var ys = [8, 16, 32]
   for (var i = 0; i < xs.length; i++) {
     var x = xs[i]
     for (var j = 0; j < ys.length; j++) {
       var y = ys[j]
-      var endianesses = (y === 8) ? [''] : ['LE','BE']
+      var endianesses = (y === 8) ? [''] : ['LE', 'BE']
       for (var k = 0; k < endianesses.length; k++) {
         var z = endianesses[k]
 
-        var v1  = new B(y / 8 - 1)
+        var v1 = new B(y / 8 - 1)
         var next = new B(4)
         next.writeUInt32BE(0, 0)
-        var writefn  = 'write' + x + y + z
+        var writefn = 'write' + x + y + z
         var val = (x === 'Int') ? -3 : 3
         v1[writefn](val, 0, true)
         t.equal(

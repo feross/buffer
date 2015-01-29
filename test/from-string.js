@@ -2,29 +2,28 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
-test('detect utf16 surrogate pairs', function(t) {
+test('detect utf16 surrogate pairs', function (t) {
   var text = '\uD83D\uDE38' + '\uD83D\uDCAD' + '\uD83D\uDC4D'
   var buf = new B(text)
   t.equal(text, buf.toString())
   t.end()
 })
 
-test('replace orphaned utf16 surrogate lead code point', function(t) {
+test('replace orphaned utf16 surrogate lead code point', function (t) {
   var text = '\uD83D\uDE38' + '\uD83D' + '\uD83D\uDC4D'
   var buf = new B(text)
   t.deepEqual(buf, new B([ 0xf0, 0x9f, 0x98, 0xb8, 0xef, 0xbf, 0xbd, 0xf0, 0x9f, 0x91, 0x8d ]))
   t.end()
 })
 
-test('replace orphaned utf16 surrogate trail code point', function(t) {
+test('replace orphaned utf16 surrogate trail code point', function (t) {
   var text = '\uD83D\uDE38' + '\uDCAD' + '\uD83D\uDC4D'
   var buf = new B(text)
   t.deepEqual(buf, new B([ 0xf0, 0x9f, 0x98, 0xb8, 0xef, 0xbf, 0xbd, 0xf0, 0x9f, 0x91, 0x8d ]))
   t.end()
 })
 
-test('do not write partial utf16 code units', function(t) {
+test('do not write partial utf16 code units', function (t) {
   var f = new B([0, 0, 0, 0, 0])
   t.equal(f.length, 5)
   var size = f.write('あいうえお', 'utf16le')
@@ -33,7 +32,7 @@ test('do not write partial utf16 code units', function(t) {
   t.end()
 })
 
-test('handle partial utf16 code points when encoding to utf8 the way node does', function(t) {
+test('handle partial utf16 code points when encoding to utf8 the way node does', function (t) {
   var text = '\uD83D\uDE38' + '\uD83D\uDC4D'
 
   var buf = new B(8)
@@ -51,27 +50,27 @@ test('handle partial utf16 code points when encoding to utf8 the way node does',
   buf.write(text)
   t.deepEqual(buf, new B([ 0xf0, 0x9f, 0x98, 0xb8, 0x00, 0x00 ]))
 
-  var buf = new B(5);
+  buf = new B(5)
   buf.fill(0)
   buf.write(text)
   t.deepEqual(buf, new B([ 0xf0, 0x9f, 0x98, 0xb8, 0x00 ]))
 
-  var buf = new B(4);
+  buf = new B(4)
   buf.fill(0)
   buf.write(text)
   t.deepEqual(buf, new B([ 0xf0, 0x9f, 0x98, 0xb8 ]))
 
-  var buf = new B(3);
+  buf = new B(3)
   buf.fill(0)
   buf.write(text)
   t.deepEqual(buf, new B([ 0x00, 0x00, 0x00 ]))
 
-  var buf = new B(2);
+  buf = new B(2)
   buf.fill(0)
   buf.write(text)
   t.deepEqual(buf, new B([ 0x00, 0x00 ]))
 
-  var buf = new B(1);
+  buf = new B(1)
   buf.fill(0)
   buf.write(text)
   t.deepEqual(buf, new B([ 0x00 ]))
@@ -79,7 +78,7 @@ test('handle partial utf16 code points when encoding to utf8 the way node does',
   t.end()
 })
 
-test('handle invalid utf16 code points when encoding to utf8 the way node does', function(t) {
+test('handle invalid utf16 code points when encoding to utf8 the way node does', function (t) {
   var text = 'a' + '\uDE38\uD83D' + 'b'
 
   var buf = new B(8)

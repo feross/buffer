@@ -2,12 +2,11 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
 test('buffer.toJSON', function (t) {
   var data = [1, 2, 3, 4]
   t.deepEqual(
     new B(data).toJSON(),
-    { type: 'Buffer', data: [1,2,3,4] }
+    { type: 'Buffer', data: [ 1, 2, 3, 4 ] }
   )
   t.end()
 })
@@ -18,8 +17,8 @@ test('buffer.copy', function (t) {
   var buf2 = new B(26)
 
   for (var i = 0 ; i < 26 ; i++) {
-    buf1[i] = i + 97; // 97 is ASCII a
-    buf2[i] = 33; // ASCII !
+    buf1[i] = i + 97 // 97 is ASCII a
+    buf2[i] = 33 // ASCII !
   }
 
   buf1.copy(buf2, 8, 16, 20)
@@ -43,7 +42,7 @@ test('test offset returns are correct', function (t) {
 
 test('concat() a varying number of buffers', function (t) {
   var zero = []
-  var one  = [ new B('asdf') ]
+  var one = [ new B('asdf') ]
   var long = []
   for (var i = 0; i < 10; i++) {
     long.push(new B('asdf'))
@@ -57,8 +56,8 @@ test('concat() a varying number of buffers', function (t) {
   t.equal(flatZero.length, 0)
   t.equal(flatOne.toString(), 'asdf')
   t.equal(flatOne, one[0])
-  t.equal(flatLong.toString(), (new Array(10+1).join('asdf')))
-  t.equal(flatLongLen.toString(), (new Array(10+1).join('asdf')))
+  t.equal(flatLong.toString(), (new Array(10 + 1).join('asdf')))
+  t.equal(flatLongLen.toString(), (new Array(10 + 1).join('asdf')))
   t.end()
 })
 

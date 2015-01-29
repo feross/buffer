@@ -2,7 +2,6 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
 test('new buffer from array', function (t) {
   t.equal(
     new B([1, 2, 3]).toString(),
@@ -153,4 +152,3 @@ test('new buffer from buffer.toJSON() output', function (t) {
   t.ok(buf.equals(copy))
   t.end()
 })
-

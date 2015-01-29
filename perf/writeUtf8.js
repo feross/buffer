@@ -4,7 +4,7 @@ var suite = util.suite()
 
 var LENGTH = 9
 var singleByte = 'abcdefghi'
-var multiByte =  '\u0610' + '\u6100' + '\uD944\uDC00'
+var multiByte = '\u0610' + '\u6100' + '\uD944\uDC00'
 
 var browserBuffer = new BrowserBuffer(LENGTH)
 var nodeBuffer = new Buffer(LENGTH)

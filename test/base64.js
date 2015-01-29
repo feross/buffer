@@ -2,7 +2,6 @@ var B = require('../').Buffer
 var test = require('tape')
 if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
-
 test('base64: ignore whitespace', function (t) {
   var text = '\n   YW9ldQ==  '
   var buf = new B(text, 'base64')
@@ -38,4 +37,3 @@ test('base64: tab characters in base64 - should get stripped', function (t) {
   )
   t.end()
 })
-
