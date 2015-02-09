@@ -91,7 +91,9 @@ function Buffer (subject, encoding, noZero) {
   var self = this
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Preferred: Return an augmented `Uint8Array` instance for best performance
+    /*eslint-disable consistent-this */
     self = Buffer._augment(new Uint8Array(length))
+    /*eslint-enable consistent-this */
   } else {
     // Fallback: Return THIS instance of Buffer (created by `new`)
     self.length = length
