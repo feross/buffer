@@ -48,10 +48,19 @@ function testfixer (filename) {
     line = line.toString()
 
     if (firstline) {
+      var originalLine = line
       // require buffer explicitly
-      line = 'var Buffer = require(\'../\').Buffer\n' +
-             'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' + line
+      line = 'var Buffer = require(\'../\').Buffer\n'
 
+      // don't run this test for the Object-based bufer implementation because
+      // it doesn't have an Iterable interface (but these old browsers won't have it
+      // anyway)
+      if (filename === 'test-buffer-iterator.js')
+        line += 'if (process.env.OBJECT_IMPL) return\n'
+      else
+        line += 'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n'
+
+      line += originalLine
       firstline = false
     }
 
