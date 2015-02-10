@@ -149,6 +149,8 @@ Buffer.compare = function (a, b) {
   if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b))
     throw new TypeError('Arguments must be Buffers')
 
+  if (a === b) return 0
+
   var x = a.length
   var y = b.length
   for (var i = 0, len = Math.min(x, y); i < len && a[i] === b[i]; i++) {}
@@ -289,6 +291,7 @@ Buffer.prototype.toString = function (encoding, start, end) {
 
 Buffer.prototype.equals = function (b) {
   if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return true
   return Buffer.compare(this, b) === 0
 }
 
@@ -305,6 +308,7 @@ Buffer.prototype.inspect = function () {
 
 Buffer.prototype.compare = function (b) {
   if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return 0
   return Buffer.compare(this, b)
 }
 
