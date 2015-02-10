@@ -1,11 +1,11 @@
-var Buffer = require('../').Buffer
+var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
 // var common = require('../common');
 var assert = require('assert');
 
 var util = require('util');
 
-var buffer = require('../');
+var buffer = require('../../');
 
 buffer.INSPECT_MAX_BYTES = 2;
 

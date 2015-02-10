@@ -1,10 +1,10 @@
-var Buffer = require('../').Buffer
+var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
 // var common = require('../common');
 var assert = require('assert');
 
-var Buffer = require('../').Buffer;
-var SlowBuffer = require('../').SlowBuffer;
+var Buffer = require('../../').Buffer;
+var SlowBuffer = require('../../').SlowBuffer;
 var smalloc = { kMaxLength: 0x3FFFFFFF };
 
 // counter to ensure unique value is always copied
@@ -1172,3 +1172,4 @@ assert.throws(function() {
 
 // Regression test for https://github.com/iojs/io.js/issues/649.
 assert.throws(function() { Buffer(1422561062959).toString('utf8'); });
+

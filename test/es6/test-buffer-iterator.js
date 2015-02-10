@@ -1,4 +1,4 @@
-var Buffer = require('../').Buffer
+var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) return
 // var common = require('../common');
 var assert = require('assert');

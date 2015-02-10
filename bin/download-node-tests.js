@@ -34,10 +34,16 @@ function downloadBufferTests (dir, files) {
   files.forEach(function (file) {
     if (!/test-buffer.*/.test(file.name)) return
 
+    var path
+    if (file.name !== 'test-buffer-iterator.js')
+      path = __dirname + '/../test/node/' + file.name
+    else
+      path = __dirname + '/../test/es6/' + file.name
+
     hyperquest(file.download_url, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
-      .pipe(fs.createWriteStream(__dirname + '/../test/node-' + file.name))
+      .pipe(fs.createWriteStream(path))
   })
 }
 
@@ -48,19 +54,8 @@ function testfixer (filename) {
     line = line.toString()
 
     if (firstline) {
-      var originalLine = line
       // require buffer explicitly
-      line = 'var Buffer = require(\'../\').Buffer\n'
-
-      // don't run this test for the Object-based bufer implementation because
-      // it doesn't have an Iterable interface (but these old browsers won't have it
-      // anyway)
-      if (filename === 'test-buffer-iterator.js')
-        line += 'if (process.env.OBJECT_IMPL) return\n'
-      else
-        line += 'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n'
-
-      line += originalLine
+      line = 'var Buffer = require(\'../../\').Buffer\nif (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' + line
       firstline = false
     }
 
@@ -68,7 +63,7 @@ function testfixer (filename) {
     line = line.replace(/(var common = require.*)/, '// $1')
 
     // require browser buffer
-    line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../\')$2')
+    line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
 
     // smalloc is only used for kMaxLength
     line = line.replace(/require\('smalloc'\)/, '{ kMaxLength: 0x3FFFFFFF }')

@@ -1,4 +1,4 @@
-var Buffer = require('../').Buffer
+var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
 // var common = require('../common');
 var assert = require('assert');
@@ -24,4 +24,3 @@ for (var i = 0; i < expected.length; ++i) {
   if (input.charCodeAt(i) > 65535) ++i;
   if (input.charCodeAt(i) > 127) ++i;
 }
-
