@@ -277,6 +277,13 @@ which is included to compare against.
 | NodeBuffer#writeFloatBE | 103,352 ops/sec | ±0.83% | 93 | |
 
 
+## JavaScript Standard Style
+
+This module uses [JavaScript Standard Style](https://github.com/feross/standard).
+
+[![js-standard-style](https://raw.githubusercontent.com/feross/standard/master/badge.png)](https://github.com/feross/standard)
+
+
 ## credit
 
 This was originally forked from [buffer-browserify](https://github.com/toots/buffer-browserify).
