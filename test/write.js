@@ -107,13 +107,8 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
         next.writeInt32BE(~0, 0)
         var readfn = 'read' + x + y + z
         var r = reads.shift()
-        if (isnan(r))
-          t.pass('equal')
-        else
-          t.equal(
-            v1[readfn](0, true),
-            r
-          )
+        if (isnan(r)) t.pass('equal')
+        else t.equal(v1[readfn](0, true), r)
       }
     }
   }
