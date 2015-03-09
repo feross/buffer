@@ -1,6 +1,6 @@
 var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-// var common = require('../common');
+var common = {};
 var assert = require('assert');
 
 // ASCII conversion in node.js simply masks off the high bits,
@@ -24,3 +24,4 @@ for (var i = 0; i < expected.length; ++i) {
   if (input.charCodeAt(i) > 65535) ++i;
   if (input.charCodeAt(i) > 127) ++i;
 }
+

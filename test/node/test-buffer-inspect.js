@@ -1,6 +1,6 @@
 var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-// var common = require('../common');
+var common = {};
 var assert = require('assert');
 
 var util = require('util');

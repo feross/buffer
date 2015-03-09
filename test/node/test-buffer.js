@@ -1,6 +1,6 @@
 var Buffer = require('../../').Buffer
 if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
-// var common = require('../common');
+var common = {};
 var assert = require('assert');
 
 var Buffer = require('../../').Buffer;
@@ -1110,16 +1110,20 @@ assert.throws(function () {
   new SlowBuffer(smalloc.kMaxLength + 1);
 }, RangeError);
 
-// Test truncation after decode
-// var crypto = require('crypto');
+if (common.hasCrypto) {
+  // Test truncation after decode
+  var crypto = require('crypto');
 
-var b1 = new Buffer('YW55=======', 'base64');
-var b2 = new Buffer('YW55', 'base64');
+  var b1 = new Buffer('YW55=======', 'base64');
+  var b2 = new Buffer('YW55', 'base64');
 
-assert.equal(
-  1 /*crypto.createHash('sha1').update(b1).digest('hex')*/,
-  1 /*crypto.createHash('sha1').update(b2).digest('hex')*/
-);
+  assert.equal(
+    1 /*crypto.createHash('sha1').update(b1).digest('hex')*/,
+    1 /*crypto.createHash('sha1').update(b2).digest('hex')*/
+  );
+} else {
+//   console.log('1..0 # Skipped: missing crypto');
+}
 
 // Test Compare
 var b = new Buffer(1).fill('a');
@@ -1172,4 +1176,9 @@ assert.throws(function() {
 
 // Regression test for https://github.com/iojs/io.js/issues/649.
 assert.throws(function() { Buffer(1422561062959).toString('utf8'); });
+
+var ps = Buffer.poolSize;
+Buffer.poolSize = 0;
+assert.equal(Buffer(1).parent, undefined);
+Buffer.poolSize = ps;
 

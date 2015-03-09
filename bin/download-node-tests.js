@@ -61,7 +61,7 @@ function testfixer (filename) {
     }
 
     // comment out require('common')
-    line = line.replace(/(var common = require.*)/, '// $1')
+    line = line.replace(/(var common = require.*)/, 'var common = {};')
 
     // require browser buffer
     line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
