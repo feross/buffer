@@ -92,7 +92,7 @@ function testfixer (filename) {
     // and crypto-browserify doesn't work in old
     // versions of ie
     if (filename === 'test-buffer.js') {
-      line = line.replace(/^(var crypto = require.*)/, '// $1')
+      line = line.replace(/^(\s*)(var crypto = require.*)/, '$1// $2')
       line = line.replace(/(crypto.createHash.*\))/, '1 /*$1*/')
     }
 
