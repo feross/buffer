@@ -60,6 +60,7 @@
     "ignore": [
       "test/node/*.js",
       "test/es6/*.js",
+      "test/_polyfill.js",
       "perf/*.js"
     ]
   },
