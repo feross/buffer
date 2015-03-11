@@ -64,8 +64,9 @@ Buffer.TYPED_ARRAY_SUPPORT = (function () {
  * By augmenting the instances, we can avoid modifying the `Uint8Array`
  * prototype.
  */
-function Buffer (subject, encoding, noZero) {
-  if (!(this instanceof Buffer)) return new Buffer(subject, encoding, noZero)
+function Buffer (subject, encoding) {
+  var self = this
+  if (!(self instanceof Buffer)) return new Buffer(subject, encoding)
 
   var type = typeof subject
   var length
@@ -90,12 +91,9 @@ function Buffer (subject, encoding, noZero) {
   if (length < 0) length = 0
   else length >>>= 0 // coerce to uint32
 
-  var self = this
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Preferred: Return an augmented `Uint8Array` instance for best performance
-    /*eslint-disable consistent-this */
-    self = Buffer._augment(new Uint8Array(length))
-    /*eslint-enable consistent-this */
+    self = Buffer._augment(new Uint8Array(length)) // eslint-disable-line consistent-this
   } else {
     // Fallback: Return THIS instance of Buffer (created by `new`)
     self.length = length
@@ -119,7 +117,7 @@ function Buffer (subject, encoding, noZero) {
     }
   } else if (type === 'string') {
     self.write(subject, 0, encoding)
-  } else if (type === 'number' && !Buffer.TYPED_ARRAY_SUPPORT && !noZero) {
+  } else if (type === 'number' && !Buffer.TYPED_ARRAY_SUPPORT) {
     for (i = 0; i < length; i++) {
       self[i] = 0
     }
@@ -130,10 +128,10 @@ function Buffer (subject, encoding, noZero) {
   return self
 }
 
-function SlowBuffer (subject, encoding, noZero) {
-  if (!(this instanceof SlowBuffer)) return new SlowBuffer(subject, encoding, noZero)
+function SlowBuffer (subject, encoding) {
+  if (!(this instanceof SlowBuffer)) return new SlowBuffer(subject, encoding)
 
-  var buf = new Buffer(subject, encoding, noZero)
+  var buf = new Buffer(subject, encoding)
   delete buf.parent
   return buf
 }
@@ -574,7 +572,7 @@ Buffer.prototype.slice = function slice (start, end) {
     newBuf = Buffer._augment(this.subarray(start, end))
   } else {
     var sliceLen = end - start
-    newBuf = new Buffer(sliceLen, undefined, true)
+    newBuf = new Buffer(sliceLen, undefined)
     for (var i = 0; i < sliceLen; i++) {
       newBuf[i] = this[i + start]
     }
