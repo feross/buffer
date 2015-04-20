@@ -178,7 +178,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
   }
 }
 
-Buffer.concat = function concat (list, totalLength) {
+Buffer.concat = function concat (list, length) {
   if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
 
   if (list.length === 0) {
@@ -188,14 +188,14 @@ Buffer.concat = function concat (list, totalLength) {
   }
 
   var i
-  if (totalLength === undefined) {
-    totalLength = 0
+  if (length === undefined) {
+    length = 0
     for (i = 0; i < list.length; i++) {
-      totalLength += list[i].length
+      length += list[i].length
     }
   }
 
-  var buf = new Buffer(totalLength)
+  var buf = new Buffer(length)
   var pos = 0
   for (i = 0; i < list.length; i++) {
     var item = list[i]
