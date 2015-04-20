@@ -17,8 +17,8 @@
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
 
 The goal is to provide an API that is 100% identical to
-[node's Buffer API](http://nodejs.org/api/buffer.html). Read the
-[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
+[node's Buffer API](http://iojs.org/api/buffer.html). Read the
+[official docs](http://iojs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
 ## features
@@ -49,7 +49,7 @@ from now on.
 ## usage
 
 The module's API is identical to node's `Buffer` API. Read the
-[official docs](http://nodejs.org/api/buffer.html) for the full list of properties,
+[official docs](http://iojs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
 As mentioned above, `require('buffer')` or use the `Buffer` global with
@@ -89,7 +89,7 @@ If you only support modern browsers (specifically, those with typed array suppor
 this issue does not affect you.
 
 In node, the `slice()` method returns a new `Buffer` that shares underlying memory with
-the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
+the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://iojs.org/api/buffer.html#buffer_buf_slice_start_end)
 
 This works correctly in browsers with typed array support (\* with the exception of Firefox older than version 30). Browsers that lack typed arrays get an alternate buffer implementation based on `Object` which has no mechanism to point separate `Buffer`s to the same underlying slab of memory.
 
