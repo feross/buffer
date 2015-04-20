@@ -123,7 +123,8 @@ function Buffer (subject, encoding) {
     }
   }
 
-  if (length > 0 && length <= Buffer.poolSize) self.parent = rootParent
+  var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
+  if (fromPool) self.parent = rootParent
 
   return self
 }
