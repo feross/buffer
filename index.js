@@ -118,7 +118,9 @@ function fromObject (that, object) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
-  if (object.buffer instanceof ArrayBuffer) return fromTypedArray(that, object)
+  if (typeof ArrayBuffer !== 'undefined' && object.buffer instanceof ArrayBuffer) {
+    return fromTypedArray(that, object)
+  }
 
   if (object.length) return fromArrayLike(that, object)
 
