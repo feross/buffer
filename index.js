@@ -114,7 +114,7 @@ function fromObject (that, object) {
 
   if (isArray(object)) return fromArray(that, object)
 
-  if (object == null) {
+  if (object === null || object === undefined) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
