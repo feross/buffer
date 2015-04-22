@@ -105,7 +105,7 @@ function fromString (that, string, encoding) {
   var length = byteLength(string, encoding) | 0
   that = allocate(that, length)
 
-  that.write(string, encoding) | 0
+  that.write(string, encoding)
   return that
 }
 
