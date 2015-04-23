@@ -114,7 +114,7 @@ function fromObject (that, object) {
 
   if (isArray(object)) return fromArray(that, object)
 
-  if (object == null) {
+  if (object === null || object === undefined) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
@@ -218,7 +218,7 @@ function SlowBuffer (subject, encoding) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return !!(b != null && b._isBuffer)
+  return !!((b !== null && b !== undefined) && b._isBuffer)
 }
 
 Buffer.compare = function compare (a, b) {
