@@ -276,6 +276,54 @@ which is included to compare against.
 | DataView#setFloat32 | 127,760 ops/sec | ±0.72% | 93 | ✓ |
 | NodeBuffer#writeFloatBE | 103,352 ops/sec | ±0.83% | 93 | |
 
+### iojs 1.8.1
+
+| Method | Operations | Accuracy | Sampled | Fastest |
+|:-------|:-----------|:---------|:--------|:-------:|
+| BrowserBuffer#bracket-notation | 10,990,488 ops/sec | ±1.11% | 91 | |
+| Uint8Array#bracket-notation | 11,268,757 ops/sec | ±0.65% | 97 | |
+| NodeBuffer#bracket-notation | 11,353,260 ops/sec | ±0.83% | 94 | ✓ |
+| | | | |
+| BrowserBuffer#concat | 378,954 ops/sec | ±0.74% | 94 | |
+| Uint8Array#concat | 1,358,288 ops/sec | ±0.97% | 87 | |
+| NodeBuffer#concat | 1,934,050 ops/sec | ±1.11% | 78 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16000) | 894,538 ops/sec | ±0.56% | 84 | |
+| Uint8Array#copy(16000) | 1,442,656 ops/sec | ±0.71% | 96 | |
+| NodeBuffer#copy(16000) | 1,457,898 ops/sec | ±0.53% | 92 | ✓ |
+| | | | |
+| BrowserBuffer#copy(16) | 12,870,457 ops/sec | ±0.67% | 95 | |
+| Uint8Array#copy(16) | 16,643,989 ops/sec | ±0.61% | 93 | ✓ |
+| NodeBuffer#copy(16) | 14,885,848 ops/sec | ±0.74% | 94 | |
+| | | | |
+| BrowserBuffer#new(16000) | 109,264 ops/sec | ±4.21% | 63 | |
+| Uint8Array#new(16000) | 138,916 ops/sec | ±1.87% | 61 | |
+| NodeBuffer#new(16000) | 281,449 ops/sec | ±3.58% | 51 | ✓ |
+| | | | |
+| BrowserBuffer#new(16) | 1,362,935 ops/sec | ±0.56% | 99 | |
+| Uint8Array#new(16) | 6,193,090 ops/sec | ±0.64% | 95 | ✓ |
+| NodeBuffer#new(16) | 4,745,425 ops/sec | ±1.56% | 90 | |
+| | | | |
+| BrowserBuffer#readDoubleBE | 118,127 ops/sec | ±0.59% | 93 | ✓ |
+| DataView#getFloat64 | 107,332 ops/sec | ±0.65% | 91 | |
+| NodeBuffer#readDoubleBE | 116,274 ops/sec | ±0.94% | 95 | |
+| | | | |
+| BrowserBuffer#readFloatBE | 150,326 ops/sec | ±0.58% | 95 | ✓ |
+| DataView#getFloat32 | 110,541 ops/sec | ±0.57% | 98 | |
+| NodeBuffer#readFloatBE | 121,599 ops/sec | ±0.60% | 87 | |
+| | | | |
+| BrowserBuffer#readUInt32LE | 814,147 ops/sec | ±0.62% | 93 | |
+| DataView#getUint32 | 137,592 ops/sec | ±0.64% | 90 | |
+| NodeBuffer#readUInt32LE | 931,650 ops/sec | ±0.71% | 96 | ✓ |
+| | | | |
+| BrowserBuffer#slice | 878,590 ops/sec | ±0.68% | 93 | |
+| Uint8Array#subarray | 2,843,308 ops/sec | ±1.02% | 90 | |
+| NodeBuffer#slice | 4,998,316 ops/sec | ±0.68% | 90 | ✓ |
+| | | | |
+| BrowserBuffer#writeFloatBE | 65,927 ops/sec | ±0.74% | 93 | |
+| DataView#setFloat32 | 139,823 ops/sec | ±0.97% | 89 | ✓ |
+| NodeBuffer#writeFloatBE | 135,763 ops/sec | ±0.65% | 96 | |
+| | | | |
 
 ## JavaScript Standard Style
 
