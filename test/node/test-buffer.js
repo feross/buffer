@@ -1182,3 +1182,8 @@ Buffer.poolSize = 0;
 assert.equal(Buffer(1).parent, undefined);
 Buffer.poolSize = ps;
 
+// Test Buffer.copy() segfault
+assert.throws(function() {
+  Buffer(10).copy();
+});
+

@@ -41,7 +41,9 @@ function downloadBufferTests (dir, files) {
       path = __dirname + '/../test/es6/' + file.name
     }
 
-    hyperquest(file.download_url, httpOpts)
+    var downloadUrl = file.download_url.replace('/master/', '/v1.x/')
+
+    hyperquest(downloadUrl, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
       .pipe(fs.createWriteStream(path))
