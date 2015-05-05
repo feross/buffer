@@ -1,4 +1,4 @@
-# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][npm-url] [![gratipay][gratipay-image]][gratipay-url]
+# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][npm-url]
 
 #### The buffer module from [node.js](http://nodejs.org/), for the browser.
 
@@ -9,8 +9,6 @@
 [npm-image]: https://img.shields.io/npm/v/buffer.svg?style=flat
 [npm-url]: https://npmjs.org/package/buffer
 [downloads-image]: https://img.shields.io/npm/dm/buffer.svg?style=flat
-[gratipay-image]: https://img.shields.io/gittip/feross.svg?style=flat
-[gratipay-url]: https://www.gittip.com/feross
 [saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
 [saucelabs-url]: https://saucelabs.com/u/buffer
 
