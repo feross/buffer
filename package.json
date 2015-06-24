@@ -28,7 +28,7 @@
     "split": "^1.0.0",
     "standard": "^4.3.2",
     "tape": "^4.0.0",
-    "through2": "^0.6.3",
+    "through2": "^2.0.0",
     "zuul": "^3.0.0"
   },
   "homepage": "https://github.com/feross/buffer",
