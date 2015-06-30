@@ -1,5 +1,6 @@
-var Buffer = require('../../').Buffer
-if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
+'use strict';
+var Buffer = require('../../').Buffer;
+if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false;
 var common = {};
 var assert = require('assert');
 
@@ -129,8 +130,8 @@ assert.strictEqual(Math.floor(c.length / 2), copied);
 for (var i = 0; i < Math.floor(c.length / 2); i++) {
   assert.strictEqual(b[b.length - Math.floor(c.length / 2) + i], c[i]);
 }
-for (var i = Math.floor(c.length /2) + 1; i < c.length; i++) {
-  assert.strictEqual(c[c.length-1], c[i]);
+for (var i = Math.floor(c.length / 2) + 1; i < c.length; i++) {
+  assert.strictEqual(c[c.length - 1], c[i]);
 }
 
 // try to copy 513 bytes, and check we don't overrun c
@@ -270,37 +271,52 @@ writeTest.write('e', 3, 'ascii');
 writeTest.write('j', 'ascii', 4);
 assert.equal(writeTest.toString(), 'nodejs');
 
+// ASCII slice test
+
 var asciiString = 'hello world';
 var offset = 100;
-for (var j = 0; j < 500; j++) {
 
-  for (var i = 0; i < asciiString.length; i++) {
-    b[i] = asciiString.charCodeAt(i);
-  }
-  var asciiSlice = b.toString('ascii', 0, asciiString.length);
-  assert.equal(asciiString, asciiSlice);
+for (var i = 0; i < asciiString.length; i++) {
+  b[i] = asciiString.charCodeAt(i);
+}
+var asciiSlice = b.toString('ascii', 0, asciiString.length);
+assert.equal(asciiString, asciiSlice);
 
-  var written = b.write(asciiString, offset, 'ascii');
-  assert.equal(asciiString.length, written);
-  var asciiSlice = b.toString('ascii', offset, offset + asciiString.length);
-  assert.equal(asciiString, asciiSlice);
+var written = b.write(asciiString, offset, 'ascii');
+assert.equal(asciiString.length, written);
+var asciiSlice = b.toString('ascii', offset, offset + asciiString.length);
+assert.equal(asciiString, asciiSlice);
 
-  var sliceA = b.slice(offset, offset + asciiString.length);
-  var sliceB = b.slice(offset, offset + asciiString.length);
-  for (var i = 0; i < asciiString.length; i++) {
-    assert.equal(sliceA[i], sliceB[i]);
-  }
-
-  // TODO utf8 slice tests
+var sliceA = b.slice(offset, offset + asciiString.length);
+var sliceB = b.slice(offset, offset + asciiString.length);
+for (var i = 0; i < asciiString.length; i++) {
+  assert.equal(sliceA[i], sliceB[i]);
 }
 
+// UTF-8 slice test
 
-for (var j = 0; j < 100; j++) {
-  var slice = b.slice(100, 150);
-  assert.equal(50, slice.length);
-  for (var i = 0; i < 50; i++) {
-    assert.equal(b[100 + i], slice[i]);
-  }
+var utf8String = '¡hέlló wôrld!';
+var offset = 100;
+
+b.write(utf8String, 0, Buffer.byteLength(utf8String), 'utf8');
+var utf8Slice = b.toString('utf8', 0, Buffer.byteLength(utf8String));
+assert.equal(utf8String, utf8Slice);
+
+var written = b.write(utf8String, offset, 'utf8');
+assert.equal(Buffer.byteLength(utf8String), written);
+utf8Slice = b.toString('utf8', offset, offset + Buffer.byteLength(utf8String));
+assert.equal(utf8String, utf8Slice);
+
+var sliceA = b.slice(offset, offset + Buffer.byteLength(utf8String));
+var sliceB = b.slice(offset, offset + Buffer.byteLength(utf8String));
+for (var i = 0; i < Buffer.byteLength(utf8String); i++) {
+  assert.equal(sliceA[i], sliceB[i]);
+}
+
+var slice = b.slice(100, 150);
+assert.equal(50, slice.length);
+for (var i = 0; i < 50; i++) {
+  assert.equal(b[100 + i], slice[i]);
 }
 
 
@@ -317,7 +333,6 @@ var c = b.slice(0, 4);
 var d = c.slice(0, 2);
 assert.equal(b, c.parent);
 assert.equal(b, d.parent);
-
 
 
 // Bug regression test
@@ -561,15 +576,6 @@ assert.equal(sb, s);
 // Single argument slice
 b = new Buffer('abcde');
 assert.equal('bcde', b.slice(1).toString());
-
-// byte length
-assert.equal(14, Buffer.byteLength('Il était tué'));
-assert.equal(14, Buffer.byteLength('Il était tué', 'utf8'));
-['ucs2', 'ucs-2', 'utf16le', 'utf-16le'].forEach(function(encoding) {
-  assert.equal(24, Buffer.byteLength('Il était tué', encoding));
-});
-assert.equal(12, Buffer.byteLength('Il était tué', 'ascii'));
-assert.equal(12, Buffer.byteLength('Il était tué', 'binary'));
 
 // slice(0,0).length === 0
 assert.equal(0, Buffer('hello').slice(0, 0).length);
@@ -845,7 +851,7 @@ Buffer(Buffer(0), 0, 0);
 
 
 // GH-5110
-(function () {
+(function() {
   var buffer = new Buffer('test'),
       string = JSON.stringify(buffer);
 
@@ -1070,14 +1076,10 @@ assert.equal(buf.readInt8(0), -1);
   // see https://github.com/joyent/node/issues/5881
   SlowBuffer(0).slice(0, 1);
   // make sure a zero length slice doesn't set the .parent attribute
-  assert.equal(Buffer(5).slice(0,0).parent, undefined);
+  assert.equal(Buffer(5).slice(0, 0).parent, undefined);
   // and make sure a proper slice does have a parent
   assert.ok(typeof Buffer(5).slice(0, 5).parent === 'object');
 })();
-
-// Make sure byteLength properly checks for base64 padding
-assert.equal(Buffer.byteLength('aaa=', 'base64'), 2);
-assert.equal(Buffer.byteLength('aaaa==', 'base64'), 3);
 
 // Regression test for #5482: should throw but not assert in C++ land.
 assert.throws(function() {
@@ -1089,7 +1091,7 @@ assert.throws(function() {
 (function() {
   var a = [0];
   for (var i = 0; i < 7; ++i) a = a.concat(a);
-  a = a.map(function(_, i) { return i });
+  a = a.map(function(_, i) { return i; });
   var b = Buffer(a);
   var c = Buffer(b);
   assert.equal(b.length, a.length);
@@ -1102,11 +1104,11 @@ assert.throws(function() {
 })();
 
 
-assert.throws(function () {
+assert.throws(function() {
   new Buffer(smalloc.kMaxLength + 1);
 }, RangeError);
 
-assert.throws(function () {
+assert.throws(function() {
   new SlowBuffer(smalloc.kMaxLength + 1);
 }, RangeError);
 
@@ -1174,7 +1176,7 @@ assert.throws(function() {
   b.equals('abc');
 });
 
-// Regression test for https://github.com/iojs/io.js/issues/649.
+// Regression test for https://github.com/nodejs/io.js/issues/649.
 assert.throws(function() { Buffer(1422561062959).toString('utf8'); });
 
 var ps = Buffer.poolSize;

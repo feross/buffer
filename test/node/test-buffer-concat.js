@@ -1,5 +1,6 @@
-var Buffer = require('../../').Buffer
-if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false
+'use strict';
+var Buffer = require('../../').Buffer;
+if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false;
 var common = {};
 var assert = require('assert');
 
@@ -16,8 +17,8 @@ var flatLongLen = Buffer.concat(long, 40);
 assert(flatZero.length === 0);
 assert(flatOne.toString() === 'asdf');
 assert(flatOne === one[0]);
-assert(flatLong.toString() === (new Array(10+1).join('asdf')));
-assert(flatLongLen.toString() === (new Array(10+1).join('asdf')));
+assert(flatLong.toString() === (new Array(10 + 1).join('asdf')));
+assert(flatLongLen.toString() === (new Array(10 + 1).join('asdf')));
 
-// console.log("ok");
+// console.log('ok');
 

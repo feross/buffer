@@ -38,7 +38,7 @@ function downloadBufferTests (dir, files) {
     if (file.name !== 'test-buffer-iterator.js') {
       path = __dirname + '/../test/node/' + file.name
     } else {
-      path = __dirname + '/../test/es6/' + file.name
+      path = __dirname + '/../test/node-es6/' + file.name
     }
 
     hyperquest(file.download_url, httpOpts)
