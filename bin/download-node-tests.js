@@ -6,7 +6,7 @@ var split = require('split')
 var thru = require('through2')
 var fs = require('fs')
 
-var url = 'https://api.github.com/repos/iojs/io.js/contents'
+var url = 'https://api.github.com/repos/nodejs/io.js/contents'
 var dirs = [
   '/test/parallel',
   '/test/pummel'
@@ -41,9 +41,7 @@ function downloadBufferTests (dir, files) {
       path = __dirname + '/../test/es6/' + file.name
     }
 
-    var downloadUrl = file.download_url.replace('/master/', '/v1.x/')
-
-    hyperquest(downloadUrl, httpOpts)
+    hyperquest(file.download_url, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
       .pipe(fs.createWriteStream(path))
@@ -58,17 +56,21 @@ function testfixer (filename) {
 
     if (firstline) {
       // require buffer explicitly
-      line = 'var Buffer = require(\'../../\').Buffer\n' +
-        'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false\n' +
-        line
+      var preamble = 'var Buffer = require(\'../../\').Buffer;\n' +
+        'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false;'
+      if (/use strict/.test(line)) line += '\n' + preamble
+      else line + preamble + '\n' + line
       firstline = false
     }
 
     // comment out require('common')
-    line = line.replace(/(var common = require.*)/, 'var common = {};')
+    line = line.replace(/((var|const) common = require.*)/, 'var common = {};')
 
     // require browser buffer
     line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
+
+    // de-const Buffer (in case it's required explicitly with a const by a node test)
+    line = line.replace(/const Buffer/, 'var Buffer')
 
     // smalloc is only used for kMaxLength
     line = line.replace(/require\('smalloc'\)/, '{ kMaxLength: 0x3FFFFFFF }')
