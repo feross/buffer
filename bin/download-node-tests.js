@@ -1,16 +1,20 @@
 #!/usr/bin/env node
 
-var hyperquest = require('hyperquest')
 var concat = require('concat-stream')
-var split = require('split')
-var thru = require('through2')
 var fs = require('fs')
+var hyperquest = require('hyperquest')
+var cp = require('child_process')
+var split = require('split')
+var through = require('through2')
 
 var url = 'https://api.github.com/repos/nodejs/io.js/contents'
 var dirs = [
   '/test/parallel',
   '/test/pummel'
 ]
+
+cp.execSync('rm -r node/*.js', { cwd: __dirname + '/../test' })
+cp.execSync('rm -r node-es6/*.js', { cwd: __dirname + '/../test' })
 
 var httpOpts = {
   headers: {
@@ -35,10 +39,14 @@ function downloadBufferTests (dir, files) {
     if (!/test-buffer.*/.test(file.name)) return
 
     var path
-    if (file.name !== 'test-buffer-iterator.js') {
-      path = __dirname + '/../test/node/' + file.name
-    } else {
+    if (file.name === 'test-buffer-iterator.js') {
       path = __dirname + '/../test/node-es6/' + file.name
+    } else if (file.name === 'test-buffer-fakes.js') {
+      // These teses only apply to node, where they're calling into C++ and need to
+      // ensure the prototype can't be faked, or else there will be a segfault.
+      return
+    } else {
+      path = __dirname + '/../test/node/' + file.name
     }
 
     hyperquest(file.download_url, httpOpts)
@@ -51,7 +59,7 @@ function downloadBufferTests (dir, files) {
 function testfixer (filename) {
   var firstline = true
 
-  return thru(function (line, enc, cb) {
+  return through(function (line, enc, cb) {
     line = line.toString()
 
     if (firstline) {
@@ -68,9 +76,6 @@ function testfixer (filename) {
 
     // require browser buffer
     line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
-
-    // de-const Buffer (in case it's required explicitly with a const by a node test)
-    line = line.replace(/const Buffer/, 'var Buffer')
 
     // smalloc is only used for kMaxLength
     line = line.replace(/require\('smalloc'\)/, '{ kMaxLength: 0x3FFFFFFF }')

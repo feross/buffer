@@ -1,1 +1,1 @@
-io.js/node.js core buffer tests
+node core buffer tests
