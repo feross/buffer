@@ -6,7 +6,7 @@ var assert = require('assert');
 
 var Buffer = require('../../').Buffer;
 var SlowBuffer = require('../../').SlowBuffer;
-var smalloc = { kMaxLength: 0x3FFFFFFF };
+var smalloc = { kMaxLength: process.env.OBJECT_IMPL ? 0x3fffffff : 0x7fffffff };
 
 // counter to ensure unique value is always copied
 var cntr = 0;

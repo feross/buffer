@@ -78,7 +78,10 @@ function testfixer (filename) {
     line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
 
     // smalloc is only used for kMaxLength
-    line = line.replace(/require\('smalloc'\)/, '{ kMaxLength: 0x3FFFFFFF }')
+    line = line.replace(
+      /require\('smalloc'\)/,
+      '{ kMaxLength: process.env.OBJECT_IMPL ? 0x3fffffff : 0x7fffffff }'
+    )
 
     // comment out console logs
     line = line.replace(/(.*console\..*)/, '// $1')
