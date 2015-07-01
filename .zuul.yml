@@ -17,4 +17,4 @@ browsers:
   - name: ipad
     version: 4.3..latest
   - name: android
-    version: 4.0..latest
+    version: 5.0..latest
