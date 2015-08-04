@@ -1290,7 +1290,7 @@ Buffer._augment = function _augment (arr) {
   return arr
 }
 
-var INVALID_BASE64_RE = /[^+\/0-9A-Za-z\-]/g
+var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
 
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
