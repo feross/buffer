@@ -37,3 +37,11 @@ test('base64: tab characters in base64 - should get stripped', function (t) {
   )
   t.end()
 })
+
+test('base64: invalid non-alphanumeric characters -- should be stripped', function (t) {
+  t.equal(
+    new B('!"#$%&\'()*,.:;<=>?@[\\]^`{|}~', 'base64').toString('utf8'),
+    ''
+  )
+  t.end()
+})
