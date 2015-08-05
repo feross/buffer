@@ -13,8 +13,8 @@ var dirs = [
   '/test/pummel'
 ]
 
-cp.execSync('rm -r node/*.js', { cwd: __dirname + '/../test' })
-cp.execSync('rm -r node-es6/*.js', { cwd: __dirname + '/../test' })
+cp.execSync('rm -rf node/*.js', { cwd: __dirname + '/../test' })
+cp.execSync('rm -rf node-es6/*.js', { cwd: __dirname + '/../test' })
 
 var httpOpts = {
   headers: {
@@ -39,7 +39,8 @@ function downloadBufferTests (dir, files) {
     if (!/test-buffer.*/.test(file.name)) return
 
     var path
-    if (file.name === 'test-buffer-iterator.js') {
+    if (file.name === 'test-buffer-iterator.js' ||
+        file.name === 'test-buffer-arraybuffer.js') {
       path = __dirname + '/../test/node-es6/' + file.name
     } else if (file.name === 'test-buffer-fakes.js') {
       // These teses only apply to node, where they're calling into C++ and need to
@@ -49,10 +50,14 @@ function downloadBufferTests (dir, files) {
       path = __dirname + '/../test/node/' + file.name
     }
 
+    console.log(file.download_url)
     hyperquest(file.download_url, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
       .pipe(fs.createWriteStream(path))
+      .on('finish', function () {
+        console.log('wrote ' + file.name)
+      })
   })
 }
 
