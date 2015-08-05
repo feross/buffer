@@ -55,7 +55,7 @@ test('concat() a varying number of buffers', function (t) {
 
   t.equal(flatZero.length, 0)
   t.equal(flatOne.toString(), 'asdf')
-  t.equal(flatOne, one[0])
+  t.deepEqual(flatOne, one[0])
   t.equal(flatLong.toString(), (new Array(10 + 1).join('asdf')))
   t.equal(flatLongLen.toString(), (new Array(10 + 1).join('asdf')))
   t.end()
