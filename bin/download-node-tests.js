@@ -71,20 +71,26 @@ function testfixer (filename) {
       firstline = false
     }
 
-    // comment out require('common')
-    line = line.replace(/((var|const) common = require.*)/, 'var common = {};')
+    // use `var` instead of `const`/`let`
+    line = line.replace(/(const|let) /g, 'var ')
+
+    // make `require('common')` work
+    line = line.replace(/(var common = require.*)/g, 'var common = {};')
+
+    // use `Buffer.isBuffer` instead of `instanceof Buffer`
+    line = line.replace(/buf instanceof Buffer/g, 'Buffer.isBuffer(buf)')
 
     // require browser buffer
-    line = line.replace(/(.*)require\('buffer'\)(.*)/, '$1require(\'../../\')$2')
+    line = line.replace(/(.*)require\('buffer'\)(.*)/g, '$1require(\'../../\')$2')
 
     // smalloc is only used for kMaxLength
     line = line.replace(
-      /require\('smalloc'\)/,
+      /require\('smalloc'\)/g,
       '{ kMaxLength: process.env.OBJECT_IMPL ? 0x3fffffff : 0x7fffffff }'
     )
 
     // comment out console logs
-    line = line.replace(/(.*console\..*)/, '// $1')
+    line = line.replace(/(.*console\..*)/g, '// $1')
 
     // we can't reliably test typed array max-sizes in the browser
     if (filename === 'test-buffer-big.js') {
