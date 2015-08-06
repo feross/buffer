@@ -100,6 +100,17 @@ test('copy() after slice()', function (t) {
   t.end()
 })
 
+test('copy() ascending and descending', function (t) {
+  var b
+  b = new B('abcdefghij')
+  b.copy(b, 0, 3, 10) // ascending copy
+  t.equal(b.toString(), 'defghijhij')
+  b = new B('abcdefghij')
+  b.copy(b, 3, 0, 7) // descending copy
+  t.equal(b.toString(), 'abcabcdefg')
+  t.end()
+})
+
 test('buffer.slice sets indexes', function (t) {
   t.equal((new B('hallo')).slice(0, 5).toString(), 'hallo')
   t.end()
