@@ -100,16 +100,16 @@ test('copy() after slice()', function (t) {
   t.end()
 })
 
-test('copy() ascending and descending', function (t) {
+test('copy() ascending', function (t) {
   var b = new B('abcdefghij')
-  b.copy(b, 0, 3, 10) // ascending copy
+  b.copy(b, 0, 3, 10)
   t.equal(b.toString(), 'defghijhij')
   t.end()
 })
 
 test('copy() descending', function (t) {
   var b = new B('abcdefghij')
-  b.copy(b, 3, 0, 7) // descending copy
+  b.copy(b, 3, 0, 7)
   t.equal(b.toString(), 'abcabcdefg')
   t.end()
 })
