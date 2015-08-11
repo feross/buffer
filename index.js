@@ -669,7 +669,7 @@ function utf8Slice (buf, start, end) {
           thirdByte = buf[i + 2]
           if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
             tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F)
-            if (tempCodePoint > 0x7FF) {
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
               codePoint = tempCodePoint
             }
           }
