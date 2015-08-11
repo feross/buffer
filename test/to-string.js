@@ -199,3 +199,27 @@ test('utf8 replacement chars on 256 random bytes', function (t) {
   )
   t.end()
 })
+
+test('utf8 replacement chars for anything in the surrogate pair range', function (t) {
+  t.equal(
+    new B([ 0xED, 0x9F, 0xBF ]).toString(),
+    '\uD7FF'
+  )
+  t.equal(
+    new B([ 0xED, 0xA0, 0x80 ]).toString(),
+    '\uFFFD\uFFFD\uFFFD'
+  )
+  t.equal(
+    new B([ 0xED, 0xBE, 0x8B ]).toString(),
+    '\uFFFD\uFFFD\uFFFD'
+  )
+  t.equal(
+    new B([ 0xED, 0xBF, 0xBF ]).toString(),
+    '\uFFFD\uFFFD\uFFFD'
+  )
+  t.equal(
+    new B([ 0xEE, 0x80, 0x80 ]).toString(),
+    '\uE000'
+  )
+  t.end()
+})
