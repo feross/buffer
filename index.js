@@ -624,7 +624,14 @@ function base64Slice (buf, start, end) {
 
 function utf8Slice (buf, start, end) {
   end = Math.min(buf.length, end)
-  var firstByte, secondByte, thirdByte, fourthByte, bytesPerSequence, tempCodePoint, codePoint, res = []
+  var firstByte
+  var secondByte
+  var thirdByte
+  var fourthByte
+  var bytesPerSequence
+  var tempCodePoint
+  var codePoint
+  var res = []
   var i = start
 
   for (; i < end; i += bytesPerSequence) {
