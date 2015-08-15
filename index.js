@@ -622,17 +622,6 @@ function base64Slice (buf, start, end) {
   }
 }
 
-function decodeLargeCodePointsArray (array) {
-  var res = ''
-  var end = array.length
-
-  for (var i = 0; i < end; i++) {
-    res += String.fromCharCode(array[i])
-  }
-
-  return res
-}
-
 function decodeCodePointsArray (array) {
   // Based on http://stackoverflow.com/a/22747272/680742, the browser with
   // the lowest argument limit is Chrome, with 0x10000 args.
@@ -640,7 +629,7 @@ function decodeCodePointsArray (array) {
 
   // If above that limit, decode using string concatenation
   // to avoid "call stack size exceeded".
-  return decodeLargeCodePointsArray(array)
+  return binarySlice(array, 0, array.length)
 }
 
 function utf8Slice (buf, start, end) {
