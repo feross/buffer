@@ -624,10 +624,9 @@ function base64Slice (buf, start, end) {
 
 function decodeLargeCodePointsArray (array) {
   var res = ''
-  var i
   var end = array.length
 
-  for (i = 0; i < end; i++) {
+  for (var i = 0; i < end; i++) {
     res += String.fromCharCode(array[i])
   }
 
@@ -654,9 +653,8 @@ function utf8Slice (buf, start, end) {
   var tempCodePoint
   var codePoint
   var res = []
-  var i = start
 
-  for (; i < end; i += bytesPerSequence) {
+  for (var i = start; i < end; i += bytesPerSequence) {
     firstByte = buf[i]
     codePoint = 0xFFFD
 
