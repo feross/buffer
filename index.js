@@ -622,16 +622,6 @@ function base64Slice (buf, start, end) {
   }
 }
 
-function decodeCodePointsArray (buf) {
-  var len = buf.length
-
-  if (len <= 0x10000) {
-    return String.fromCharCode.apply(String, buf) // avoid extra slice()
-  }
-
-  return binarySlice(buf, 0, len)
-}
-
 function utf8Slice (buf, start, end) {
   end = Math.min(buf.length, end)
   var res = []
@@ -700,7 +690,7 @@ function utf8Slice (buf, start, end) {
     i += bytesPerSequence
   }
 
-  return decodeCodePointsArray(res)
+  return binarySlice(res, 0, res.length)
 }
 
 function asciiSlice (buf, start, end) {
@@ -713,17 +703,28 @@ function asciiSlice (buf, start, end) {
   return ret
 }
 
+// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+// the lowest limit is Chrome, with 0x10000 args.
+var MAX_ARGUMENTS_LENGTH = 0x10000
+
 function binarySlice (buf, start, end) {
-  var chunk = 0x10000
+  var len = buf.length
+  end = Math.min(len, end)
+
+  // TODO: verify, this is probably the average case
+  if (start === 0 && end === len && end <= MAX_ARGUMENTS_LENGTH) {
+    return String.fromCharCode.apply(String, buf)
+  }
+
   var res = ''
 
   // Decode in chunks to avoid "call stack size exceeded".
-  // Based on http://stackoverflow.com/a/22747272/680742, the browser with
-  // the lowest limit is Chrome, with 0x10000 args.
-  for (var i = start; i < end; i += chunk) {
-    var chunkEnd = Math.min(end, i + chunk)
+  for (var i = start; i < end; i += MAX_ARGUMENTS_LENGTH) {
+    var chunkEnd = Math.min(i + MAX_ARGUMENTS_LENGTH, end)
+
     res += String.fromCharCode.apply(String, buf.slice(i, chunkEnd))
   }
+
   return res
 }
 
