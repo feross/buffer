@@ -622,6 +622,28 @@ function base64Slice (buf, start, end) {
   }
 }
 
+function decodeLargeCodePointsArray (array) {
+  var res = ''
+  var i
+  var end = array.length
+
+  for (i = 0; i < end; i++) {
+    res += String.fromCharCode(array[i])
+  }
+
+  return res
+}
+
+function decodeCodePointsArray (array) {
+  if (array.length < 0x10000) {
+    return String.fromCharCode.apply(String, array)
+  }
+  // Decode using string concatenation to avoid "call stack size exceeded".
+  // Based on http://stackoverflow.com/a/22747272/680742, the browser with
+  // the lowest limit is Chrome, with 0x10000 args.
+  return decodeLargeCodePointsArray(array)
+}
+
 function utf8Slice (buf, start, end) {
   end = Math.min(buf.length, end)
   var firstByte
@@ -700,7 +722,7 @@ function utf8Slice (buf, start, end) {
     res.push(codePoint)
   }
 
-  return String.fromCharCode.apply(String, res)
+  return decodeCodePointsArray(res)
 }
 
 function asciiSlice (buf, start, end) {
