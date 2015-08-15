@@ -635,12 +635,12 @@ function decodeLargeCodePointsArray (array) {
 }
 
 function decodeCodePointsArray (array) {
-  if (array.length < 0x10000) {
-    return String.fromCharCode.apply(String, array)
-  }
-  // Decode using string concatenation to avoid "call stack size exceeded".
   // Based on http://stackoverflow.com/a/22747272/680742, the browser with
-  // the lowest limit is Chrome, with 0x10000 args.
+  // the lowest argument limit is Chrome, with 0x10000 args.
+  if (array.length < 0x10000) return String.fromCharCode.apply(String, array)
+
+  // If above that limit, decode using string concatenation
+  // to avoid "call stack size exceeded".
   return decodeLargeCodePointsArray(array)
 }
 
