@@ -622,14 +622,14 @@ function base64Slice (buf, start, end) {
   }
 }
 
-function decodeCodePointsArray (array) {
-  // Based on http://stackoverflow.com/a/22747272/680742, the browser with
-  // the lowest argument limit is Chrome, with 0x10000 args.
-  if (array.length < 0x10000) return String.fromCharCode.apply(String, array)
+function decodeCodePointsArray (buf) {
+  var len = buf.length
 
-  // If above that limit, decode using string concatenation
-  // to avoid "call stack size exceeded".
-  return binarySlice(array, 0, array.length)
+  if (len <= 0x10000) {
+    return String.fromCharCode.apply(String, buf) // avoid extra slice()
+  }
+
+  return binarySlice(buf, 0, len)
 }
 
 function utf8Slice (buf, start, end) {
@@ -714,13 +714,17 @@ function asciiSlice (buf, start, end) {
 }
 
 function binarySlice (buf, start, end) {
-  var ret = ''
-  end = Math.min(buf.length, end)
+  var chunk = 0x10000
+  var res = ''
 
-  for (var i = start; i < end; i++) {
-    ret += String.fromCharCode(buf[i])
+  // Decode in chunks to avoid "call stack size exceeded".
+  // Based on http://stackoverflow.com/a/22747272/680742, the browser with
+  // the lowest limit is Chrome, with 0x10000 args.
+  for (var i = start; i < end; i += chunk) {
+    var chunkEnd = Math.min(end, i + chunk)
+    res += String.fromCharCode.apply(String, buf.slice(i, chunkEnd))
   }
-  return ret
+  return res
 }
 
 function hexSlice (buf, start, end) {
