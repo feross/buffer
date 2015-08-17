@@ -223,3 +223,11 @@ test('utf8 replacement chars for anything in the surrogate pair range', function
   )
   t.end()
 })
+
+test('utf8 don\'t replace the replacement char', function (t) {
+  t.equal(
+    new B('\uFFFD').toString(),
+    '\uFFFD'
+  )
+  t.end()
+})
