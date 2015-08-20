@@ -707,7 +707,8 @@ function asciiSlice (buf, start, end) {
 
 // Based on http://stackoverflow.com/a/22747272/680742, the browser with
 // the lowest limit is Chrome, with 0x10000 args.
-var MAX_ARGUMENTS_LENGTH = 0x10000
+// We go 1 magnitude less, for safety
+var MAX_ARGUMENTS_LENGTH = 0x1000
 
 function binarySlice (buf, start, end) {
   var len = buf.length
