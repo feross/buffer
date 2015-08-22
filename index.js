@@ -705,30 +705,14 @@ function asciiSlice (buf, start, end) {
   return ret
 }
 
-// Based on http://stackoverflow.com/a/22747272/680742, the browser with
-// the lowest limit is Chrome, with 0x10000 args.
-// We go 1 magnitude less, for safety
-var MAX_ARGUMENTS_LENGTH = 0x1000
-
 function binarySlice (buf, start, end) {
-  var len = buf.length
-  end = Math.min(len, end)
+  var ret = ''
+  end = Math.min(buf.length, end)
 
-  // TODO: verify, this is probably the average case
-  if (start === 0 && end === len && end <= MAX_ARGUMENTS_LENGTH) {
-    return String.fromCharCode.apply(String, buf)
+  for (var i = start; i < end; i++) {
+    ret += String.fromCharCode(buf[i])
   }
-
-  var res = ''
-
-  // Decode in chunks to avoid "call stack size exceeded".
-  for (var i = start; i < end; i += MAX_ARGUMENTS_LENGTH) {
-    var chunkEnd = Math.min(i + MAX_ARGUMENTS_LENGTH, end)
-
-    res += String.fromCharCode.apply(String, buf.slice(i, chunkEnd))
-  }
-
-  return res
+  return ret
 }
 
 function hexSlice (buf, start, end) {
