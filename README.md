@@ -70,31 +70,28 @@ instead of the **node.js core** module named `buffer`!
 
 ## how does it work?
 
-The `Buffer` constructor returns instances of `Uint8Array` that are augmented with function properties for all the `Buffer` API functions. We use `Uint8Array` so that square bracket notation works as expected -- it returns a single octet. By augmenting the instances, we can avoid modifying the `Uint8Array` prototype.
+`Buffer` is a subclass of `Uint8Array` augmented with all the `Buffer` API methods.
+The `Uint8Array` prototype is not modified.
 
 
-## differences
+## one minor difference
 
-#### IMPORTANT: always use `Buffer.isBuffer` instead of `instanceof Buffer`
+#### In old browsers, `buf.slice()` does not modify parent buffer's memory
 
-The Buffer constructor returns a `Uint8Array` (with all the Buffer methods added as
-properties on the instance) for performance reasons, so `instanceof Buffer` won't work. In
-node, you can use either `Buffer.isBuffer` or `instanceof Buffer` to check if an object
-is a `Buffer`. But, in the browser you must use `Buffer.isBuffer` to detect the special
-`Uint8Array`-based Buffers.
+If you only support modern browsers (specifically, those with typed array support),
+then this issue does not affect you. If you support super old browsers, then read on.
 
-#### Minor: `buf.slice()` does not modify parent buffer's memory in old browsers
+In node, the `slice()` method returns a new `Buffer` that shares underlying memory
+with the original Buffer. When you modify one buffer, you modify the other.
+[Read more.](http://iojs.org/api/buffer.html#buffer_buf_slice_start_end)
 
-If you only support modern browsers (specifically, those with typed array support), then
-this issue does not affect you.
+In browsers with typed array support, this `Buffer` implementation supports this
+behavior. In browsers without typed arrays, an alternate buffer implementation is
+used that is based on `Object` which has no mechanism to point separate
+`Buffer`s to the same underlying slab of memory.
 
-In node, the `slice()` method returns a new `Buffer` that shares underlying memory with
-the original Buffer. When you modify one buffer, you modify the other. [Read more.](http://iojs.org/api/buffer.html#buffer_buf_slice_start_end)
-
-This works correctly in browsers with typed array support (\* with the exception of Firefox older than version 30). Browsers that lack typed arrays get an alternate buffer implementation based on `Object` which has no mechanism to point separate `Buffer`s to the same underlying slab of memory.
-
-\* *Firefox older than version 30 gets the `Object` implementation -- not the typed arrays one -- because of [this
-bug](https://bugzilla.mozilla.org/show_bug.cgi?id=952403) (now fixed!) that made it impossible to add properties to a typed array.*
+You can see which browser versions lack typed array support
+[here](https://github.com/feross/buffer/blob/master/index.js#L20-L46).
 
 
 ## tracking the latest node api
