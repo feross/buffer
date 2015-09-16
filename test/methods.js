@@ -16,7 +16,7 @@ test('buffer.copy', function (t) {
   var buf1 = new B(26)
   var buf2 = new B(26)
 
-  for (var i = 0 ; i < 26 ; i++) {
+  for (var i = 0; i < 26; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
     buf2[i] = 33 // ASCII !
   }
