@@ -69,8 +69,8 @@ function testfixer (filename) {
 
     if (firstline) {
       // require buffer explicitly
-      var preamble = 'var Buffer = require(\'../../\').Buffer;\n' +
-        'if (process.env.OBJECT_IMPL) Buffer.TYPED_ARRAY_SUPPORT = false;'
+      var preamble = 'if (process.env.OBJECT_IMPL) global.TYPED_ARRAY_SUPPORT = false;\n' +
+      'var Buffer = require(\'../../\').Buffer;'
       if (/use strict/.test(line)) line += '\n' + preamble
       else line + preamble + '\n' + line
       firstline = false

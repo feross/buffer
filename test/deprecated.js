@@ -1,6 +1,6 @@
+if (process.env.OBJECT_IMPL) global.TYPED_ARRAY_SUPPORT = false
 var B = require('../').Buffer
 var test = require('tape')
-if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
 test('.get (deprecated)', function (t) {
   var b = new B([7, 42])

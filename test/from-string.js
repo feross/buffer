@@ -1,6 +1,6 @@
+if (process.env.OBJECT_IMPL) global.TYPED_ARRAY_SUPPORT = false
 var B = require('../').Buffer
 var test = require('tape')
-if (process.env.OBJECT_IMPL) B.TYPED_ARRAY_SUPPORT = false
 
 test('detect utf16 surrogate pairs', function (t) {
   var text = '\uD83D\uDE38' + '\uD83D\uDCAD' + '\uD83D\uDC4D'
