@@ -114,9 +114,9 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
   }
   t.end()
 })
-test('android issue', function (t) {
+test('large values do not imporoperly roll over (ref #80)', function (t) {
   var nums = [-25589992, -633756690, -898146932]
-  var out = new Buffer(12)
+  var out = new B(12)
   out.fill(0)
   out.writeInt32BE(nums[0], 0)
   var newNum = out.readInt32BE(0)
