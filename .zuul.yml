@@ -3,9 +3,9 @@ scripts:
   - "./test/_polyfill.js"
 browsers:
   - name: chrome
-    version: 39..latest
+    version: -2..latest
   - name: firefox
-    version: 34..latest
+    version: -2..latest
   - name: safari
     version: 5..latest
   - name: ie
