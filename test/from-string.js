@@ -9,6 +9,13 @@ test('detect utf16 surrogate pairs', function (t) {
   t.end()
 })
 
+test('detect utf16 surrogate pairs over U+20000 until U+10FFFF', function (t) {
+  var text = '\uD842\uDFB7' + '\uD93D\uDCAD' + '\uDBFF\uDFFF'
+  var buf = new B(text)
+  t.equal(text, buf.toString())
+  t.end()
+})
+
 test('replace orphaned utf16 surrogate lead code point', function (t) {
   var text = '\uD83D\uDE38' + '\uD83D' + '\uD83D\uDC4D'
   var buf = new B(text)
