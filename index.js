@@ -167,6 +167,9 @@ function fromArray (that, array) {
 
 // Duplicate of fromArray() to keep fromArray() monomorphic.
 function fromTypedArray (that, array) {
+  if (Buffer.TYPED_ARRAY_SUPPORT && array.constructor.BYTES_PER_ELEMENT === 1) {
+    return fromArrayBuffer(that, array.buffer)
+  }
   var length = checked(array.length) | 0
   that = allocate(that, length)
   // Truncating the elements is probably not what people expect from typed
