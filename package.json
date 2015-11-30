@@ -63,5 +63,12 @@
       "test/_polyfill.js",
       "perf/*.js"
     ]
+  },
+  "jspm": {
+    "map": {
+      "./index.js": {
+        "node": "@node/buffer"
+      }
+    }
   }
 }
