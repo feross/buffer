@@ -186,10 +186,11 @@ function fromArrayBuffer (that, array) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     array.byteLength
-    that = Buffer._augment(new Uint8Array(array))
+    that = new Uint8Array(array)
+    that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
-    that = fromTypedArray(that, new Uint8Array(array))
+    that = fromTypedArray(that, array)
   }
   return that
 }
@@ -223,6 +224,7 @@ function fromJsonObject (that, object) {
 
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype
+  Buffer.prototype._set = Uint8Array.prototype.set // For `copy` below.
   Buffer.__proto__ = Uint8Array
 } else {
   // pre-set for values that may exist in the future
@@ -233,12 +235,11 @@ if (Buffer.TYPED_ARRAY_SUPPORT) {
 function allocate (that, length) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
-    that = Buffer._augment(new Uint8Array(length))
+    that = new Uint8Array(length)
     that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
     that.length = length
-    that._isBuffer = true
   }
 
   var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
@@ -420,6 +421,10 @@ function slowToString (encoding, start, end) {
     }
   }
 }
+
+// Even though this property is private, it shouldn't be removed because it is
+// used by `is-buffer` to detect buffer instances in Safari 5-7.
+Buffer.prototype._isBuffer = true
 
 Buffer.prototype.toString = function toString () {
   var length = this.length | 0
@@ -798,7 +803,8 @@ Buffer.prototype.slice = function slice (start, end) {
 
   var newBuf
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    newBuf = Buffer._augment(this.subarray(start, end))
+    newBuf = this.subarray(start, end)
+    newBuf.__proto__ = Buffer.prototype
   } else {
     var sliceLen = end - start
     newBuf = new Buffer(sliceLen, undefined)
@@ -1322,6 +1328,9 @@ var BP = Buffer.prototype
 
 /**
  * Augment a Uint8Array *instance* (not the Uint8Array class!) with Buffer methods
+ *
+ * This function is also used externally by `typedarray-to-buffer`.
+ *
  */
 Buffer._augment = function _augment (arr) {
   arr.constructor = Buffer
