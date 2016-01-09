@@ -103,6 +103,11 @@ so it is unlikely that there will ever be breaking changes.
 Nonetheless, when/if the Buffer API changes in node, this module's API will change
 accordingly.
 
+## related packages
+
+- [`is-buffer`](https://www.npmjs.com/package/is-buffer) - Determine if an object is a Buffer without including the whole `Buffer` package
+- [`typedarray-to-buffer`](https://www.npmjs.com/package/typedarray-to-buffer) - Convert a typed array to a Buffer without a copy
+
 ## performance
 
 See perf tests in `/perf`.
@@ -331,17 +336,17 @@ First, install the project:
 Then, to run tests in Node.js, run:
 
     npm run test-node
-    
+
 To test locally in a browser, you can run:
 
     npm run test-browser-local
-    
+
 This will print out a URL that you can then open in a browser to run the tests, using [Zuul](https://github.com/defunctzombie/zuul).
 
 To run automated browser tests using Saucelabs, ensure that your `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are set, then run:
 
     npm test
-    
+
 This is what's run in Travis, to check against various browsers. The list of browsers is kept in the `.zuul.yml` file.
 
 ## JavaScript Standard Style
