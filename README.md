@@ -91,7 +91,7 @@ used that is based on `Object` which has no mechanism to point separate
 `Buffer`s to the same underlying slab of memory.
 
 You can see which browser versions lack typed array support
-[here](https://github.com/feross/buffer/blob/master/index.js#L20-L46).
+[here](https://github.com/feross/buffer/blob/master/index.js#L22-L48).
 
 
 ## tracking the latest node api
