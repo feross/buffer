@@ -20,7 +20,7 @@
     "isarray": "^1.0.0"
   },
   "devDependencies": {
-    "benchmark": "^1.0.0",
+    "benchmark": "^2.0.0",
     "browserify": "^12.0.1",
     "concat-stream": "^1.4.7",
     "hyperquest": "^1.0.1",
