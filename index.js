@@ -225,7 +225,6 @@ function fromJsonObject (that, object) {
 
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype
-  Buffer.prototype._set = Uint8Array.prototype.set // For `copy` below.
   Buffer.__proto__ = Uint8Array
 } else {
   // pre-set for values that may exist in the future
@@ -1285,7 +1284,11 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
       target[i + targetStart] = this[i + start]
     }
   } else {
-    target._set(this.subarray(start, start + len), targetStart)
+    Uint8Array.prototype.set.call(
+      target,
+      this.subarray(start, start + len),
+      targetStart
+    )
   }
 
   return len
@@ -1336,9 +1339,6 @@ var BP = Buffer.prototype
 Buffer._augment = function _augment (arr) {
   arr.constructor = Buffer
   arr._isBuffer = true
-
-  // save reference to original Uint8Array set method before overwriting
-  arr._set = arr.set
 
   // deprecated
   arr.get = BP.get
