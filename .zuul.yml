@@ -13,10 +13,10 @@ browsers:
   - name: microsoftedge
     version: 20..latest
   - name: opera
-    version: 11..latest
+    version: 12..latest
   - name: iphone
     version: [5.1, 6.1, 7.1, 8.4, 9.1..latest]
   - name: ipad
     version: [5.1, 6.1, 7.1, 8.4, 9.1..latest]
   - name: android
-    version: 4.0..latest
+    version: 4.4..latest
