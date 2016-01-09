@@ -30,6 +30,7 @@
     "standard": "^5.0.0",
     "tape": "^4.0.0",
     "through2": "^2.0.0",
+    "typedarray-to-buffer": "^3.0.4",
     "zuul": "^3.0.0"
   },
   "homepage": "https://github.com/feross/buffer",
