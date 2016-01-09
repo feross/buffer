@@ -15,7 +15,7 @@
     "James Halliday <mail@substack.net>"
   ],
   "dependencies": {
-    "base64-js": "0.0.8",
+    "base64-js": "^1.0.2",
     "ieee754": "^1.1.4",
     "isarray": "^1.0.0"
   },
