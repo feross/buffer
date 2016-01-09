@@ -191,7 +191,7 @@ function fromArrayBuffer (that, array) {
     that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
-    that = fromTypedArray(that, array)
+    that = fromTypedArray(that, new Uint8Array(array))
   }
   return that
 }
