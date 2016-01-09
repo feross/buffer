@@ -20,7 +20,7 @@ test('convert to buffer from Uint8Array', function (t) {
 })
 
 test('convert to buffer from another arrayview type (Uint32Array)', function (t) {
-  if (typeof Uint32Array !== 'undefined' && B.TYPED_ARRAY_SUPPORT) {
+  if (typeof Uint32Array !== 'undefined' && B.TYPED_ARRAY_SUPPORT !== false) {
     var arr = new Uint32Array([1, 2, 3])
     arr = toBuffer(arr)
 
@@ -37,7 +37,7 @@ test('convert to buffer from another arrayview type (Uint32Array)', function (t)
 })
 
 test('convert to buffer from ArrayBuffer', function (t) {
-  if (typeof Uint32Array !== 'undefined' && B.TYPED_ARRAY_SUPPORT) {
+  if (typeof Uint32Array !== 'undefined' && B.TYPED_ARRAY_SUPPORT !== false) {
     var arr = new Uint32Array([1, 2, 3]).subarray(1, 2)
     arr = toBuffer(arr)
 
