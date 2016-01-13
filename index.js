@@ -782,7 +782,9 @@ Buffer.prototype.slice = function slice (start, end) {
 
   var newBuf
   if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this.__proto__ = Uint8Array.prototype
     newBuf = this.subarray(start, end)
+    this.__proto__ = Buffer.prototype
     newBuf.__proto__ = Buffer.prototype
   } else {
     var sliceLen = end - start
