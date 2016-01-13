@@ -1,6 +1,6 @@
 # buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][npm-url]
 
-#### The buffer module from [node.js](http://nodejs.org/), for the browser.
+#### The buffer module from [node.js](https://nodejs.org/), for the browser.
 
 [![saucelabs][saucelabs-image]][saucelabs-url]
 
@@ -15,8 +15,8 @@
 With [browserify](http://browserify.org), simply `require('buffer')` or use the `Buffer` global and you will get this module.
 
 The goal is to provide an API that is 100% identical to
-[node's Buffer API](http://iojs.org/api/buffer.html). Read the
-[official docs](http://iojs.org/api/buffer.html) for the full list of properties,
+[node's Buffer API](https://nodejs.org/api/buffer.html). Read the
+[official docs](https://nodejs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
 ## features
@@ -49,7 +49,7 @@ A standalone bundle is available [here](https://wzrd.in/standalone/buffer), for 
 ## usage
 
 The module's API is identical to node's `Buffer` API. Read the
-[official docs](http://iojs.org/api/buffer.html) for the full list of properties,
+[official docs](https://nodejs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
 As mentioned above, `require('buffer')` or use the `Buffer` global with
@@ -88,7 +88,7 @@ then this issue does not affect you. If you support super old browsers, then rea
 
 In node, the `slice()` method returns a new `Buffer` that shares underlying memory
 with the original Buffer. When you modify one buffer, you modify the other.
-[Read more.](http://iojs.org/api/buffer.html#buffer_buf_slice_start_end)
+[Read more.](https://nodejs.org/api/buffer.html#buffer_buf_slice_start_end)
 
 In browsers with typed array support, this `Buffer` implementation supports this
 behavior. In browsers without typed arrays, an alternate buffer implementation is
@@ -103,7 +103,7 @@ You can see which browser versions lack typed array support
 
 This module tracks the Buffer API in the latest (unstable) version of node.js. The Buffer
 API is considered **stable** in the
-[node stability index](http://nodejs.org/docs/latest/api/documentation.html#documentation_stability_index),
+[node stability index](https://nodejs.org/docs/latest/api/documentation.html#documentation_stability_index),
 so it is unlikely that there will ever be breaking changes.
 Nonetheless, when/if the Buffer API changes in node, this module's API will change
 accordingly.
