@@ -33,6 +33,7 @@
     "typedarray-to-buffer": "^3.0.4",
     "zuul": "^3.0.0"
   },
+  "files": [],
   "homepage": "https://github.com/feross/buffer",
   "keywords": [
     "buffer",
