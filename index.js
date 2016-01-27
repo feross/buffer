@@ -100,6 +100,12 @@ function Buffer (arg) {
   return fromObject(this, arg)
 }
 
+// TODO: Legacy, not needed anymore. Remove in next major version.
+Buffer._augment = function (arr) {
+  arr.__proto__ = Buffer.prototype
+  return arr
+}
+
 function fromNumber (that, length) {
   that = allocate(that, length < 0 ? 0 : checked(length) | 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) {
