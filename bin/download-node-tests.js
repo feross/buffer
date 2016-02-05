@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 var concat = require('concat-stream')
+var cp = require('child_process')
 var fs = require('fs')
 var hyperquest = require('hyperquest')
-var cp = require('child_process')
+var path = require('path')
 var split = require('split')
 var through = require('through2')
 
@@ -13,8 +14,8 @@ var dirs = [
   '/test/pummel'
 ]
 
-cp.execSync('rm -rf node/*.js', { cwd: __dirname + '/../test' })
-cp.execSync('rm -rf node-es6/*.js', { cwd: __dirname + '/../test' })
+cp.execSync('rm -rf node/*.js', { cwd: path.join(__dirname, '../test') })
+cp.execSync('rm -rf node-es6/*.js', { cwd: path.join(__dirname, '../test') })
 
 var httpOpts = {
   headers: {
@@ -38,23 +39,23 @@ function downloadBufferTests (dir, files) {
   files.forEach(function (file) {
     if (!/test-buffer.*/.test(file.name)) return
 
-    var path
+    var out
     if (file.name === 'test-buffer-iterator.js' ||
         file.name === 'test-buffer-arraybuffer.js') {
-      path = __dirname + '/../test/node-es6/' + file.name
+      out = path.join(__dirname, '../test/node-es6', file.name)
     } else if (file.name === 'test-buffer-fakes.js') {
       // These teses only apply to node, where they're calling into C++ and need to
       // ensure the prototype can't be faked, or else there will be a segfault.
       return
     } else {
-      path = __dirname + '/../test/node/' + file.name
+      out = path.join(__dirname, '../test/node', file.name)
     }
 
     console.log(file.download_url)
     hyperquest(file.download_url, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
-      .pipe(fs.createWriteStream(path))
+      .pipe(fs.createWriteStream(out))
       .on('finish', function () {
         console.log('wrote ' + file.name)
       })
