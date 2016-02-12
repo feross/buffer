@@ -27,7 +27,7 @@
     "is-buffer": "^1.1.1",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
-    "standard": "^5.0.0",
+    "standard": "^6.0.5",
     "tape": "^4.0.0",
     "through2": "^2.0.0",
     "typedarray-to-buffer": "^3.0.4",
