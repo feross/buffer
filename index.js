@@ -225,8 +225,11 @@ if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.__proto__ = Uint8Array
   if (typeof Symbol !== 'undefined' && Symbol.species &&
       Buffer[Symbol.species] === Buffer) {
-    Object.defineProperty(Buffer, Symbol.species,
-                          { value: null, configurable: true })
+    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
+    Object.defineProperty(Buffer, Symbol.species, {
+      value: null,
+      configurable: true
+    })
   }
 } else {
   // pre-set for values that may exist in the future
