@@ -15,7 +15,7 @@ browsers:
   - name: ie
     version: 8..latest
   - name: microsoftedge
-    version: 20..latest
+    version: 13..latest
   - name: android
     version: 4.4..latest
   - name: iphone
