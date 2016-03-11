@@ -110,6 +110,9 @@ accordingly.
 
 ## related packages
 
+- [`buffer-equals`](https://www.npmjs.com/package/buffer-equals) - Node.js 0.12 buffer.equals() ponyfill
+- [`buffer-reverse`](https://www.npmjs.com/package/buffer-reverse) - A lite module for reverse-operations on buffers
+- [`buffer-xor`](https://www.npmjs.com/package/buffer-xor) - A simple module for bitwise-xor on buffers
 - [`is-buffer`](https://www.npmjs.com/package/is-buffer) - Determine if an object is a Buffer without including the whole `Buffer` package
 - [`typedarray-to-buffer`](https://www.npmjs.com/package/typedarray-to-buffer) - Convert a typed array to a Buffer without a copy
 
