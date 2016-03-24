@@ -286,7 +286,11 @@ Buffer.compare = function compare (a, b) {
   var y = b.length
 
   for (var i = 0, len = Math.min(x, y); i < len; ++i) {
-    if (a[i] !== b[i]) return a[i] > b[i] ? 1 : -1
+    if (a[i] !== b[i]) {
+      x = a[i]
+      y = b[i]
+      break
+    }
   }
 
   if (x < y) return -1
