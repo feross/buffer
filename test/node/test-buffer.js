@@ -261,15 +261,6 @@ assert.equal(new Buffer('abc').toString({toString: function() {
   return 'ascii';
 }}), 'abc');
 
-// testing for smart defaults and ability to pass string values as offset
-var writeTest = new Buffer('abcdes');
-writeTest.write('n', 'ascii');
-writeTest.write('o', 'ascii', '1');
-writeTest.write('d', '2', 'ascii');
-writeTest.write('e', 3, 'ascii');
-writeTest.write('j', 'ascii', 4);
-assert.equal(writeTest.toString(), 'nodejs');
-
 // ASCII slice test
 
 var asciiString = 'hello world';
@@ -744,15 +735,6 @@ assert.equal(buf[2], 0x62);
 assert.equal(buf[3], 0x63);
 
 buf.fill(0xFF);
-written = buf.write('abcd', 'utf8', 1, 2);  // legacy style
-// console.log(buf);
-assert.equal(written, 2);
-assert.equal(buf[0], 0xFF);
-assert.equal(buf[1], 0x61);
-assert.equal(buf[2], 0x62);
-assert.equal(buf[3], 0xFF);
-
-buf.fill(0xFF);
 written = buf.write('abcdef', 1, 2, 'hex');
 // console.log(buf);
 assert.equal(written, 2);
@@ -1186,9 +1168,9 @@ assert.throws(function() {
 
 assert.throws(function() {
   new Buffer();
-}, /must start with number, buffer, array or string/);
+}, /Must start with number, buffer, array or string/);
 
 assert.throws(function() {
   new Buffer(null);
-}, /must start with number, buffer, array or string/);
+}, /Must start with number, buffer, array or string/);
 
