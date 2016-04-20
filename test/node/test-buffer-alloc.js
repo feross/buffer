@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (Buffer.TYPED_ARRAY_SUPPORT) {
+if (Buffer.TYPED_ARRAY_SUPPORT) return;
 var common = {};
 var assert = require('assert');
 
@@ -1447,6 +1447,3 @@ assert(ubuf);
 assert(ubuf.buffer);
 assert.equal(ubuf.buffer.byteLength, 10);
 
-
-
-}

@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (Buffer.TYPED_ARRAY_SUPPORT) {
+if (Buffer.TYPED_ARRAY_SUPPORT) return;
 
 
 var assert = require('assert');
@@ -25,6 +25,3 @@ assert(isZeroFilled(new Float64Array(10)));
 Buffer.allocUnsafe(10);
 assert(isZeroFilled(Buffer.alloc(10)));
 
-
-
-}

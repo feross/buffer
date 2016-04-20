@@ -66,7 +66,7 @@ function testfixer (filename) {
     if (firstline) {
       // require buffer explicitly
       var preamble = 'var Buffer = require(\'../../\').Buffer;\n' +
-        'if (Buffer.TYPED_ARRAY_SUPPORT) {'
+        'if (Buffer.TYPED_ARRAY_SUPPORT) return;'
       if (/use strict/.test(line)) line += '\n' + preamble
       else line + preamble + '\n' + line
       firstline = false
@@ -103,8 +103,5 @@ function testfixer (filename) {
     }
 
     cb(null, line + '\n')
-  }, function (cb) {
-    // flush function
-    this.push('\n}')
   })
 }

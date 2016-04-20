@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (Buffer.TYPED_ARRAY_SUPPORT) {
+if (Buffer.TYPED_ARRAY_SUPPORT) return;
 
 
 var assert = require('assert');
@@ -40,6 +40,3 @@ vals.forEach(function(t) {
   t.toString();
 });
 
-
-
-}

@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (Buffer.TYPED_ARRAY_SUPPORT) {
+if (Buffer.TYPED_ARRAY_SUPPORT) return;
 
 
 var assert = require('assert');
@@ -61,6 +61,3 @@ assert.throws(() => Buffer.from(buf3).swap32(), re32);
 assert.throws(() => buf3.slice(1, 3).swap32(), re32);
 assert.throws(() => Buffer.alloc(1025).swap32(), re32);
 
-
-
-}
