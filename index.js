@@ -252,17 +252,19 @@ function fromArrayBuffer (that, array, byteOffset, length) {
     throw new RangeError('\'length\' is out of bounds')
   }
 
+  if (length === undefined) {
+    array = new Uint8Array(array, byteOffset)
+  } else {
+    array = new Uint8Array(array, byteOffset, length)
+  }
+
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
-    if (length === undefined) {
-      that = new Uint8Array(array, byteOffset)
-    } else {
-      that = new Uint8Array(array, byteOffset, length)
-    }
+    that = array
     that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
-    that = fromArrayLike(that, new Uint8Array(array, byteOffset, length))
+    that = fromArrayLike(that, array)
   }
   return that
 }
