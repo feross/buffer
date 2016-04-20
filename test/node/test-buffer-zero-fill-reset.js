@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (!Buffer.TYPED_ARRAY_SUPPORT) return;
+if (Buffer.TYPED_ARRAY_SUPPORT) {
 
 
 var assert = require('assert');
@@ -20,3 +20,6 @@ for (var i = 0; i < 100; i++) {
   assert.ok(testUint8Array(ui), 'Uint8Array is not zero-filled');
 }
 
+
+
+}

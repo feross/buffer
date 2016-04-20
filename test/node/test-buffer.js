@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (!Buffer.TYPED_ARRAY_SUPPORT) return;
+if (Buffer.TYPED_ARRAY_SUPPORT) {
 var common = {};
 var assert = require('assert');
 
@@ -678,7 +678,7 @@ assert.equal(dot.toString('base64'), '//4uAA==');
 }
 
 // Regression test for https://github.com/nodejs/node/issues/3496.
-// TODO assert.equal(Buffer('=bad'.repeat(1e4), 'base64').length, 0);
+// assert.equal(Buffer('=bad'.repeat(1e4), 'base64').length, 0);
 
 {
   // Creating buffers larger than pool size.
@@ -1296,7 +1296,7 @@ assert.throws(function() {
   }
 
   var utf16Buf = new Buffer('0123456789', 'utf16le');
-  // TODO assert.deepEqual(utf16Buf.slice(0, 6), Buffer('012', 'utf16le'));
+  // assert.deepEqual(utf16Buf.slice(0, 6), Buffer('012', 'utf16le'));
 
   assert.equal(buf.slice('0', '1'), '0');
   assert.equal(buf.slice('-5', '10'), '56789');
@@ -1444,3 +1444,6 @@ assert.equal(Buffer.prototype.offset, undefined);
 assert.equal(SlowBuffer.prototype.parent, undefined);
 assert.equal(SlowBuffer.prototype.offset, undefined);
 
+
+
+}

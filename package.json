@@ -50,7 +50,8 @@
   },
   "scripts": {
     "test": "standard && node ./bin/test.js",
-    "test-browser": "zuul -- test/*.js test/node/*.js",
+    "test-browser-es5": "zuul -- test/*.js",
+    "test-browser-es6": "zuul -- test/*.js test/node/*.js",
     "test-browser-local": "zuul --local -- test/*.js test/node/*.js",
     "test-node": "tape test/*.js test/node/*.js && OBJECT_IMPL=true tape test/*.js",
     "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",

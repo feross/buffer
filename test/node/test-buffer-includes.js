@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (!Buffer.TYPED_ARRAY_SUPPORT) return;
+if (Buffer.TYPED_ARRAY_SUPPORT) {
 
 var assert = require('assert');
 
@@ -259,3 +259,6 @@ assert.throws(function() {
   b.includes([]);
 });
 
+
+
+}

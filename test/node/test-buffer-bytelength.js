@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (!Buffer.TYPED_ARRAY_SUPPORT) return;
+if (Buffer.TYPED_ARRAY_SUPPORT) {
 
 
 var assert = require('assert');
@@ -87,3 +87,6 @@ assert.equal(Buffer.byteLength('Il était tué', 'binary'), 12);
   assert.equal(24, Buffer.byteLength('Il était tué', encoding));
 });
 
+
+
+}
