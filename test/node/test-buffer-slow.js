@@ -15,7 +15,9 @@ var sb = SlowBuffer(4);
 assert(sb instanceof Buffer);
 assert.strictEqual(sb.length, 4);
 sb.fill(1);
-assert.deepEqual(sb, ones);
+for (var [key, value] of sb.entries()) {
+  assert.deepStrictEqual(value, ones[key]);
+}
 
 // underlying ArrayBuffer should have the same length
 assert.strictEqual(sb.buffer.byteLength, 4);
@@ -25,7 +27,9 @@ sb = SlowBuffer(4);
 assert(sb instanceof Buffer);
 assert.strictEqual(sb.length, 4);
 sb.fill(1);
-assert.deepEqual(sb, ones);
+for (var [key, value] of sb.entries()) {
+  assert.deepStrictEqual(value, ones[key]);
+}
 
 // should work with edge cases
 assert.strictEqual(SlowBuffer(0).length, 0);
