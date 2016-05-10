@@ -1278,7 +1278,7 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
       target[i + targetStart] = this[i + start]
     }
   } else {
-    target._set(this.subarray(start, start + len), targetStart)
+    target.set(this.subarray(start, start + len), targetStart)
   }
 
   return len
