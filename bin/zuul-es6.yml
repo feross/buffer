@@ -1,6 +1,4 @@
 ui: tape
-scripts:
-  - ./test/_polyfill.js
 browsers:
   - name: chrome
     version: '-1..latest'
