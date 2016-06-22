@@ -25,8 +25,7 @@ instance methods, and class methods that are supported.
 - Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
 - Extremely small bundle size (**5.04KB minified + gzipped**, 35.5KB with comments)
 - Excellent browser support (IE 6+, Chrome 4+, Firefox 3+, Safari 5.1+, Opera 11+, iOS, etc.)
-- Preserves Node API exactly, with one important difference (see below)
-- `.slice()` returns instances of the same type (Buffer)
+- Preserves Node API exactly, with one minor difference (see below)
 - Square-bracket `buf[4]` notation works, even in old browsers like IE6!
 - Does not modify any browser prototypes or put anything on `window`
 - Comprehensive test suite (including all buffer tests from node.js core)
