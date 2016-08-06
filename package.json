@@ -23,7 +23,7 @@
     "benchmark": "^2.0.0",
     "browserify": "^13.0.0",
     "concat-stream": "^1.4.7",
-    "hyperquest": "^1.0.1",
+    "hyperquest": "^2.0.0",
     "is-buffer": "^1.1.1",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
