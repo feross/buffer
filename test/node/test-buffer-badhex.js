@@ -5,6 +5,47 @@ var Buffer = require('../../').Buffer;
 var assert = require('assert');
 var Buffer = require('../../').Buffer;
 
+/**
+ * TEMPORARY HACK UNTIL THIS ASSERT BUG IS FIXED IN NODE CORE
+ * https://github.com/nodejs/node/issues/8001
+ */
+var pToString = function (obj) { return Object.prototype.toString.call(obj) }
+var _deepStrictEqual = assert.deepStrictEqual
+assert.deepStrictEqual = function (actual, expected, msg) {
+  if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView(actual) &&
+      ArrayBuffer.isView(expected) && !require('buffer').Buffer.isBuffer(actual) &&
+      !require('buffer').Buffer.isBuffer(expected) && pToString(actual) === pToString(expected) &&
+      !(actual instanceof Float32Array || actual instanceof Float64Array)) {
+    assert.equal(Buffer.compare(Buffer.from(actual.buffer,
+                                            actual.byteOffset,
+                                            actual.byteLength),
+                             Buffer.from(expected.buffer,
+                                         expected.byteOffset,
+                                         expected.byteLength)), 0);
+  } else {
+    _deepStrictEqual.call(assert, actual, expected, msg)
+  }
+}
+var _deepEqual = assert.deepEqual
+assert.deepEqual = function (actual, expected, msg) {
+  if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView(actual) &&
+      ArrayBuffer.isView(expected) && !require('buffer').Buffer.isBuffer(actual) &&
+      !require('buffer').Buffer.isBuffer(expected) && pToString(actual) === pToString(expected) &&
+      !(actual instanceof Float32Array || actual instanceof Float64Array)) {
+    assert.ok(Buffer.compare(Buffer.from(actual.buffer,
+                                         actual.byteOffset,
+                                         actual.byteLength),
+                             Buffer.from(expected.buffer,
+                                         expected.byteOffset,
+                                         expected.byteLength)) === 0);
+  } else {
+    _deepEqual.call(assert, actual, expected, msg)
+  }
+}
+/**
+ * END HACK
+ */
+
 // Test hex strings and bad hex strings
 {
   var buf1 = Buffer.alloc(4);
