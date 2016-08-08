@@ -75,7 +75,7 @@ function testfixer (filename) {
     line = line.replace(/(const|let) /g, 'var ')
 
     // make `var common = require('common')` work
-    line = line.replace(/(var common = require.*)/g, 'var common = {};')
+    line = line.replace(/(var common = require.*)/g, 'var common = { skip: function () {} };')
 
     // make `require('../common')` work
     line = line.replace(/require\('\.\.\/common'\);/g, '')

@@ -1,12 +1,12 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-if (!Buffer.TYPED_ARRAY_SUPPORT) return;
+
 
 
 var assert = require('assert');
 
 // Test buffers small enough to use the JS implementation
-const buf = Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+var buf = Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
                          0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10]);
 
 assert.strictEqual(buf, buf.swap16());
@@ -34,7 +34,7 @@ assert.deepStrictEqual(buf3, Buffer.from([0x1, 0x5, 0x4, 0x3, 0x2, 0x6, 0x7]));
 buf3.slice(1, 5).swap16();
 assert.deepStrictEqual(buf3, Buffer.from([0x1, 0x4, 0x5, 0x2, 0x3, 0x6, 0x7]));
 
-const buf3_64 = Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+var buf3_64 = Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
                              0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
                              0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
                              0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10]);
@@ -63,10 +63,9 @@ var buf7 = Buffer.from(bu7A.buffer, bu7A.byteOffset);
 buf6.swap32();
 assert.deepStrictEqual(buf6, buf7);
 
-
 var buf8A = new Uint8Array(256 * 8);
 var buf9A = new Uint8Array(256 * 8);
-for (let i = 0; i < buf8A.length; i++) {
+for (var i = 0; i < buf8A.length; i++) {
   buf8A[i] = i % 8;
   buf9A[buf9A.length - i - 1] = i % 8;
 }
@@ -79,10 +78,10 @@ assert.deepStrictEqual(buf8, buf9);
 // Test native code with buffers that are not memory-aligned
 var buf10A = new Uint8Array(256 * 8);
 var buf11A = new Uint8Array(256 * 8 - 2);
-for (let i = 0; i < buf10A.length; i++) {
+for (var i = 0; i < buf10A.length; i++) {
   buf10A[i] = i % 2;
 }
-for (let i = 1; i < buf11A.length; i++) {
+for (var i = 1; i < buf11A.length; i++) {
   buf11A[buf11A.length - i] = (i + 1) % 2;
 }
 var buf10 = Buffer.from(buf10A.buffer, buf10A.byteOffset);
@@ -96,10 +95,10 @@ assert.deepStrictEqual(buf10.slice(0, buf11.length), buf11);
 
 var buf12A = new Uint8Array(256 * 8);
 var buf13A = new Uint8Array(256 * 8 - 4);
-for (let i = 0; i < buf12A.length; i++) {
+for (var i = 0; i < buf12A.length; i++) {
   buf12A[i] = i % 4;
 }
-for (let i = 1; i < buf13A.length; i++) {
+for (var i = 1; i < buf13A.length; i++) {
   buf13A[buf13A.length - i] = (i + 1) % 4;
 }
 var buf12 = Buffer.from(buf12A.buffer, buf12A.byteOffset);
@@ -113,10 +112,10 @@ assert.deepStrictEqual(buf12.slice(0, buf13.length), buf13);
 
 var buf14A = new Uint8Array(256 * 8);
 var buf15A = new Uint8Array(256 * 8 - 8);
-for (let i = 0; i < buf14A.length; i++) {
+for (var i = 0; i < buf14A.length; i++) {
   buf14A[i] = i % 8;
 }
-for (let i = 1; i < buf15A.length; i++) {
+for (var i = 1; i < buf15A.length; i++) {
   buf15A[buf15A.length - i] = (i + 1) % 8;
 }
 var buf14 = Buffer.from(buf14A.buffer, buf14A.byteOffset);
@@ -128,9 +127,9 @@ buf14.slice(1, buf14.length - 7).swap64();
 assert.deepStrictEqual(buf14.slice(0, buf15.length), buf15);
 
 // Length assertions
-const re16 = /Buffer size must be a multiple of 16-bits/;
-const re32 = /Buffer size must be a multiple of 32-bits/;
-const re64 = /Buffer size must be a multiple of 64-bits/;
+var re16 = /Buffer size must be a multiple of 16-bits/;
+var re32 = /Buffer size must be a multiple of 32-bits/;
+var re64 = /Buffer size must be a multiple of 64-bits/;
 
 assert.throws(() => Buffer.from(buf3).swap16(), re16);
 assert.throws(() => Buffer.alloc(1025).swap16(), re16);
@@ -139,3 +138,4 @@ assert.throws(() => buf3.slice(1, 3).swap32(), re32);
 assert.throws(() => Buffer.alloc(1025).swap32(), re32);
 assert.throws(() => buf3.slice(1, 3).swap64(), re64);
 assert.throws(() => Buffer.alloc(1025).swap64(), re64);
+
