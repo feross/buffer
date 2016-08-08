@@ -725,6 +725,10 @@ Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
   throw new TypeError('val must be string, number or Buffer')
 }
 
+Buffer.prototype.lastIndexOf = function () {
+  throw new Error('Not implemented yet. PR welcome! https://github.com/feross/buffer/issues/114')
+}
+
 Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
   return this.indexOf(val, byteOffset, encoding) !== -1
 }
