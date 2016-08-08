@@ -708,6 +708,9 @@ Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
     return arrayIndexOf(this, val, byteOffset, encoding)
   }
   if (typeof val === 'number') {
+    // Numbers will be interpreted as unsigned 8-bit integer values between
+    // `0` and `255`.
+    val &= 0xFF
     if (Buffer.TYPED_ARRAY_SUPPORT && Uint8Array.prototype.indexOf === 'function') {
       return Uint8Array.prototype.indexOf.call(this, val, byteOffset)
     }
@@ -735,7 +738,7 @@ function hexWrite (buf, string, offset, length) {
 
   // must be an even number of digits
   var strLen = string.length
-  if (strLen % 2 !== 0) throw new Error('Invalid hex string')
+  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
 
   if (length > strLen / 2) {
     length = strLen / 2
