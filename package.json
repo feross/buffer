@@ -33,14 +33,21 @@
     "zuul": "^3.0.0"
   },
   "homepage": "https://github.com/feross/buffer",
+  "jspm": {
+    "map": {
+      "./index.js": {
+        "node": "@node/buffer"
+      }
+    }
+  },
   "keywords": [
-    "buffer",
-    "browserify",
-    "compatible",
-    "browser",
     "arraybuffer",
-    "uint8array",
-    "dataview"
+    "browser",
+    "browserify",
+    "buffer",
+    "compatible",
+    "dataview",
+    "uint8array"
   ],
   "license": "MIT",
   "main": "index.js",
@@ -49,16 +56,16 @@
     "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
-    "update-authors": "./bin/update-authors.sh",
+    "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",
+    "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
+    "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c",
     "test": "standard && node ./bin/test.js",
     "test-browser-es5": "zuul --ui tape -- test/*.js",
     "test-browser-es5-local": "zuul --ui tape --local -- test/*.js",
     "test-browser-es6": "zuul --ui tape -- test/*.js test/node/*.js",
     "test-browser-es6-local": "zuul --ui tape --local -- test/*.js test/node/*.js",
     "test-node": "tape test/*.js test/node/*.js && OBJECT_IMPL=true tape test/*.js",
-    "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",
-    "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
-    "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c"
+    "update-authors": "./bin/update-authors.sh"
   },
   "standard": {
     "ignore": [
@@ -66,12 +73,5 @@
       "test/_polyfill.js",
       "perf/*.js"
     ]
-  },
-  "jspm": {
-    "map": {
-      "./index.js": {
-        "node": "@node/buffer"
-      }
-    }
   }
 }
