@@ -49,6 +49,7 @@
     "url": "git://github.com/feross/buffer.git"
   },
   "scripts": {
+    "update-authors": "./bin/update-authors.sh",
     "test": "standard && node ./bin/test.js",
     "test-browser-es5": "zuul --ui tape -- test/*.js",
     "test-browser-es5-local": "zuul --ui tape --local -- test/*.js",
