@@ -1007,7 +1007,6 @@ assert.equal(0, Buffer('hello').slice(0, 0).length);
 
 // Call .fill() first, stops valgrind warning about uninitialized memory reads.
 Buffer(3.3).fill().toString(); // throws bad argument error in commit 43cb4ec
-assert.equal(Buffer(-1).length, 0);
 assert.equal(Buffer(NaN).length, 0);
 assert.equal(Buffer(3.3).length, 3);
 assert.equal(Buffer({length: 3.3}).length, 3);
@@ -1493,10 +1492,10 @@ assert.equal(SlowBuffer.prototype.offset, undefined);
 
 {
   // Test that large negative Buffer length inputs don't affect the pool offset.
-  assert.deepStrictEqual(Buffer(-Buffer.poolSize), Buffer.from(''));
-  assert.deepStrictEqual(Buffer(-100), Buffer.from(''));
-  assert.deepStrictEqual(Buffer.allocUnsafe(-Buffer.poolSize), Buffer.from(''));
-  assert.deepStrictEqual(Buffer.allocUnsafe(-100), Buffer.from(''));
+  // Use the fromArrayLike() variant here because it's more lenient
+  // about its input and passes the length directly to allocate().
+  assert.deepStrictEqual(Buffer({ length: -Buffer.poolSize }), Buffer.from(''));
+  assert.deepStrictEqual(Buffer({ length: -100 }), Buffer.from(''));
 
   // Check pool offset after that by trying to write string into the pool.
   assert.doesNotThrow(() => Buffer.from('abc'));
@@ -1524,4 +1523,12 @@ assert.equal(SlowBuffer.prototype.offset, undefined);
     }
   }
 }
+
+// Test that large negative Buffer length inputs throw errors.
+assert.throws(() => Buffer(-Buffer.poolSize),
+              '"size" argument must not be negative');
+assert.throws(() => Buffer(-100),
+              '"size" argument must not be negative');
+assert.throws(() => Buffer(-1),
+              '"size" argument must not be negative');
 
