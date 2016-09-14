@@ -113,6 +113,28 @@ function Buffer (arg, encodingOrOffset, length) {
   return from(this, arg, encodingOrOffset, length)
 }
 
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  Buffer.prototype.__proto__ = Uint8Array.prototype
+  Buffer.__proto__ = Uint8Array
+  if (typeof Symbol !== 'undefined' && Symbol.species &&
+      Buffer[Symbol.species] === Buffer) {
+    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
+    Object.defineProperty(Buffer, Symbol.species, {
+      value: null,
+      configurable: true
+    })
+  }
+}
+
+if ('ト'.length !== 1) {
+  console.warn(
+    'The character encoding of the HTML document was not declared as UTF-8. ' +
+    'Therefore, the `buffer` package may behave incorrectly in some situations. ' +
+    'Consider adding <meta charset="utf-8"> to the <head> section of the HTML ' +
+    'document.'
+  )
+}
+
 Buffer.poolSize = 8192 // not used by this implementation
 
 // TODO: Legacy, not needed anymore. Remove in next major version.
@@ -147,19 +169,6 @@ function from (that, value, encodingOrOffset, length) {
  **/
 Buffer.from = function (value, encodingOrOffset, length) {
   return from(null, value, encodingOrOffset, length)
-}
-
-if (Buffer.TYPED_ARRAY_SUPPORT) {
-  Buffer.prototype.__proto__ = Uint8Array.prototype
-  Buffer.__proto__ = Uint8Array
-  if (typeof Symbol !== 'undefined' && Symbol.species &&
-      Buffer[Symbol.species] === Buffer) {
-    // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
-    Object.defineProperty(Buffer, Symbol.species, {
-      value: null,
-      configurable: true
-    })
-  }
 }
 
 function assertSize (size) {
