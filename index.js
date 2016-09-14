@@ -125,6 +125,16 @@ if (Buffer.TYPED_ARRAY_SUPPORT) {
     })
   }
 }
+
+if ('ト'.length !== 1) {
+  console.warn(
+    'The character encoding of the HTML document was not declared as UTF-8. ' +
+    'Therefore, the `buffer` package may behave incorrectly in some situations. ' +
+    'Consider adding <meta charset="utf-8"> to the <head> section of the HTML ' +
+    'document.'
+  )
+}
+
 Buffer.poolSize = 8192 // not used by this implementation
 
 // TODO: Legacy, not needed anymore. Remove in next major version.
