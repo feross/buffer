@@ -5,7 +5,7 @@ browsers:
   - name: safari
     version: latest
   - name: ie
-    version: 8..latest
+    version: 11..latest
   - name: microsoftedge
     version: 13..latest
   - name: android
