@@ -63,7 +63,7 @@
     "test-browser-es5-local": "zuul --ui tape --local -- test/*.js",
     "test-browser-es6": "zuul --ui tape -- test/*.js test/node/*.js",
     "test-browser-es6-local": "zuul --ui tape --local -- test/*.js test/node/*.js",
-    "test-node": "tape test/*.js test/node/*.js && OBJECT_IMPL=true tape test/*.js",
+    "test-node": "tape test/*.js test/node/*.js",
     "update-authors": "./bin/update-authors.sh"
   },
   "standard": {
