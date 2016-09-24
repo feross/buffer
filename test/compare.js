@@ -1,4 +1,3 @@
-if (process.env.OBJECT_IMPL) global.TYPED_ARRAY_SUPPORT = false
 var B = require('../').Buffer
 var test = require('tape')
 
