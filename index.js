@@ -92,7 +92,9 @@ if (typeof Symbol !== 'undefined' && Symbol.species &&
     Buffer[Symbol.species] === Buffer) {
   Object.defineProperty(Buffer, Symbol.species, {
     value: null,
-    configurable: true
+    configurable: true,
+    enumerable: false,
+    writable: false
   })
 }
 
