@@ -23,7 +23,7 @@ instance methods, and class methods that are supported.
 
 - Manipulate binary data like a boss, in all browsers!
 - Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
-- Extremely small bundle size (**5.04KB minified + gzipped**, 35.5KB with comments)
+- Extremely small bundle size (**6.75KB minified + gzipped**, 51.9KB with comments)
 - Excellent browser support (IE 11, Edge, Chrome, Firefox, Safari 5.1+, Opera, iOS, etc.)
 - Preserves Node API exactly, with one minor difference (see below)
 - Square-bracket `buf[4]` notation works!
