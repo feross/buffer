@@ -29,6 +29,7 @@
     "standard": "*",
     "tape": "^4.0.0",
     "through2": "^2.0.0",
+    "uglify-js": "^2.7.3",
     "zuul": "^3.0.0"
   },
   "homepage": "https://github.com/feross/buffer",
