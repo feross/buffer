@@ -52,7 +52,7 @@ function typedArraySupport () {
 }
 
 function createBuffer (length) {
-  if (K_MAX_LENGTH < length) {
+  if (length > K_MAX_LENGTH) {
     throw new RangeError('Invalid typed array length')
   }
   // Return an augmented `Uint8Array` instance
