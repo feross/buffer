@@ -84,9 +84,6 @@ function Buffer (arg, encodingOrOffset, length) {
   return from(arg, encodingOrOffset, length)
 }
 
-Buffer.prototype.__proto__ = Uint8Array.prototype
-Buffer.__proto__ = Uint8Array
-
 // Fix subarray() in ES2016. See: https://github.com/feross/buffer/pull/97
 if (typeof Symbol !== 'undefined' && Symbol.species &&
     Buffer[Symbol.species] === Buffer) {
@@ -127,6 +124,10 @@ function from (value, encodingOrOffset, length) {
 Buffer.from = function (value, encodingOrOffset, length) {
   return from(value, encodingOrOffset, length)
 }
+
+Buffer.prototype.__proto__ = Uint8Array.prototype
+// Assign Uint8Array as proto AFTER setting Buffer.from
+Buffer.__proto__ = Uint8Array
 
 function assertSize (size) {
   if (typeof size !== 'number') {
