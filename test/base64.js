@@ -44,3 +44,12 @@ test('base64: invalid non-alphanumeric characters -- should be stripped', functi
   )
   t.end()
 })
+
+test('base64: high byte', function (t) {
+  var highByte = B.from([128])
+  t.deepEqual(
+    B.alloc(1, highByte.toString('base64'), 'base64'),
+    highByte
+  )
+  t.end()
+})
