@@ -125,8 +125,9 @@ Buffer.from = function (value, encodingOrOffset, length) {
   return from(value, encodingOrOffset, length)
 }
 
+// Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
+// https://github.com/feross/buffer/pull/148
 Buffer.prototype.__proto__ = Uint8Array.prototype
-// Assign Uint8Array as proto AFTER setting Buffer.from
 Buffer.__proto__ = Uint8Array
 
 function assertSize (size) {
