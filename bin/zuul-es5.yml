@@ -1,6 +1,4 @@
 ui: tape
-scripts:
-  - ./test/_polyfill.js
 browsers:
   - name: safari
     version: latest
