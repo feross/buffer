@@ -19,7 +19,7 @@ var K_MAX_LENGTH = 0x7fffffff
 exports.kMaxLength = K_MAX_LENGTH
 
 /**
- * If `TYPED_ARRAY_SUPPORT`:
+ * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
  *   === false   Print warning and recommend using `buffer` v4.x which has an Object
  *               implementation (most compatible, even IE6)
@@ -37,7 +37,7 @@ Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport()
 if (!Buffer.TYPED_ARRAY_SUPPORT) {
   console.error(
     'This browser lacks typed array (Uint8Array) support which is required by ' +
-    '`buffer` v5.x. Use v4.x if you require old browser support.')
+    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.')
 }
 
 function typedArraySupport () {
