@@ -1,6 +1,6 @@
 ui: tape
 browsers:
   - name: ie
-    version: 11..latest
+    version: latest
   - name: android
     version: latest
