@@ -65,12 +65,6 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
-  if (!B.TYPED_ARRAY_SUPPORT) {
-    t.pass('object impl: skipping overflow test')
-    t.end()
-    return
-  }
-
   t.plan(3 * (2 * 2 * 2 + 2))
   var hex = [
     '', '03', '00', '030000', '000000',
