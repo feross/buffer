@@ -29,7 +29,7 @@ test('writeUint8 with a negative number throws', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
-  t.plan(2 * (2 * 2 * 2 + 2))
+  t.plan(2 * ((2 * 2 * 2) + 2))
   var hex = [
     '03', '0300', '0003', '03000000', '00000003',
     'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
@@ -65,7 +65,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
 })
 
 test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
-  t.plan(3 * (2 * 2 * 2 + 2))
+  t.plan(3 * ((2 * 2 * 2) + 2))
   var hex = [
     '', '03', '00', '030000', '000000',
     '', 'fd', 'ff', 'fdffff', 'ffffff'
@@ -84,7 +84,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE} with overflow', function (t) {
       for (var k = 0; k < endianesses.length; k++) {
         var z = endianesses[k]
 
-        var v1 = new B(y / 8 - 1)
+        var v1 = new B((y / 8) - 1)
         var next = new B(4)
         next.writeUInt32BE(0, 0)
         var writefn = 'write' + x + y + z
