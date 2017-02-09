@@ -239,7 +239,7 @@ function fromArrayBuffer (array, byteOffset, length) {
 }
 
 function fromObject (obj) {
-  if (obj instanceof Buffer) {
+  if (Buffer.isBuffer(obj)) {
     var len = checked(obj.length) | 0
     var buf = createBuffer(len)
 
@@ -285,11 +285,11 @@ function SlowBuffer (length) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return b instanceof Buffer
+  return b != null && b._isBuffer === true
 }
 
 Buffer.compare = function compare (a, b) {
-  if (!(a instanceof Buffer) || !(b instanceof Buffer)) {
+  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
     throw new TypeError('Arguments must be Buffers')
   }
 
@@ -351,7 +351,7 @@ Buffer.concat = function concat (list, length) {
   var pos = 0
   for (i = 0; i < list.length; ++i) {
     var buf = list[i]
-    if (!(buf instanceof Buffer)) {
+    if (!Buffer.isBuffer(buf)) {
       throw new TypeError('"list" argument must be an Array of Buffers')
     }
     buf.copy(buffer, pos)
@@ -361,7 +361,7 @@ Buffer.concat = function concat (list, length) {
 }
 
 function byteLength (string, encoding) {
-  if (string instanceof Buffer) {
+  if (Buffer.isBuffer(string)) {
     return string.length
   }
   if (ArrayBuffer.isView(string) || string instanceof ArrayBuffer) {
@@ -474,8 +474,12 @@ function slowToString (encoding, start, end) {
   }
 }
 
-// The property is used by the `is-buffer` npm package to detect Buffer instances
-// in Safari 5-7. Remove this eventually.
+// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+// reliably in a browserify context because there could be multiple different
+// copies of the 'buffer' package in use. This method works even for Buffer
+// instances that were created from another copy of the `buffer` package.
+// See: https://github.com/feross/buffer/issues/154
 Buffer.prototype._isBuffer = true
 
 function swap (b, n, m) {
@@ -529,7 +533,7 @@ Buffer.prototype.toString = function toString () {
 }
 
 Buffer.prototype.equals = function equals (b) {
-  if (!(b instanceof Buffer)) throw new TypeError('Argument must be a Buffer')
+  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
   if (this === b) return true
   return Buffer.compare(this, b) === 0
 }
@@ -545,7 +549,7 @@ Buffer.prototype.inspect = function inspect () {
 }
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
-  if (!(target instanceof Buffer)) {
+  if (!Buffer.isBuffer(target)) {
     throw new TypeError('Argument must be a Buffer')
   }
 
@@ -647,7 +651,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   }
 
   // Finally, search either indexOf (if dir is true) or lastIndexOf
-  if (val instanceof Buffer) {
+  if (Buffer.isBuffer(val)) {
     // Special case: looking for empty string/buffer always fails
     if (val.length === 0) {
       return -1
@@ -1213,7 +1217,7 @@ Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
 }
 
 function checkInt (buf, value, offset, ext, max, min) {
-  if (!(buf instanceof Buffer)) throw new TypeError('"buffer" argument must be a Buffer instance')
+  if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
   if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
   if (offset + ext > buf.length) throw new RangeError('Index out of range')
 }
@@ -1541,7 +1545,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
       this[i] = val
     }
   } else {
-    var bytes = val instanceof Buffer
+    var bytes = Buffer.isBuffer(val)
       ? val
       : new Buffer(val, encoding)
     var len = bytes.length
