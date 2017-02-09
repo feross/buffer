@@ -65,9 +65,9 @@ function testfixer (filename) {
 
     if (firstline) {
       // require buffer explicitly
-      var preamble = 'var Buffer = require(\'../../\').Buffer;\n'
+      var preamble = 'var Buffer = require(\'../../\').Buffer;'
       if (/use strict/.test(line)) line += '\n' + preamble
-      else line + preamble + '\n' + line
+      else line += preamble + '\n' + line
       firstline = false
     }
 

@@ -104,7 +104,7 @@ function from (value, encodingOrOffset, length) {
     throw new TypeError('"value" argument must not be a number')
   }
 
-  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+  if (value instanceof ArrayBuffer) {
     return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
@@ -216,8 +216,6 @@ function fromArrayLike (array) {
 }
 
 function fromArrayBuffer (array, byteOffset, length) {
-  array.byteLength // this throws if `array` is not a valid ArrayBuffer
-
   if (byteOffset < 0 || array.byteLength < byteOffset) {
     throw new RangeError('\'offset\' is out of bounds')
   }
@@ -241,7 +239,7 @@ function fromArrayBuffer (array, byteOffset, length) {
 }
 
 function fromObject (obj) {
-  if (Buffer.isBuffer(obj)) {
+  if (obj instanceof Buffer) {
     var len = checked(obj.length) | 0
     var buf = createBuffer(len)
 
@@ -254,8 +252,7 @@ function fromObject (obj) {
   }
 
   if (obj) {
-    if ((typeof ArrayBuffer !== 'undefined' &&
-        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
+    if (ArrayBuffer.isView(obj) || 'length' in obj) {
       if (typeof obj.length !== 'number' || isnan(obj.length)) {
         return createBuffer(0)
       }
@@ -288,11 +285,11 @@ function SlowBuffer (length) {
 }
 
 Buffer.isBuffer = function isBuffer (b) {
-  return !!(b != null && b._isBuffer)
+  return b instanceof Buffer
 }
 
 Buffer.compare = function compare (a, b) {
-  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
+  if (!(a instanceof Buffer) || !(b instanceof Buffer)) {
     throw new TypeError('Arguments must be Buffers')
   }
 
@@ -354,7 +351,7 @@ Buffer.concat = function concat (list, length) {
   var pos = 0
   for (i = 0; i < list.length; ++i) {
     var buf = list[i]
-    if (!Buffer.isBuffer(buf)) {
+    if (!(buf instanceof Buffer)) {
       throw new TypeError('"list" argument must be an Array of Buffers')
     }
     buf.copy(buffer, pos)
@@ -364,11 +361,10 @@ Buffer.concat = function concat (list, length) {
 }
 
 function byteLength (string, encoding) {
-  if (Buffer.isBuffer(string)) {
+  if (string instanceof Buffer) {
     return string.length
   }
-  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
-      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+  if (ArrayBuffer.isView(string) || string instanceof ArrayBuffer) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
@@ -478,8 +474,8 @@ function slowToString (encoding, start, end) {
   }
 }
 
-// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
-// Buffer instances.
+// The property is used by the `is-buffer` npm package to detect Buffer instances
+// in Safari 5-7. Remove this eventually.
 Buffer.prototype._isBuffer = true
 
 function swap (b, n, m) {
@@ -533,7 +529,7 @@ Buffer.prototype.toString = function toString () {
 }
 
 Buffer.prototype.equals = function equals (b) {
-  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (!(b instanceof Buffer)) throw new TypeError('Argument must be a Buffer')
   if (this === b) return true
   return Buffer.compare(this, b) === 0
 }
@@ -549,7 +545,7 @@ Buffer.prototype.inspect = function inspect () {
 }
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
-  if (!Buffer.isBuffer(target)) {
+  if (!(target instanceof Buffer)) {
     throw new TypeError('Argument must be a Buffer')
   }
 
@@ -651,7 +647,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   }
 
   // Finally, search either indexOf (if dir is true) or lastIndexOf
-  if (Buffer.isBuffer(val)) {
+  if (val instanceof Buffer) {
     // Special case: looking for empty string/buffer always fails
     if (val.length === 0) {
       return -1
@@ -1217,7 +1213,7 @@ Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
 }
 
 function checkInt (buf, value, offset, ext, max, min) {
-  if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
+  if (!(buf instanceof Buffer)) throw new TypeError('"buffer" argument must be a Buffer instance')
   if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
   if (offset + ext > buf.length) throw new RangeError('Index out of range')
 }
@@ -1545,7 +1541,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
       this[i] = val
     }
   } else {
-    var bytes = Buffer.isBuffer(val)
+    var bytes = val instanceof Buffer
       ? val
       : new Buffer(val, encoding)
     var len = bytes.length
