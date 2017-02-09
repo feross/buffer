@@ -38,4 +38,3 @@ function runBrowserTests () {
     fs.writeFileSync(zuulYmlPath, fs.readFileSync(path.join(__dirname, 'zuul-es6.yml')))
   }
 }
-
