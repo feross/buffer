@@ -89,11 +89,53 @@ accordingly.
 
 ## related packages
 
-- [`buffer-equals`](https://www.npmjs.com/package/buffer-equals) - Node.js 0.12 buffer.equals() ponyfill
-- [`buffer-reverse`](https://www.npmjs.com/package/buffer-reverse) - A lite module for reverse-operations on buffers
-- [`buffer-xor`](https://www.npmjs.com/package/buffer-xor) - A simple module for bitwise-xor on buffers
+- [`buffer-reverse`](https://www.npmjs.com/package/buffer-reverse) - Reverse a buffer
+- [`buffer-xor`](https://www.npmjs.com/package/buffer-xor) - Bitwise xor a buffer
 - [`is-buffer`](https://www.npmjs.com/package/is-buffer) - Determine if an object is a Buffer without including the whole `Buffer` package
-- [`typedarray-to-buffer`](https://www.npmjs.com/package/typedarray-to-buffer) - Convert a typed array to a Buffer without a copy
+
+## conversion packages
+
+### convert typed array to buffer
+
+Use [`typedarray-to-buffer`](https://www.npmjs.com/package/typedarray-to-buffer) to convert any kind of typed array to a `Buffer`. Does not perform a copy, so it's super fast.
+
+### convert buffer to typed array
+
+`Buffer` is a subclass of `Uint8Array` (which is a typed array). So there is no need to explicitly convert to typed array. Just use the buffer as a `Uint8Array`.
+
+### convert blob to buffer
+
+Use [`blob-to-buffer`](https://www.npmjs.com/package/blob-to-buffer) to convert a `Blob` to a `Buffer`.
+
+### convert buffer to blob
+
+To convert a `Buffer` to a `Blob`, use the `Blob` constructor:
+
+```js
+var blob = new Blob([ buffer ])
+```
+
+Optionally, specify a mimetype:
+
+```js
+var blob = new Blob([ buffer ], { type: 'text/html' })
+```
+
+### convert arraybuffer to buffer
+
+To convert an `ArrayBuffer` to a `Buffer`, use the `Buffer.from` function. Does not perform a copy, so it's super fast.
+
+```js
+var buffer = Buffer.from(arrayBuffer)
+```
+
+### convert buffer to arraybuffer
+
+To convert a `Buffer` to an `ArrayBuffer`, use the `.buffer` property (which is present on all `Uint8Array` objects):
+
+```js
+var arrayBuffer = buffer.buffer
+```
 
 ## performance
 
