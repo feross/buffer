@@ -1,14 +1,18 @@
-# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][npm-url]
-
-#### The buffer module from [node.js](https://nodejs.org/), for the browser.
-
-[![saucelabs][saucelabs-image]][saucelabs-url]
+# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
 
 [travis-image]: https://img.shields.io/travis/feross/buffer/master.svg
 [travis-url]: https://travis-ci.org/feross/buffer
 [npm-image]: https://img.shields.io/npm/v/buffer.svg
 [npm-url]: https://npmjs.org/package/buffer
 [downloads-image]: https://img.shields.io/npm/dm/buffer.svg
+[downloads-url]: https://npmjs.org/package/buffer
+[standard-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[standard-url]: https://standardjs.com
+
+#### The buffer module from [node.js](https://nodejs.org/), for the browser.
+
+[![saucelabs][saucelabs-image]][saucelabs-url]
+
 [saucelabs-image]: https://saucelabs.com/browser-matrix/buffer.svg
 [saucelabs-url]: https://saucelabs.com/u/buffer
 
