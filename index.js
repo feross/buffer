@@ -252,8 +252,8 @@ function fromObject (obj) {
   }
 
   if (obj) {
-      if (typeof obj.length !== 'number' || isnan(obj.length)) {
     if (isArrayBufferView(obj) || 'length' in obj) {
+      if (typeof obj.length !== 'number' || Number.isNaN(obj.length)) {
         return createBuffer(0)
       }
       return fromArrayLike(obj)
@@ -630,7 +630,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     byteOffset = -0x80000000
   }
   byteOffset = +byteOffset  // Coerce to Number.
-  if (isNaN(byteOffset)) {
+  if (Number.isNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
     byteOffset = dir ? 0 : (buffer.length - 1)
   }
@@ -761,7 +761,7 @@ function hexWrite (buf, string, offset, length) {
   }
   for (var i = 0; i < length; ++i) {
     var parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (isNaN(parsed)) return i
+    if (Number.isNaN(parsed)) return i
     buf[offset + i] = parsed
   }
   return i
@@ -1699,10 +1699,6 @@ function blitBuffer (src, dst, offset, length) {
     dst[i + offset] = src[i]
   }
   return i
-}
-
-function isnan (val) {
-  return val !== val // eslint-disable-line no-self-compare
 }
 
 // Node 0.10 supports `ArrayBuffer` but lacks `ArrayBuffer.isView`
