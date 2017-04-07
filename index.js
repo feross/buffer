@@ -123,7 +123,7 @@ function from (value, encodingOrOffset, length) {
  * Buffer.from(buffer)
  * Buffer.from(arrayBuffer[, byteOffset[, length]])
  **/
-Buffer.from = function (value, encodingOrOffset, length) {
+Buffer.from = function from (value, encodingOrOffset, length) {
   return from(value, encodingOrOffset, length)
 }
 
@@ -160,7 +160,7 @@ function alloc (size, fill, encoding) {
  * Creates a new filled Buffer instance.
  * alloc(size[, fill[, encoding]])
  **/
-Buffer.alloc = function (size, fill, encoding) {
+Buffer.alloc = function alloc (size, fill, encoding) {
   return alloc(size, fill, encoding)
 }
 
@@ -172,13 +172,13 @@ function allocUnsafe (size) {
 /**
  * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
  * */
-Buffer.allocUnsafe = function (size) {
+Buffer.allocUnsafe = function allocUnsafe (size) {
   return allocUnsafe(size)
 }
 /**
  * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
  */
-Buffer.allocUnsafeSlow = function (size) {
+Buffer.allocUnsafeSlow = function allocUnsafeSlow (size) {
   return allocUnsafe(size)
 }
 
