@@ -19,7 +19,7 @@
     "ieee754": "^1.1.4"
   },
   "devDependencies": {
-    "benchmark": "^2.0.0",
+    "benchmark": "^2.1.4",
     "browserify": "^14.0.0",
     "concat-stream": "^1.4.7",
     "hyperquest": "^2.0.0",
