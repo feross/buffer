@@ -138,8 +138,12 @@ var buffer = Buffer.from(arrayBuffer)
 To convert a `Buffer` to an `ArrayBuffer`, use the `.buffer` property (which is present on all `Uint8Array` objects):
 
 ```js
-var arrayBuffer = buffer.buffer
+var arrayBuffer = buffer.buffer.slice(
+  buffer.byteOffset, buffer.byteOffset + buffer.byteLength
+)
 ```
+
+Alternatively, use the [`to-arraybuffer`](https://www.npmjs.com/package/to-arraybuffer) module.
 
 ## performance
 
