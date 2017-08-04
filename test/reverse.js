@@ -18,3 +18,8 @@ test('reversing a buffer', function (t) {
 
   t.end()
 })
+
+test('reversing a known buffer', function (t) {
+  t.equal('d9b4bef9', B.from('f9beb4d9', 'hex').reverse().toString('hex'))
+  t.end()
+})

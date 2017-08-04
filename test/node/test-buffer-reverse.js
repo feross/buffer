@@ -15,3 +15,5 @@ buf2.reverse()
 for (i = 0; i < len; i++) {
   assert.equal(buf1[i], buf2[len - i - 1])
 }
+
+assert.equal('d9b4bef9', Buffer.from('f9beb4d9', 'hex').reverse().toString('hex'))
