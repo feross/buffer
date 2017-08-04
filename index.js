@@ -488,6 +488,18 @@ function swap (b, n, m) {
   b[m] = i
 }
 
+if (typeof Uint8Array.prototype.reverse !== 'function') {
+  Buffer.prototype.reverse = function reverse () {
+    var c
+    for (var i = 0, j = this.length - 1; i <= j; ++i, --j) {
+      c = this[i]
+      this[i] = this[j]
+      this[j] = c
+    }
+    return this
+  }
+}
+
 Buffer.prototype.swap16 = function swap16 () {
   var len = this.length
   if (len % 2 !== 0) {
