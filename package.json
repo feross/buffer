@@ -1,7 +1,7 @@
 {
   "name": "buffer",
   "description": "Node.js Buffer API, for the browser",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "author": {
     "name": "Feross Aboukhadijeh",
     "email": "feross@feross.org",
