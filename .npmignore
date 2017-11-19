@@ -1,3 +1,4 @@
 .zuul.yml
 bin/
 perf/
+test/
