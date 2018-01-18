@@ -459,10 +459,10 @@ assert.strictEqual(
   assert.strictEqual(b.toString('latin1', 0, pos),
                      'Madness?! This is node.js!');
 }
-/*
+
 // Regression test for https://github.com/nodejs/node/issues/3496.
 assert.strictEqual(Buffer.from('=bad'.repeat(1e4), 'base64').length, 0);
-*/
+
 // Regression test for https://github.com/nodejs/node/issues/11987.
 assert.deepStrictEqual(Buffer.from('w0  ', 'base64'),
                        Buffer.from('w0', 'base64'));
