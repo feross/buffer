@@ -967,7 +967,7 @@ assert.strictEqual(SlowBuffer.prototype.offset, undefined);
   assert.doesNotThrow(() => Buffer.from('abc'));
 }
 
-/*
+
 // Test that ParseArrayIndex handles full uint32
 {
   var errMsg = common.expectsError({
@@ -977,7 +977,7 @@ assert.strictEqual(SlowBuffer.prototype.offset, undefined);
   });
   assert.throws(() => Buffer.from(new ArrayBuffer(0), -1 >>> 0), errMsg);
 }
-
+/*
 // ParseArrayIndex() should reject values that don't fit in a 32 bits size_t.
 common.expectsError(() => {
   var a = Buffer.alloc(1);
