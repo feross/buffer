@@ -83,6 +83,8 @@ function _mustCallInner(fn, criteria = 1, field) {
   };
 }
 
+exports.printSkipMessage = function(msg) {}
+
 // Useful for testing expected internal/error objects
 exports.expectsError = function expectsError(fn, settings, exact) {
   if (typeof fn !== 'function') {

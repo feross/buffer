@@ -915,7 +915,7 @@ common.expectsError(
     assert.strictEqual(c[i], i);
   }
 }
-/*
+
 if (common.hasCrypto) { // eslint-disable-line crypto-check
   // Test truncation after decode
   var crypto = require('crypto');
@@ -930,7 +930,7 @@ if (common.hasCrypto) { // eslint-disable-line crypto-check
 } else {
   common.printSkipMessage('missing crypto');
 }
-
+/*
 var ps = Buffer.poolSize;
 Buffer.poolSize = 0;
 assert(Buffer.allocUnsafe(1).parent instanceof ArrayBuffer);
