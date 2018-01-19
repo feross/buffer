@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-var common = { skip: function () {} };
+var common = require('../common.js');
 var assert = require('assert');
 var vm = require('vm');
 
@@ -888,7 +888,7 @@ assert.throws(() => Buffer.allocUnsafe(8).writeFloatLE(0.0, -1), RangeError);
   assert.deepStrictEqual(buf.toJSON().data, [0xff, 0xee, 0x00, 0x00, 0x00]);
   assert.strictEqual(buf.readIntBE(0, 5), -0x0012000000);
 }
-/*
+
 // Regression test for https://github.com/nodejs/node-v0.x-archive/issues/5482:
 // should throw but not assert in C++ land.
 common.expectsError(
@@ -899,7 +899,7 @@ common.expectsError(
     message: 'Unknown encoding: buffer'
   }
 );
-*/
+
 // Regression test for https://github.com/nodejs/node-v0.x-archive/issues/6111.
 // Constructing a buffer from another buffer should a) work, and b) not corrupt
 // the source buffer.
