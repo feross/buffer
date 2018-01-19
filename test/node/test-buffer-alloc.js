@@ -939,14 +939,14 @@ Buffer.poolSize = ps;
 // Test Buffer.copy() segfault
 assert.throws(() => Buffer.allocUnsafe(10).copy(),
               /TypeError: argument should be a Buffer/);
-/*
+
 var regErrorMsg =
   new RegExp('The first argument must be one of type string, Buffer, ' +
              'ArrayBuffer, Array, or Array-like Object\\.');
 
 assert.throws(() => Buffer.from(), regErrorMsg);
 assert.throws(() => Buffer.from(null), regErrorMsg);
-*/
+
 // Test prototype getters don't throw
 assert.strictEqual(Buffer.prototype.parent, undefined);
 assert.strictEqual(Buffer.prototype.offset, undefined);
