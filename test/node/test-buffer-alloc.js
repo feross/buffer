@@ -935,11 +935,11 @@ var ps = Buffer.poolSize;
 Buffer.poolSize = 0;
 assert(Buffer.allocUnsafe(1).parent instanceof ArrayBuffer);
 Buffer.poolSize = ps;
-
+*/
 // Test Buffer.copy() segfault
 assert.throws(() => Buffer.allocUnsafe(10).copy(),
               /TypeError: argument should be a Buffer/);
-
+/*
 var regErrorMsg =
   new RegExp('The first argument must be one of type string, Buffer, ' +
              'ArrayBuffer, Array, or Array-like Object\\.');
