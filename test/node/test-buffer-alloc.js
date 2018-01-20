@@ -1000,12 +1000,12 @@ assert.doesNotThrow(() => Buffer.from(new ArrayBuffer()));
 var arrayBuf = vm.runInNewContext('new ArrayBuffer()');
 assert.doesNotThrow(() => Buffer.from(arrayBuf));
 assert.doesNotThrow(() => Buffer.from({ buffer: arrayBuf }));
-/*
+
 assert.throws(() => Buffer.alloc({ valueOf: () => 1 }),
               /"size" argument must be of type number/);
 assert.throws(() => Buffer.alloc({ valueOf: () => -1 }),
               /"size" argument must be of type number/);
-
+/*
 assert.strictEqual(Buffer.prototype.toLocaleString, Buffer.prototype.toString);
 {
   var buf = Buffer.from('test');
