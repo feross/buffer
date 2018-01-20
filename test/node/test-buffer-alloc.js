@@ -1011,25 +1011,25 @@ assert.strictEqual(Buffer.prototype.toLocaleString, Buffer.prototype.toString);
   var buf = Buffer.from('test');
   assert.strictEqual(buf.toLocaleString(), buf.toString());
 }
-/*
+
 common.expectsError(() => {
   Buffer.alloc(0x1000, 'This is not correctly encoded', 'hex');
 }, {
   code: 'ERR_INVALID_ARG_VALUE',
   type: TypeError
 });
-
+/*
 common.expectsError(() => {
   Buffer.alloc(0x1000, 'c', 'hex');
 }, {
   code: 'ERR_INVALID_ARG_VALUE',
   type: TypeError
 });
-
+*/
 common.expectsError(() => {
   Buffer.alloc(1, Buffer.alloc(0));
 }, {
   code: 'ERR_INVALID_ARG_VALUE',
   type: TypeError
 });
-*/
+
