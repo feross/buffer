@@ -1018,14 +1018,14 @@ common.expectsError(() => {
   code: 'ERR_INVALID_ARG_VALUE',
   type: TypeError
 });
-/*
+
 common.expectsError(() => {
   Buffer.alloc(0x1000, 'c', 'hex');
 }, {
   code: 'ERR_INVALID_ARG_VALUE',
   type: TypeError
 });
-*/
+
 common.expectsError(() => {
   Buffer.alloc(1, Buffer.alloc(0));
 }, {
