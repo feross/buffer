@@ -1005,13 +1005,13 @@ assert.throws(() => Buffer.alloc({ valueOf: () => 1 }),
               /"size" argument must be of type number/);
 assert.throws(() => Buffer.alloc({ valueOf: () => -1 }),
               /"size" argument must be of type number/);
-/*
+
 assert.strictEqual(Buffer.prototype.toLocaleString, Buffer.prototype.toString);
 {
   var buf = Buffer.from('test');
   assert.strictEqual(buf.toLocaleString(), buf.toString());
 }
-
+/*
 common.expectsError(() => {
   Buffer.alloc(0x1000, 'This is not correctly encoded', 'hex');
 }, {
