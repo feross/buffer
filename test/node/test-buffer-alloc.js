@@ -931,12 +931,12 @@ if (common.hasCrypto) { // eslint-disable-line crypto-check
 } else {
   common.printSkipMessage('missing crypto');
 }
-/*
+
 var ps = Buffer.poolSize;
 Buffer.poolSize = 0;
 assert(Buffer.allocUnsafe(1).parent instanceof ArrayBuffer);
 Buffer.poolSize = ps;
-*/
+
 // Test Buffer.copy() segfault
 assert.throws(() => Buffer.allocUnsafe(10).copy(),
               /TypeError: argument should be a Buffer/);

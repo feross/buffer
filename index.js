@@ -53,6 +53,16 @@ function typedArraySupport () {
   }
 }
 
+Object.defineProperty(Buffer.prototype, 'parent', {
+  enumerable: true,
+  get () {
+    if (!(this instanceof Buffer)) {
+      return undefined
+    }
+    return this.buffer
+  }
+})
+
 Object.defineProperty(Buffer.prototype, 'offset', {
   enumerable: true,
   get () {
