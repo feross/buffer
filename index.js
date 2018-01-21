@@ -241,7 +241,7 @@ function fromArrayBuffer (array, byteOffset, length) {
   }
 
   if (array.byteLength < byteOffset + (length || 0)) {
-    throw new RangeError('\'length\' is out of bounds')
+    throw new RangeError('"length" is outside of buffer bounds')
   }
 
   var buf
