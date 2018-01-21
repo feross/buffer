@@ -1,35 +1,34 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-var common = require('../common.js');
-var assert = require('assert');
-var vm = require('vm');
+const common = require('../common');
+const assert = require('assert');
+const vm = require('vm');
 
-var SlowBuffer = require('../../').SlowBuffer;
+const SlowBuffer = require('../../').SlowBuffer;
 
 
-var b = Buffer.allocUnsafe(1024);
+const b = Buffer.allocUnsafe(1024);
 assert.strictEqual(1024, b.length);
 
 b[0] = -1;
 assert.strictEqual(b[0], 255);
 
-for (var i = 0; i < 1024; i++) {
+for (let i = 0; i < 1024; i++) {
   b[i] = i % 256;
 }
 
-for (var i = 0; i < 1024; i++) {
+for (let i = 0; i < 1024; i++) {
   assert.strictEqual(i % 256, b[i]);
 }
 
-var c = Buffer.allocUnsafe(512);
+const c = Buffer.allocUnsafe(512);
 assert.strictEqual(512, c.length);
 
-var d = Buffer.from([]);
+const d = Buffer.from([]);
 assert.strictEqual(0, d.length);
 
 // Test offset properties
 {
-  // NOTE vmx 2018-01-21: Without this `const` later tests will fail
   const b = Buffer.alloc(128);
   assert.strictEqual(128, b.length);
   assert.strictEqual(0, b.byteOffset);
@@ -38,17 +37,17 @@ assert.strictEqual(0, d.length);
 
 // Test creating a Buffer from a Uint32Array
 {
-  var ui32 = new Uint32Array(4).fill(42);
-  var e = Buffer.from(ui32);
-  for (var [index, value] of e.entries()) {
+  const ui32 = new Uint32Array(4).fill(42);
+  const e = Buffer.from(ui32);
+  for (const [index, value] of e.entries()) {
     assert.strictEqual(value, ui32[index]);
   }
 }
 // Test creating a Buffer from a Uint32Array (old constructor)
 {
-  var ui32 = new Uint32Array(4).fill(42);
-  var e = Buffer(ui32);
-  for (var [key, value] of e.entries()) {
+  const ui32 = new Uint32Array(4).fill(42);
+  const e = Buffer(ui32);
+  for (const [key, value] of e.entries()) {
     assert.deepStrictEqual(value, ui32[key]);
   }
 }
@@ -100,7 +99,7 @@ b.copy(Buffer.alloc(1), 0, 2048, 2048);
 
 // testing for smart defaults and ability to pass string values as offset
 {
-  var writeTest = Buffer.from('abcdes');
+  const writeTest = Buffer.from('abcdes');
   writeTest.write('n', 'ascii');
   writeTest.write('o', '1', 'ascii');
   writeTest.write('d', '2', 'ascii');
@@ -115,42 +114,42 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
 
 // ASCII slice test
 {
-  var asciiString = 'hello world';
+  const asciiString = 'hello world';
 
-  for (var i = 0; i < asciiString.length; i++) {
+  for (let i = 0; i < asciiString.length; i++) {
     b[i] = asciiString.charCodeAt(i);
   }
-  var asciiSlice = b.toString('ascii', 0, asciiString.length);
+  const asciiSlice = b.toString('ascii', 0, asciiString.length);
   assert.strictEqual(asciiString, asciiSlice);
 }
 
 {
-  var asciiString = 'hello world';
-  var offset = 100;
+  const asciiString = 'hello world';
+  const offset = 100;
 
   assert.strictEqual(asciiString.length, b.write(asciiString, offset, 'ascii'));
-  var asciiSlice = b.toString('ascii', offset, offset + asciiString.length);
+  const asciiSlice = b.toString('ascii', offset, offset + asciiString.length);
   assert.strictEqual(asciiString, asciiSlice);
 }
 
 {
-  var asciiString = 'hello world';
-  var offset = 100;
+  const asciiString = 'hello world';
+  const offset = 100;
 
-  var sliceA = b.slice(offset, offset + asciiString.length);
-  var sliceB = b.slice(offset, offset + asciiString.length);
-  for (var i = 0; i < asciiString.length; i++) {
+  const sliceA = b.slice(offset, offset + asciiString.length);
+  const sliceB = b.slice(offset, offset + asciiString.length);
+  for (let i = 0; i < asciiString.length; i++) {
     assert.strictEqual(sliceA[i], sliceB[i]);
   }
 }
 
 // UTF-8 slice test
 {
-  var utf8String = '¡hέlló wôrld!';
-  var offset = 100;
+  const utf8String = '¡hέlló wôrld!';
+  const offset = 100;
 
   b.write(utf8String, 0, Buffer.byteLength(utf8String), 'utf8');
-  var utf8Slice = b.toString('utf8', 0, Buffer.byteLength(utf8String));
+  let utf8Slice = b.toString('utf8', 0, Buffer.byteLength(utf8String));
   assert.strictEqual(utf8String, utf8Slice);
 
   assert.strictEqual(Buffer.byteLength(utf8String),
@@ -159,63 +158,63 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
                          offset + Buffer.byteLength(utf8String));
   assert.strictEqual(utf8String, utf8Slice);
 
-  var sliceA = b.slice(offset, offset + Buffer.byteLength(utf8String));
-  var sliceB = b.slice(offset, offset + Buffer.byteLength(utf8String));
-  for (var i = 0; i < Buffer.byteLength(utf8String); i++) {
+  const sliceA = b.slice(offset, offset + Buffer.byteLength(utf8String));
+  const sliceB = b.slice(offset, offset + Buffer.byteLength(utf8String));
+  for (let i = 0; i < Buffer.byteLength(utf8String); i++) {
     assert.strictEqual(sliceA[i], sliceB[i]);
   }
 }
 
 {
-  var slice = b.slice(100, 150);
+  const slice = b.slice(100, 150);
   assert.strictEqual(50, slice.length);
-  for (var i = 0; i < 50; i++) {
+  for (let i = 0; i < 50; i++) {
     assert.strictEqual(b[100 + i], slice[i]);
   }
 }
 
 {
   // make sure only top level parent propagates from allocPool
-  var b = Buffer.allocUnsafe(5);
-  var c = b.slice(0, 4);
-  var d = c.slice(0, 2);
+  const b = Buffer.allocUnsafe(5);
+  const c = b.slice(0, 4);
+  const d = c.slice(0, 2);
   assert.strictEqual(b.parent, c.parent);
   assert.strictEqual(b.parent, d.parent);
 }
 
 {
   // also from a non-pooled instance
-  var b = Buffer.allocUnsafeSlow(5);
-  var c = b.slice(0, 4);
-  var d = c.slice(0, 2);
+  const b = Buffer.allocUnsafeSlow(5);
+  const c = b.slice(0, 4);
+  const d = c.slice(0, 2);
   assert.strictEqual(c.parent, d.parent);
 }
 
 {
   // Bug regression test
-  var testValue = '\u00F6\u65E5\u672C\u8A9E'; // ö日本語
-  var buffer = Buffer.allocUnsafe(32);
-  var size = buffer.write(testValue, 0, 'utf8');
-  var slice = buffer.toString('utf8', 0, size);
+  const testValue = '\u00F6\u65E5\u672C\u8A9E'; // ö日本語
+  const buffer = Buffer.allocUnsafe(32);
+  const size = buffer.write(testValue, 0, 'utf8');
+  const slice = buffer.toString('utf8', 0, size);
   assert.strictEqual(slice, testValue);
 }
 
 {
   // Test triple  slice
-  var a = Buffer.allocUnsafe(8);
-  for (var i = 0; i < 8; i++) a[i] = i;
-  var b = a.slice(4, 8);
+  const a = Buffer.allocUnsafe(8);
+  for (let i = 0; i < 8; i++) a[i] = i;
+  const b = a.slice(4, 8);
   assert.strictEqual(4, b[0]);
   assert.strictEqual(5, b[1]);
   assert.strictEqual(6, b[2]);
   assert.strictEqual(7, b[3]);
-  var c = b.slice(2, 4);
+  const c = b.slice(2, 4);
   assert.strictEqual(6, c[0]);
   assert.strictEqual(7, c[1]);
 }
 
 {
-  var d = Buffer.from([23, 42, 255]);
+  const d = Buffer.from([23, 42, 255]);
   assert.strictEqual(d.length, 3);
   assert.strictEqual(d[0], 23);
   assert.strictEqual(d[1], 42);
@@ -225,26 +224,26 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
 
 {
   // Test for proper UTF-8 Encoding
-  var e = Buffer.from('über');
+  const e = Buffer.from('über');
   assert.deepStrictEqual(e, Buffer.from([195, 188, 98, 101, 114]));
 }
 
 {
   // Test for proper ascii Encoding, length should be 4
-  var f = Buffer.from('über', 'ascii');
+  const f = Buffer.from('über', 'ascii');
   assert.deepStrictEqual(f, Buffer.from([252, 98, 101, 114]));
 }
 
 ['ucs2', 'ucs-2', 'utf16le', 'utf-16le'].forEach((encoding) => {
   {
     // Test for proper UTF16LE encoding, length should be 8
-    var f = Buffer.from('über', encoding);
+    const f = Buffer.from('über', encoding);
     assert.deepStrictEqual(f, Buffer.from([252, 0, 98, 0, 101, 0, 114, 0]));
   }
 
   {
     // Length should be 12
-    var f = Buffer.from('привет', encoding);
+    const f = Buffer.from('привет', encoding);
     assert.deepStrictEqual(
       f, Buffer.from([63, 4, 64, 4, 56, 4, 50, 4, 53, 4, 66, 4])
     );
@@ -252,26 +251,26 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
   }
 
   {
-    var f = Buffer.from([0, 0, 0, 0, 0]);
+    const f = Buffer.from([0, 0, 0, 0, 0]);
     assert.strictEqual(f.length, 5);
-    var size = f.write('あいうえお', encoding);
+    const size = f.write('あいうえお', encoding);
     assert.strictEqual(size, 4);
     assert.deepStrictEqual(f, Buffer.from([0x42, 0x30, 0x44, 0x30, 0x00]));
   }
 });
 
 {
-  var f = Buffer.from('\uD83D\uDC4D', 'utf-16le'); // THUMBS UP SIGN (U+1F44D)
+  const f = Buffer.from('\uD83D\uDC4D', 'utf-16le'); // THUMBS UP SIGN (U+1F44D)
   assert.strictEqual(f.length, 4);
   assert.deepStrictEqual(f, Buffer.from('3DD84DDC', 'hex'));
 }
 
 // Test construction from arrayish object
 {
-  var arrayIsh = { 0: 0, 1: 1, 2: 2, 3: 3, length: 4 };
-  var g = Buffer.from(arrayIsh);
+  const arrayIsh = { 0: 0, 1: 1, 2: 2, 3: 3, length: 4 };
+  let g = Buffer.from(arrayIsh);
   assert.deepStrictEqual(g, Buffer.from([0, 1, 2, 3]));
-  var strArrayIsh = { 0: '0', 1: '1', 2: '2', 3: '3', length: 4 };
+  const strArrayIsh = { 0: '0', 1: '1', 2: '2', 3: '3', length: 4 };
   g = Buffer.from(strArrayIsh);
   assert.deepStrictEqual(g, Buffer.from([0, 1, 2, 3]));
 }
@@ -283,7 +282,7 @@ assert.strictEqual('TWFu', (Buffer.from('Man')).toString('base64'));
 
 {
   // test that regular and URL-safe base64 both work
-  var expected = [0xff, 0xff, 0xbe, 0xff, 0xef, 0xbf, 0xfb, 0xef, 0xff];
+  const expected = [0xff, 0xff, 0xbe, 0xff, 0xef, 0xbf, 0xfb, 0xef, 0xff];
   assert.deepStrictEqual(Buffer.from('//++/++/++//', 'base64'),
                          Buffer.from(expected));
   assert.deepStrictEqual(Buffer.from('__--_--_--__', 'base64'),
@@ -292,12 +291,12 @@ assert.strictEqual('TWFu', (Buffer.from('Man')).toString('base64'));
 
 {
   // big example
-  var quote = 'Man is distinguished, not only by his reason, but by this ' +
+  const quote = 'Man is distinguished, not only by his reason, but by this ' +
                 'singular passion from other animals, which is a lust ' +
                 'of the mind, that by a perseverance of delight in the ' +
                 'continued and indefatigable generation of knowledge, ' +
                 'exceeds the short vehemence of any carnal pleasure.';
-  var expected = 'TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb' +
+  const expected = 'TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb' +
                    '24sIGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlci' +
                    'BhbmltYWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQ' +
                    'gYnkgYSBwZXJzZXZlcmFuY2Ugb2YgZGVsaWdodCBpbiB0aGUgY29udGlu' +
@@ -306,13 +305,13 @@ assert.strictEqual('TWFu', (Buffer.from('Man')).toString('base64'));
                    '5hbCBwbGVhc3VyZS4=';
   assert.strictEqual(expected, (Buffer.from(quote)).toString('base64'));
 
-  var b = Buffer.allocUnsafe(1024);
-  var bytesWritten = b.write(expected, 0, 'base64');
+  let b = Buffer.allocUnsafe(1024);
+  let bytesWritten = b.write(expected, 0, 'base64');
   assert.strictEqual(quote.length, bytesWritten);
   assert.strictEqual(quote, b.toString('ascii', 0, quote.length));
 
   // check that the base64 decoder ignores whitespace
-  var expectedWhite = `${expected.slice(0, 60)} \n` +
+  const expectedWhite = `${expected.slice(0, 60)} \n` +
                         `${expected.slice(60, 120)} \n` +
                         `${expected.slice(120, 180)} \n` +
                         `${expected.slice(180, 240)} \n` +
@@ -330,7 +329,7 @@ assert.strictEqual('TWFu', (Buffer.from('Man')).toString('base64'));
   assert.strictEqual(quote, b.toString('ascii', 0, quote.length));
 
   // check that the base64 decoder ignores illegal chars
-  var expectedIllegal = expected.slice(0, 60) + ' \x80' +
+  const expectedIllegal = expected.slice(0, 60) + ' \x80' +
                           expected.slice(60, 120) + ' \xff' +
                           expected.slice(120, 180) + ' \x00' +
                           expected.slice(180, 240) + ' \x98' +
@@ -438,7 +437,7 @@ assert.strictEqual(
 
 {
 // This string encodes single '.' character in UTF-16
-  var dot = Buffer.from('//4uAA==', 'base64');
+  const dot = Buffer.from('//4uAA==', 'base64');
   assert.strictEqual(dot[0], 0xff);
   assert.strictEqual(dot[1], 0xfe);
   assert.strictEqual(dot[2], 0x2e);
@@ -450,11 +449,11 @@ assert.strictEqual(
   // Writing base64 at a position > 0 should not mangle the result.
   //
   // https://github.com/joyent/node/issues/402
-  var segments = ['TWFkbmVzcz8h', 'IFRoaXM=', 'IGlz', 'IG5vZGUuanMh'];
-  var b = Buffer.allocUnsafe(64);
-  var pos = 0;
+  const segments = ['TWFkbmVzcz8h', 'IFRoaXM=', 'IGlz', 'IG5vZGUuanMh'];
+  const b = Buffer.allocUnsafe(64);
+  let pos = 0;
 
-  for (var i = 0; i < segments.length; ++i) {
+  for (let i = 0; i < segments.length; ++i) {
     pos += b.write(segments[i], pos, 'base64');
   }
   assert.strictEqual(b.toString('latin1', 0, pos),
@@ -474,26 +473,26 @@ assert.deepStrictEqual(Buffer.from(' YWJvcnVtLg', 'base64'),
 
 {
   // Creating buffers larger than pool size.
-  var l = Buffer.poolSize + 5;
-  var s = 'h'.repeat(l);
-  var b = Buffer.from(s);
+  const l = Buffer.poolSize + 5;
+  const s = 'h'.repeat(l);
+  const b = Buffer.from(s);
 
-  for (var i = 0; i < l; i++) {
+  for (let i = 0; i < l; i++) {
     assert.strictEqual('h'.charCodeAt(0), b[i]);
   }
 
-  var sb = b.toString();
+  const sb = b.toString();
   assert.strictEqual(sb.length, s.length);
   assert.strictEqual(sb, s);
 }
 
 {
   // test hex toString
-  var hexb = Buffer.allocUnsafe(256);
-  for (var i = 0; i < 256; i++) {
+  const hexb = Buffer.allocUnsafe(256);
+  for (let i = 0; i < 256; i++) {
     hexb[i] = i;
   }
-  var hexStr = hexb.toString('hex');
+  const hexStr = hexb.toString('hex');
   assert.strictEqual(hexStr,
                      '000102030405060708090a0b0c0d0e0f' +
                      '101112131415161718191a1b1c1d1e1f' +
@@ -512,8 +511,8 @@ assert.deepStrictEqual(Buffer.from(' YWJvcnVtLg', 'base64'),
                      'e0e1e2e3e4e5e6e7e8e9eaebecedeeef' +
                      'f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff');
 
-  var hexb2 = Buffer.from(hexStr, 'hex');
-  for (var i = 0; i < 256; i++) {
+  const hexb2 = Buffer.from(hexStr, 'hex');
+  for (let i = 0; i < 256; i++) {
     assert.strictEqual(hexb2[i], hexb[i]);
   }
 }
@@ -530,29 +529,29 @@ assert.strictEqual(Buffer.from('A', 'base64').length, 0);
 
 {
   // test an invalid slice end.
-  var b = Buffer.from([1, 2, 3, 4, 5]);
-  var b2 = b.toString('hex', 1, 10000);
-  var b3 = b.toString('hex', 1, 5);
-  var b4 = b.toString('hex', 1);
+  const b = Buffer.from([1, 2, 3, 4, 5]);
+  const b2 = b.toString('hex', 1, 10000);
+  const b3 = b.toString('hex', 1, 5);
+  const b4 = b.toString('hex', 1);
   assert.strictEqual(b2, b3);
   assert.strictEqual(b2, b4);
 }
 
 function buildBuffer(data) {
   if (Array.isArray(data)) {
-    var buffer = Buffer.allocUnsafe(data.length);
+    const buffer = Buffer.allocUnsafe(data.length);
     data.forEach((v, k) => buffer[k] = v);
     return buffer;
   }
   return null;
 }
 
-var x = buildBuffer([0x81, 0xa3, 0x66, 0x6f, 0x6f, 0xa3, 0x62, 0x61, 0x72]);
+const x = buildBuffer([0x81, 0xa3, 0x66, 0x6f, 0x6f, 0xa3, 0x62, 0x61, 0x72]);
 
 assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 
 {
-  var z = x.slice(4);
+  const z = x.slice(4);
   assert.strictEqual(5, z.length);
   assert.strictEqual(0x6f, z[0]);
   assert.strictEqual(0xa3, z[1]);
@@ -562,51 +561,51 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 }
 
 {
-  var z = x.slice(0);
+  const z = x.slice(0);
   assert.strictEqual(z.length, x.length);
 }
 
 {
-  var z = x.slice(0, 4);
+  const z = x.slice(0, 4);
   assert.strictEqual(4, z.length);
   assert.strictEqual(0x81, z[0]);
   assert.strictEqual(0xa3, z[1]);
 }
 
 {
-  var z = x.slice(0, 9);
+  const z = x.slice(0, 9);
   assert.strictEqual(9, z.length);
 }
 
 {
-  var z = x.slice(1, 4);
+  const z = x.slice(1, 4);
   assert.strictEqual(3, z.length);
   assert.strictEqual(0xa3, z[0]);
 }
 
 {
-  var z = x.slice(2, 4);
+  const z = x.slice(2, 4);
   assert.strictEqual(2, z.length);
   assert.strictEqual(0x66, z[0]);
   assert.strictEqual(0x6f, z[1]);
 }
 
 ['ucs2', 'ucs-2', 'utf16le', 'utf-16le'].forEach((encoding) => {
-  var b = Buffer.allocUnsafe(10);
+  const b = Buffer.allocUnsafe(10);
   b.write('あいうえお', encoding);
   assert.strictEqual(b.toString(encoding), 'あいうえお');
 });
 
 ['ucs2', 'ucs-2', 'utf16le', 'utf-16le'].forEach((encoding) => {
-  var b = Buffer.allocUnsafe(11);
+  const b = Buffer.allocUnsafe(11);
   b.write('あいうえお', 1, encoding);
   assert.strictEqual(b.toString(encoding, 1), 'あいうえお');
 });
 
 {
   // latin1 encoding should write only one byte per character.
-  var b = Buffer.from([0xde, 0xad, 0xbe, 0xef]);
-  var s = String.fromCharCode(0xffff);
+  const b = Buffer.from([0xde, 0xad, 0xbe, 0xef]);
+  let s = String.fromCharCode(0xffff);
   b.write(s, 0, 'latin1');
   assert.strictEqual(0xff, b[0]);
   assert.strictEqual(0xad, b[1]);
@@ -622,8 +621,8 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 
 {
   // Binary encoding should write only one byte per character.
-  var b = Buffer.from([0xde, 0xad, 0xbe, 0xef]);
-  var s = String.fromCharCode(0xffff);
+  const b = Buffer.from([0xde, 0xad, 0xbe, 0xef]);
+  let s = String.fromCharCode(0xffff);
   b.write(s, 0, 'latin1');
   assert.strictEqual(0xff, b[0]);
   assert.strictEqual(0xad, b[1]);
@@ -640,14 +639,14 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 {
   // https://github.com/nodejs/node-v0.x-archive/pull/1210
   // Test UTF-8 string includes null character
-  var buf = Buffer.from('\0');
+  let buf = Buffer.from('\0');
   assert.strictEqual(buf.length, 1);
   buf = Buffer.from('\0\0');
   assert.strictEqual(buf.length, 2);
 }
 
 {
-  var buf = Buffer.allocUnsafe(2);
+  const buf = Buffer.allocUnsafe(2);
   assert.strictEqual(buf.write(''), 0); //0bytes
   assert.strictEqual(buf.write('\0'), 1); // 1byte (v8 adds null terminator)
   assert.strictEqual(buf.write('a\0'), 2); // 1byte * 2
@@ -657,7 +656,7 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 }
 
 {
-  var buf = Buffer.allocUnsafe(10);
+  const buf = Buffer.allocUnsafe(10);
   assert.strictEqual(buf.write('あいう'), 9); // 3bytes * 3 (v8 adds null term.)
   assert.strictEqual(buf.write('あいう\0'), 10); // 3bytes * 3 + 1byte
 }
@@ -665,7 +664,7 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 {
   // https://github.com/nodejs/node-v0.x-archive/issues/243
   // Test write() with maxLength
-  var buf = Buffer.allocUnsafe(4);
+  const buf = Buffer.allocUnsafe(4);
   buf.fill(0xFF);
   assert.strictEqual(buf.write('abcd', 1, 2, 'utf8'), 2);
   assert.strictEqual(buf[0], 0xFF);
@@ -706,7 +705,7 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 
 {
   // test offset returns are correct
-  var b = Buffer.allocUnsafe(16);
+  const b = Buffer.allocUnsafe(16);
   assert.strictEqual(4, b.writeUInt32LE(0, 0));
   assert.strictEqual(6, b.writeUInt16LE(0, 4));
   assert.strictEqual(7, b.writeUInt8(0, 6));
@@ -718,7 +717,7 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
   // test unmatched surrogates not producing invalid utf8 output
   // ef bf bd = utf-8 representation of unicode replacement character
   // see https://codereview.chromium.org/121173009/
-  var buf = Buffer.from('ab\ud800cd', 'utf8');
+  const buf = Buffer.from('ab\ud800cd', 'utf8');
   assert.strictEqual(buf[0], 0x61);
   assert.strictEqual(buf[1], 0x62);
   assert.strictEqual(buf[2], 0xef);
@@ -730,8 +729,8 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 
 {
   // test for buffer overrun
-  var buf = Buffer.from([0, 0, 0, 0, 0]); // length: 5
-  var sub = buf.slice(0, 4);         // length: 4
+  const buf = Buffer.from([0, 0, 0, 0, 0]); // length: 5
+  const sub = buf.slice(0, 4);         // length: 4
   assert.strictEqual(sub.write('12345', 'latin1'), 4);
   assert.strictEqual(buf[4], 0);
   assert.strictEqual(sub.write('12345', 'binary'), 4);
@@ -740,7 +739,7 @@ assert.strictEqual('<Buffer 81 a3 66 6f 6f a3 62 61 72>', x.inspect());
 
 {
   // test alloc with fill option
-  var buf = Buffer.alloc(5, '800A', 'hex');
+  const buf = Buffer.alloc(5, '800A', 'hex');
   assert.strictEqual(buf[0], 128);
   assert.strictEqual(buf[1], 10);
   assert.strictEqual(buf[2], 128);
@@ -772,8 +771,8 @@ assert.strictEqual(Buffer.from('13.37').length, 5);
 
 {
   // Regression test, guard against buffer overrun in the base64 decoder.
-  var a = Buffer.allocUnsafe(3);
-  var b = Buffer.from('xxx');
+  const a = Buffer.allocUnsafe(3);
+  const b = Buffer.from('xxx');
   a.write('aaaaaaaa', 'base64');
   assert.strictEqual(b.toString(), 'xxx');
 }
@@ -799,7 +798,7 @@ assert.throws(() => Buffer.allocUnsafe(8).writeFloatLE(0.0, -1), RangeError);
 
 // test for common write(U)IntLE/BE
 {
-  var buf = Buffer.allocUnsafe(3);
+  let buf = Buffer.allocUnsafe(3);
   buf.writeUIntLE(0x123456, 0, 3);
   assert.deepStrictEqual(buf.toJSON().data, [0x56, 0x34, 0x12]);
   assert.strictEqual(buf.readUIntLE(0, 3), 0x123456);
@@ -905,12 +904,12 @@ common.expectsError(
 // Constructing a buffer from another buffer should a) work, and b) not corrupt
 // the source buffer.
 {
-  var a = [...Array(128).keys()]; // [0, 1, 2, 3, ... 126, 127]
-  var b = Buffer.from(a);
-  var c = Buffer.from(b);
+  const a = [...Array(128).keys()]; // [0, 1, 2, 3, ... 126, 127]
+  const b = Buffer.from(a);
+  const c = Buffer.from(b);
   assert.strictEqual(b.length, a.length);
   assert.strictEqual(c.length, a.length);
-  for (var i = 0, k = a.length; i < k; ++i) {
+  for (let i = 0, k = a.length; i < k; ++i) {
     assert.strictEqual(a[i], i);
     assert.strictEqual(b[i], i);
     assert.strictEqual(c[i], i);
@@ -919,10 +918,10 @@ common.expectsError(
 
 if (common.hasCrypto) { // eslint-disable-line crypto-check
   // Test truncation after decode
-  var crypto = require('crypto');
+  const crypto = require('crypto');
 
-  var b1 = Buffer.from('YW55=======', 'base64');
-  var b2 = Buffer.from('YW55', 'base64');
+  const b1 = Buffer.from('YW55=======', 'base64');
+  const b2 = Buffer.from('YW55', 'base64');
 
   assert.strictEqual(
     crypto.createHash('sha1').update(b1).digest('hex'),
@@ -932,7 +931,7 @@ if (common.hasCrypto) { // eslint-disable-line crypto-check
   common.printSkipMessage('missing crypto');
 }
 
-var ps = Buffer.poolSize;
+const ps = Buffer.poolSize;
 Buffer.poolSize = 0;
 assert(Buffer.allocUnsafe(1).parent instanceof ArrayBuffer);
 Buffer.poolSize = ps;
@@ -941,7 +940,7 @@ Buffer.poolSize = ps;
 assert.throws(() => Buffer.allocUnsafe(10).copy(),
               /TypeError: argument should be a Buffer/);
 
-var regErrorMsg =
+const regErrorMsg =
   new RegExp('The first argument must be one of type string, Buffer, ' +
              'ArrayBuffer, Array, or Array-like Object\\.');
 
@@ -971,7 +970,7 @@ assert.strictEqual(SlowBuffer.prototype.offset, undefined);
 
 // Test that ParseArrayIndex handles full uint32
 {
-  var errMsg = common.expectsError({
+  const errMsg = common.expectsError({
     code: 'ERR_BUFFER_OUT_OF_BOUNDS',
     type: RangeError,
     message: '"offset" is outside of buffer bounds'
@@ -981,14 +980,14 @@ assert.strictEqual(SlowBuffer.prototype.offset, undefined);
 
 // ParseArrayIndex() should reject values that don't fit in a 32 bits size_t.
 common.expectsError(() => {
-  var a = Buffer.alloc(1);
-  var b = Buffer.alloc(1);
+  const a = Buffer.alloc(1);
+  const b = Buffer.alloc(1);
   a.copy(b, 0, 0x100000000, 0x100000001);
 }, { code: undefined, type: RangeError, message: 'Index out of range' });
 
 // Unpooled buffer (replaces SlowBuffer)
 {
-  var ubuf = Buffer.allocUnsafeSlow(10);
+  const ubuf = Buffer.allocUnsafeSlow(10);
   assert(ubuf);
   assert(ubuf.buffer);
   assert.strictEqual(ubuf.buffer.byteLength, 10);
@@ -998,7 +997,7 @@ common.expectsError(() => {
 assert.doesNotThrow(() => Buffer.from(new ArrayBuffer()));
 
 // Test that ArrayBuffer from a different context is detected correctly
-var arrayBuf = vm.runInNewContext('new ArrayBuffer()');
+const arrayBuf = vm.runInNewContext('new ArrayBuffer()');
 assert.doesNotThrow(() => Buffer.from(arrayBuf));
 assert.doesNotThrow(() => Buffer.from({ buffer: arrayBuf }));
 
@@ -1009,7 +1008,7 @@ assert.throws(() => Buffer.alloc({ valueOf: () => -1 }),
 
 assert.strictEqual(Buffer.prototype.toLocaleString, Buffer.prototype.toString);
 {
-  var buf = Buffer.from('test');
+  const buf = Buffer.from('test');
   assert.strictEqual(buf.toLocaleString(), buf.toString());
 }
 
