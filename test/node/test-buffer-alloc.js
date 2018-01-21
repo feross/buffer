@@ -29,7 +29,8 @@ assert.strictEqual(0, d.length);
 
 // Test offset properties
 {
-  var b = Buffer.alloc(128);
+  // NOTE vmx 2018-01-21: Without this `const` later tests will fail
+  const b = Buffer.alloc(128);
   assert.strictEqual(128, b.length);
   assert.strictEqual(0, b.byteOffset);
   assert.strictEqual(0, b.offset);
@@ -164,7 +165,7 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
     assert.strictEqual(sliceA[i], sliceB[i]);
   }
 }
-/*
+
 {
   var slice = b.slice(100, 150);
   assert.strictEqual(50, slice.length);
@@ -172,7 +173,7 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
     assert.strictEqual(b[100 + i], slice[i]);
   }
 }
-*/
+
 {
   // make sure only top level parent propagates from allocPool
   var b = Buffer.allocUnsafe(5);
