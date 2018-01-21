@@ -53,6 +53,16 @@ function typedArraySupport () {
   }
 }
 
+Object.defineProperty(Buffer.prototype, 'offset', {
+  enumerable: true,
+  get () {
+    if (!(this instanceof Buffer)) {
+      return undefined
+    }
+    return this.byteOffset
+  }
+})
+
 function createBuffer (length) {
   if (length > K_MAX_LENGTH) {
     throw new RangeError('Invalid typed array length')

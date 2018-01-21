@@ -32,7 +32,7 @@ assert.strictEqual(0, d.length);
   var b = Buffer.alloc(128);
   assert.strictEqual(128, b.length);
   assert.strictEqual(0, b.byteOffset);
-  //assert.strictEqual(0, b.offset);
+  assert.strictEqual(0, b.offset);
 }
 
 // Test creating a Buffer from a Uint32Array
