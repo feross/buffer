@@ -154,7 +154,7 @@ sanity check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Arra
 always be at least a bit faster). Finally, `NodeBuffer` is the node.js buffer module,
 which is included to compare against.
 
-NOTE: Performance has improved since these benchmarks were taken. PR welcoem to update the README.
+NOTE: Performance has improved since these benchmarks were taken. PR welcome to update the README.
 
 ### Chrome 38
 
