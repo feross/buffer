@@ -14,7 +14,7 @@ var dirs = [
   '/test/pummel'
 ]
 
-cp.execSync('rm -rf node/*.js', { cwd: path.join(__dirname, '../test') })
+cp.execSync('rm -rf node/test-*.js', { cwd: path.join(__dirname, '../test') })
 
 var httpOpts = {
   headers: {
