@@ -72,7 +72,7 @@ function testfixer (filename) {
     }
 
     // make `require('../common')` work
-    line = line.replace(/require\('\.\.\/common'\);/g, 'require(\'./common\')')
+    line = line.replace(/require\('\.\.\/common'\);/g, 'require(\'./common\');')
 
     // require browser buffer
     line = line.replace(/(.*)require\('buffer'\)(.*)/g, '$1require(\'../../\')$2')
