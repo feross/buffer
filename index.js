@@ -119,7 +119,9 @@ Buffer.poolSize = 8192 // not used by this implementation
 
 function from (value, encodingOrOffset, length) {
   if (typeof value === 'number') {
-    throw new TypeError('"value" argument must not be a number')
+    throw new TypeError(
+      'The "value" argument must not be of type number. Received type number'
+    )
   }
 
   if (isArrayBuffer(value) || (value && isArrayBuffer(value.buffer))) {
