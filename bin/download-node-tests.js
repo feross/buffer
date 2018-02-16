@@ -38,11 +38,18 @@ function downloadBufferTests (dir, files) {
   files.forEach(function (file) {
     if (!/test-buffer.*/.test(file.name)) return
 
-    if (file.name === 'test-buffer-fakes.js') {
-      // These teses only apply to node, where they're calling into C++ and need to
-      // ensure the prototype can't be faked, or else there will be a segfault.
-      return
-    }
+    const skipFileNames = [
+      // Only applies to node. Calls into C++ and needs to ensure the prototype can't
+      // be faked, or else there will be a segfault.
+      'test-buffer-fakes.js',
+      // This test file is testing the SharedArrayBuffer support, which is obscure
+      // and now temporarily disabled in all browsers due to the Spectre/Meltdown
+      // security issue.
+      'test-buffer-sharedarraybuffer.js'
+    ]
+
+    // Skip test files with these names
+    if (skipFileNames.includes(file.name)) return
 
     console.log(file.download_url)
 
