@@ -55,7 +55,7 @@ function typedArraySupport () {
 
 Object.defineProperty(Buffer.prototype, 'parent', {
   get: function () {
-    if (!(this instanceof Buffer)) {
+    if (!Buffer.isBuffer(this)) {
       return undefined
     }
     return this.buffer
@@ -64,7 +64,7 @@ Object.defineProperty(Buffer.prototype, 'parent', {
 
 Object.defineProperty(Buffer.prototype, 'offset', {
   get: function () {
-    if (!(this instanceof Buffer)) {
+    if (!Buffer.isBuffer(this)) {
       return undefined
     }
     return this.byteOffset
