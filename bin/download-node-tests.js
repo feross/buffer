@@ -42,10 +42,11 @@ function downloadBufferTests (dir, files) {
       // Only applies to node. Calls into C++ and needs to ensure the prototype can't
       // be faked, or else there will be a segfault.
       'test-buffer-fakes.js',
-      // This test file is testing the SharedArrayBuffer support, which is obscure
-      // and now temporarily disabled in all browsers due to the Spectre/Meltdown
-      // security issue.
-      'test-buffer-sharedarraybuffer.js'
+      // Tests SharedArrayBuffer support, which is obscure and now temporarily
+      // disabled in all browsers due to the Spectre/Meltdown security issue.
+      'test-buffer-sharedarraybuffer.js',
+      // References Node.js internals, irrelevant to browser implementation
+      'test-buffer-bindingobj-no-zerofill.js'
     ]
 
     // Skip test files with these names
