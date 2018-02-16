@@ -1744,7 +1744,7 @@ function isInstance (obj, type) {
   return obj instanceof type ||
     (obj != null && obj.constructor != null && obj.constructor.name === type.name)
 }
-
 function numberIsNaN (obj) {
+  // For IE11 support
   return obj !== obj // eslint-disable-line no-self-compare
 }
