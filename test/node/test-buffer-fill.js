@@ -1,6 +1,6 @@
 'use strict';
 var Buffer = require('../../').Buffer;
-
+const common = require('./common');
 
 
 var assert = require('assert');
@@ -137,10 +137,24 @@ testBufs('c8a26161', 8, 1, 'hex');
 testBufs('61c8b462c8b563c8b6', 4, -1, 'hex');
 testBufs('61c8b462c8b563c8b6', 4, 1, 'hex');
 testBufs('61c8b462c8b563c8b6', 12, 1, 'hex');
-// Make sure this operation doesn't go on forever
-buf1.fill('yKJh', 'hex');
-assert.throws(() => buf1.fill('\u0222', 'hex'));
 
+common.expectsError(() => {
+  const buf = Buffer.allocUnsafe(SIZE);
+
+  buf.fill('yKJh', 'hex');
+}, {
+  code: 'ERR_INVALID_ARG_VALUE',
+  type: TypeError
+});
+
+common.expectsError(() => {
+  const buf = Buffer.allocUnsafe(SIZE);
+
+  buf.fill('\u0222', 'hex');
+}, {
+  code: 'ERR_INVALID_ARG_VALUE',
+  type: TypeError
+});
 
 // BASE64
 testBufs('YWJj', 'ucs2');

@@ -70,6 +70,7 @@
   "standard": {
     "ignore": [
       "test/node/**/*.js",
+      "test/common.js",
       "test/_polyfill.js",
       "perf/**/*.js"
     ]

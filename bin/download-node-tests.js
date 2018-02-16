@@ -71,14 +71,8 @@ function testfixer (filename) {
       firstline = false
     }
 
-    // use `var` instead of `const`/`let`
-    line = line.replace(/(const|let) /g, 'var ')
-
-    // make `var common = require('common')` work
-    line = line.replace(/(var common = require.*)/g, 'var common = { skip: function () {} };')
-
     // make `require('../common')` work
-    line = line.replace(/require\('\.\.\/common'\);/g, '')
+    line = line.replace(/require\('\.\.\/common'\);/g, 'require(\'./common\')')
 
     // require browser buffer
     line = line.replace(/(.*)require\('buffer'\)(.*)/g, '$1require(\'../../\')$2')

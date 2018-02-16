@@ -753,12 +753,6 @@ for (var i = 0; i < 256; i++) {
   assert.equal(hexb2[i], hexb[i]);
 }
 
-// Test single hex character throws TypeError
-// - https://github.com/nodejs/node/issues/6770
-assert.throws(function() {
-  Buffer.from('A', 'hex');
-}, TypeError);
-
 // Test single base64 char encodes as 0
 // assert.strictEqual(Buffer.from('A', 'base64').length, 0);
 
@@ -1461,34 +1455,6 @@ assert.throws(function() {
 
 // Regression test for https://github.com/nodejs/node/issues/649.
 assert.throws(function() { Buffer(1422561062959).toString('utf8'); });
-
-var ps = Buffer.poolSize;
-Buffer.poolSize = 0;
-assert.equal(Buffer(1).parent, undefined);
-Buffer.poolSize = ps;
-
-// Test Buffer.copy() segfault
-assert.throws(function() {
-  Buffer(10).copy();
-});
-
-var regErrorMsg = new RegExp('First argument must be a string, Buffer, ' +
-                               'ArrayBuffer, Array, or array-like object.');
-
-assert.throws(function() {
-  new Buffer();
-}, regErrorMsg);
-
-assert.throws(function() {
-  new Buffer(null);
-}, regErrorMsg);
-
-
-// Test prototype getters don't throw
-assert.equal(Buffer.prototype.parent, undefined);
-assert.equal(Buffer.prototype.offset, undefined);
-assert.equal(SlowBuffer.prototype.parent, undefined);
-assert.equal(SlowBuffer.prototype.offset, undefined);
 
 {
   // Test that large negative Buffer length inputs don't affect the pool offset.

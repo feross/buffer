@@ -2,5 +2,3 @@ ui: tape
 browsers:
   - name: ie
     version: latest
-  - name: android
-    version: latest
