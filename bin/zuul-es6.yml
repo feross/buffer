@@ -9,4 +9,4 @@ browsers:
   - name: microsoftedge
     version: -1..latest
   - name: iphone
-    version: 9.3..latest
+    version: 9.3, 10.3, latest
