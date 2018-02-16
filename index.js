@@ -1495,14 +1495,16 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   var i
 
   if (this === target && start < targetStart && targetStart < end) {
-    // descending copy from end
-    for (i = len - 1; i >= 0; --i) {
-      target[i + targetStart] = this[i + start]
+    // copyWithin available
+    if('copyWithin' in this) {
+      this.copyWithin(targetStart, start, end);
     }
-  } else if (len < 1000) {
-    // ascending copy from start
-    for (i = 0; i < len; ++i) {
-      target[i + targetStart] = this[i + start]
+    // fallback
+    else {
+      // descending copy from end
+      for (i = len - 1; i >= 0; --i) {
+        target[i + targetStart] = this[i + start]
+      }
     }
   } else {
     Uint8Array.prototype.set.call(
