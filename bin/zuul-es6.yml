@@ -1,12 +1,12 @@
 ui: tape
 browsers:
   - name: chrome
-    version: '-1..latest'
+    version: -1..latest
   - name: firefox
-    version: '-1..latest'
+    version: -1..latest
   - name: safari
-    version: latest
+    version: 9..latest
   - name: microsoftedge
-    version: latest
+    version: -1..latest
   - name: iphone
-    version: latest
+    version: 9.3..latest
