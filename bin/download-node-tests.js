@@ -46,7 +46,10 @@ function downloadBufferTests (dir, files) {
       // disabled in all browsers due to the Spectre/Meltdown security issue.
       'test-buffer-sharedarraybuffer.js',
       // References Node.js internals, irrelevant to browser implementation
-      'test-buffer-bindingobj-no-zerofill.js'
+      'test-buffer-bindingobj-no-zerofill.js',
+      // Destructive test, modifies buffer.INSPECT_MAX_BYTES and causes later tests
+      // to fail.
+      'test-buffer-inspect.js'
     ]
 
     // Skip test files with these names
