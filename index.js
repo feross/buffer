@@ -142,7 +142,7 @@ function from (value, encodingOrOffset, length) {
     )
   }
 
-  const valueOf = value.valueOf && value.valueOf()
+  var valueOf = value.valueOf && value.valueOf()
   if (valueOf != null && valueOf !== value) {
     return Buffer.from(valueOf, encodingOrOffset, length)
   }
