@@ -1768,7 +1768,8 @@ function blitBuffer (src, dst, offset, length) {
 // See: https://github.com/feross/buffer/issues/166
 function isInstance (obj, type) {
   return obj instanceof type ||
-    (obj != null && obj.constructor != null && obj.constructor.name === type.name)
+    (obj != null && obj.constructor != null && obj.constructor.name != null &&
+      obj.constructor.name === type.name)
 }
 function numberIsNaN (obj) {
   // For IE11 support
