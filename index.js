@@ -126,7 +126,7 @@ function from (value, encodingOrOffset, length) {
 
   if (value == null) {
     throw TypeError(
-      'The first argument must be one of type string, Buffer, ArrayBuffer, Array ' +
+      'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
       'or Array-like Object. Received type ' + (typeof value)
     )
   }
