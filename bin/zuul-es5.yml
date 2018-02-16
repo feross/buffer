@@ -4,3 +4,5 @@ browsers:
     version: latest
   - name: safari
     version: 9
+  - name: iphone
+    version: 9.3

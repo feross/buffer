@@ -10,6 +10,5 @@ browsers:
     version: -1..latest
   - name: iphone
     version:
-      - 9.3
       - 10.3
       - latest
