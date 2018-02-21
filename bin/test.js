@@ -17,24 +17,24 @@ node.on('close', function (code) {
 })
 
 function runBrowserTests () {
-  var zuulYmlPath = path.join(__dirname, '..', '.zuul.yml')
+  var airtapYmlPath = path.join(__dirname, '..', '.airtap.yml')
 
-  writeES5ZuulYml()
+  writeES5AirtapYml()
   cp.spawn('npm', ['run', 'test-browser-es5'], { stdio: 'inherit' })
     .on('close', function (code) {
       if (code !== 0) process.exit(code)
-      writeES6ZuulYml()
+      writeES6AirtapYml()
       cp.spawn('npm', ['run', 'test-browser-es6'], { stdio: 'inherit' })
         .on('close', function (code) {
           process.exit(code)
         })
     })
 
-  function writeES5ZuulYml () {
-    fs.writeFileSync(zuulYmlPath, fs.readFileSync(path.join(__dirname, 'zuul-es5.yml')))
+  function writeES5AirtapYml () {
+    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-es5.yml')))
   }
 
-  function writeES6ZuulYml () {
-    fs.writeFileSync(zuulYmlPath, fs.readFileSync(path.join(__dirname, 'zuul-es6.yml')))
+  function writeES6AirtapYml () {
+    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-es6.yml')))
   }
 }

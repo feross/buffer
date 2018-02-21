@@ -381,13 +381,13 @@ To test locally in a browser, you can run:
     npm run test-browser-es5-local # For ES5 browsers that don't support ES6
     npm run test-browser-es6-local # For ES6 compliant browsers
 
-This will print out a URL that you can then open in a browser to run the tests, using [Zuul](https://github.com/defunctzombie/zuul).
+This will print out a URL that you can then open in a browser to run the tests, using [airtap](https://www.npmjs.com/package/airtap).
 
 To run automated browser tests using Saucelabs, ensure that your `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are set, then run:
 
     npm test
 
-This is what's run in Travis, to check against various browsers. The list of browsers is kept in the `.zuul.yml` file.
+This is what's run in Travis, to check against various browsers. The list of browsers is kept in the `bin/airtap-es5.yml` and `bin/airtap-es6.yml` files.
 
 ## JavaScript Standard Style
 

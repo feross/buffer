@@ -19,6 +19,7 @@
     "ieee754": "^1.1.4"
   },
   "devDependencies": {
+    "airtap": "0.0.1",
     "benchmark": "^2.0.0",
     "browserify": "^14.0.0",
     "concat-stream": "^1.4.7",
@@ -29,8 +30,7 @@
     "standard": "*",
     "tape": "^4.0.0",
     "through2": "^2.0.0",
-    "uglify-js": "^2.7.3",
-    "zuul": "^3.0.0"
+    "uglify-js": "^2.7.3"
   },
   "homepage": "https://github.com/feross/buffer",
   "jspm": {
@@ -60,10 +60,10 @@
     "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c",
     "test": "standard && node ./bin/test.js",
-    "test-browser-es5": "zuul --ui tape -- test/*.js",
-    "test-browser-es5-local": "zuul --ui tape --local -- test/*.js",
-    "test-browser-es6": "zuul --ui tape -- test/*.js test/node/*.js",
-    "test-browser-es6-local": "zuul --ui tape --local -- test/*.js test/node/*.js",
+    "test-browser-es5": "airtap -- test/*.js",
+    "test-browser-es5-local": "airtap --local -- test/*.js",
+    "test-browser-es6": "airtap -- test/*.js test/node/*.js",
+    "test-browser-es6-local": "airtap --local -- test/*.js test/node/*.js",
     "test-node": "tape test/*.js test/node/*.js",
     "update-authors": "./bin/update-authors.sh"
   },
