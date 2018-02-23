@@ -19,18 +19,18 @@
     "ieee754": "^1.1.4"
   },
   "devDependencies": {
-    "airtap": "0.0.1",
+    "airtap": "0.0.2",
     "benchmark": "^2.0.0",
-    "browserify": "^14.0.0",
+    "browserify": "^16.1.0",
     "concat-stream": "^1.4.7",
     "hyperquest": "^2.0.0",
-    "is-buffer": "^1.1.1",
+    "is-buffer": "^2.0.0",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
     "standard": "*",
     "tape": "^4.0.0",
     "through2": "^2.0.0",
-    "uglify-js": "^2.7.3"
+    "uglify-js": "^3.3.12"
   },
   "homepage": "https://github.com/feross/buffer",
   "jspm": {
