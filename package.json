@@ -24,7 +24,7 @@
     "browserify": "^14.0.0",
     "concat-stream": "^1.4.7",
     "hyperquest": "^2.0.0",
-    "is-buffer": "^1.1.1",
+    "is-buffer": "^2.0.0",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
     "standard": "*",
