@@ -381,7 +381,8 @@ Buffer.isEncoding = function isEncoding (encoding) {
 
 Buffer.concat = function concat (list, length) {
   if (!Array.isArray(list)) {
-    throw new TypeError('"list" argument must be an Array of Buffers')
+    throw new TypeError('The "list" argument must be one of type ' +
+      'Array, Buffer, or Uint8Array')
   }
 
   if (list.length === 0) {
@@ -404,7 +405,8 @@ Buffer.concat = function concat (list, length) {
       buf = Buffer.from(buf)
     }
     if (!Buffer.isBuffer(buf)) {
-      throw new TypeError('"list" argument must be an Array of Buffers')
+      throw new TypeError('The "list" argument must be one of type ' +
+        'Array, Buffer, or Uint8Array')
     }
     buf.copy(buffer, pos)
     pos += buf.length
