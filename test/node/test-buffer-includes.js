@@ -1,17 +1,14 @@
 'use strict';
 var Buffer = require('../../').Buffer;
+const assert = require('assert');
+const common = require('./common');
 
-
-var assert = require('assert');
-
-var Buffer = require('../../').Buffer;
-
-var b = Buffer.from('abcdef');
-var buf_a = Buffer.from('a');
-var buf_bc = Buffer.from('bc');
-var buf_f = Buffer.from('f');
-var buf_z = Buffer.from('z');
-var buf_empty = Buffer.from('');
+const b = Buffer.from('abcdef');
+const buf_a = Buffer.from('a');
+const buf_bc = Buffer.from('bc');
+const buf_f = Buffer.from('f');
+const buf_z = Buffer.from('z');
+const buf_empty = Buffer.from('');
 
 assert(b.includes('a'));
 assert(!b.includes('a', 1));
@@ -31,10 +28,10 @@ assert(b.includes('bc', -Infinity));
 assert(!b.includes('bc', Infinity));
 assert(b.includes('f'), b.length - 1);
 assert(!b.includes('z'));
-assert(!b.includes(''));
-assert(!b.includes('', 1));
-assert(!b.includes('', b.length + 1));
-assert(!b.includes('', Infinity));
+assert(b.includes(''));
+assert(b.includes('', 1));
+assert(b.includes('', b.length + 1));
+assert(b.includes('', Infinity));
 assert(b.includes(buf_a));
 assert(!b.includes(buf_a, 1));
 assert(!b.includes(buf_a, -1));
@@ -53,10 +50,10 @@ assert(b.includes(buf_bc, -Infinity));
 assert(!b.includes(buf_bc, Infinity));
 assert(b.includes(buf_f), b.length - 1);
 assert(!b.includes(buf_z));
-assert(!b.includes(buf_empty));
-assert(!b.includes(buf_empty, 1));
-assert(!b.includes(buf_empty, b.length + 1));
-assert(!b.includes(buf_empty, Infinity));
+assert(b.includes(buf_empty));
+assert(b.includes(buf_empty, 1));
+assert(b.includes(buf_empty, b.length + 1));
+assert(b.includes(buf_empty, Infinity));
 assert(b.includes(0x61));
 assert(!b.includes(0x61, 1));
 assert(!b.includes(0x61, -1));
@@ -141,8 +138,8 @@ assert.strictEqual(
 );
 
 
-// test usc2 encoding
-var twoByteString = Buffer.from('\u039a\u0391\u03a3\u03a3\u0395', 'ucs2');
+// test ucs2 encoding
+let twoByteString = Buffer.from('\u039a\u0391\u03a3\u03a3\u0395', 'ucs2');
 
 assert(twoByteString.includes('\u0395', 4, 'ucs2'));
 assert(twoByteString.includes('\u03a3', -4, 'ucs2'));
@@ -151,20 +148,18 @@ assert(twoByteString.includes(
   Buffer.from('\u03a3', 'ucs2'), -6, 'ucs2'));
 assert(!twoByteString.includes('\u03a3', -2, 'ucs2'));
 
-var mixedByteStringUcs2 =
-    Buffer.from('\u039a\u0391abc\u03a3\u03a3\u0395', 'ucs2');
+const mixedByteStringUcs2 =
+  Buffer.from('\u039a\u0391abc\u03a3\u03a3\u0395', 'ucs2');
 assert(mixedByteStringUcs2.includes('bc', 0, 'ucs2'));
 assert(mixedByteStringUcs2.includes('\u03a3', 0, 'ucs2'));
 assert(!mixedByteStringUcs2.includes('\u0396', 0, 'ucs2'));
 
-assert(
-    6, mixedByteStringUcs2.includes(Buffer.from('bc', 'ucs2'), 0, 'ucs2'));
-assert(
-    10, mixedByteStringUcs2.includes(Buffer.from('\u03a3', 'ucs2'),
-    0, 'ucs2'));
-assert(
-    -1, mixedByteStringUcs2.includes(Buffer.from('\u0396', 'ucs2'),
-    0, 'ucs2'));
+assert.ok(
+  mixedByteStringUcs2.includes(Buffer.from('bc', 'ucs2'), 0, 'ucs2'));
+assert.ok(
+  mixedByteStringUcs2.includes(Buffer.from('\u03a3', 'ucs2'), 0, 'ucs2'));
+assert.ok(
+  !mixedByteStringUcs2.includes(Buffer.from('\u0396', 'ucs2'), 0, 'ucs2'));
 
 twoByteString = Buffer.from('\u039a\u0391\u03a3\u03a3\u0395', 'ucs2');
 
@@ -182,7 +177,7 @@ assert(twoByteString.includes('\u0391\u03a3', 0, 'ucs2'), 'Alpha Sigma');
 assert(twoByteString.includes('\u03a3\u03a3', 0, 'ucs2'), 'Sigma Sigma');
 assert(twoByteString.includes('\u03a3\u0395', 0, 'ucs2'), 'Sigma Epsilon');
 
-var mixedByteStringUtf8 = Buffer.from('\u039a\u0391abc\u03a3\u03a3\u0395');
+const mixedByteStringUtf8 = Buffer.from('\u039a\u0391abc\u03a3\u03a3\u0395');
 assert(mixedByteStringUtf8.includes('bc'));
 assert(mixedByteStringUtf8.includes('bc', 5));
 assert(mixedByteStringUtf8.includes('bc', -8));
@@ -192,18 +187,18 @@ assert(!mixedByteStringUtf8.includes('\u0396'));
 
 // Test complex string includes algorithms. Only trigger for long strings.
 // Long string that isn't a simple repeat of a shorter string.
-var longString = 'A';
-for (var i = 66; i < 76; i++) {  // from 'B' to 'K'
+let longString = 'A';
+for (let i = 66; i < 76; i++) {  // from 'B' to 'K'
   longString = longString + String.fromCharCode(i) + longString;
 }
 
-var longBufferString = Buffer.from(longString);
+const longBufferString = Buffer.from(longString);
 
 // pattern of 15 chars, repeated every 16 chars in long
-var pattern = 'ABACABADABACABA';
-for (var i = 0; i < longBufferString.length - pattern.length; i += 7) {
-  var includes = longBufferString.includes(pattern, i);
-  assert(includes, 'Long ABACABA...-string at index ' + i);
+let pattern = 'ABACABADABACABA';
+for (let i = 0; i < longBufferString.length - pattern.length; i += 7) {
+  const includes = longBufferString.includes(pattern, i);
+  assert(includes, `Long ABACABA...-string at index ${i}`);
 }
 assert(longBufferString.includes('AJABACA'), 'Long AJABACA, First J');
 assert(longBufferString.includes('AJABACA', 511), 'Long AJABACA, Second J');
@@ -213,17 +208,17 @@ assert(longBufferString.includes(pattern), 'Long JABACABA..., First J');
 assert(longBufferString.includes(pattern, 512), 'Long JABACABA..., Second J');
 
 // Search for a non-ASCII string in a pure ASCII string.
-var asciiString = Buffer.from(
-    'arglebargleglopglyfarglebargleglopglyfarglebargleglopglyf');
+const asciiString = Buffer.from(
+  'arglebargleglopglyfarglebargleglopglyfarglebargleglopglyf');
 assert(!asciiString.includes('\x2061'));
 assert(asciiString.includes('leb', 0));
 
 // Search in string containing many non-ASCII chars.
-var allCodePoints = [];
-for (var i = 0; i < 65536; i++) allCodePoints[i] = i;
-var allCharsString = String.fromCharCode.apply(String, allCodePoints);
-var allCharsBufferUtf8 = Buffer.from(allCharsString);
-var allCharsBufferUcs2 = Buffer.from(allCharsString, 'ucs2');
+const allCodePoints = [];
+for (let i = 0; i < 65536; i++) allCodePoints[i] = i;
+const allCharsString = String.fromCharCode.apply(String, allCodePoints);
+const allCharsBufferUtf8 = Buffer.from(allCharsString);
+const allCharsBufferUcs2 = Buffer.from(allCharsString, 'ucs2');
 
 // Search for string long enough to trigger complex search with ASCII pattern
 // and UC16 subject.
@@ -231,12 +226,12 @@ assert(!allCharsBufferUtf8.includes('notfound'));
 assert(!allCharsBufferUcs2.includes('notfound'));
 
 // Find substrings in Utf8.
-var lengths = [1, 3, 15];  // Single char, simple and complex.
-var indices = [0x5, 0x60, 0x400, 0x680, 0x7ee, 0xFF02, 0x16610, 0x2f77b];
-for (var lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
-  for (var i = 0; i < indices.length; i++) {
-    var index = indices[i];
-    var length = lengths[lengthIndex];
+let lengths = [1, 3, 15];  // Single char, simple and complex.
+let indices = [0x5, 0x60, 0x400, 0x680, 0x7ee, 0xFF02, 0x16610, 0x2f77b];
+for (let lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
+  for (let i = 0; i < indices.length; i++) {
+    const index = indices[i];
+    let length = lengths[lengthIndex];
 
     if (index + length > 0x7F) {
       length = 2 * length;
@@ -250,10 +245,10 @@ for (var lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
       length = 4 * length;
     }
 
-    var patternBufferUtf8 = allCharsBufferUtf8.slice(index, index + length);
+    const patternBufferUtf8 = allCharsBufferUtf8.slice(index, index + length);
     assert(index, allCharsBufferUtf8.includes(patternBufferUtf8));
 
-    var patternStringUtf8 = patternBufferUtf8.toString();
+    const patternStringUtf8 = patternBufferUtf8.toString();
     assert(index, allCharsBufferUtf8.includes(patternStringUtf8));
   }
 }
@@ -261,35 +256,41 @@ for (var lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
 // Find substrings in Usc2.
 lengths = [2, 4, 16];  // Single char, simple and complex.
 indices = [0x5, 0x65, 0x105, 0x205, 0x285, 0x2005, 0x2085, 0xfff0];
-for (var lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
-  for (var i = 0; i < indices.length; i++) {
-    var index = indices[i] * 2;
-    var length = lengths[lengthIndex];
+for (let lengthIndex = 0; lengthIndex < lengths.length; lengthIndex++) {
+  for (let i = 0; i < indices.length; i++) {
+    const index = indices[i] * 2;
+    const length = lengths[lengthIndex];
 
-    var patternBufferUcs2 =
-        allCharsBufferUcs2.slice(index, index + length);
-    assert(
-        index, allCharsBufferUcs2.includes(patternBufferUcs2, 0, 'ucs2'));
+    const patternBufferUcs2 =
+      allCharsBufferUcs2.slice(index, index + length);
+    assert.ok(
+      allCharsBufferUcs2.includes(patternBufferUcs2, 0, 'ucs2'));
 
-    var patternStringUcs2 = patternBufferUcs2.toString('ucs2');
-    assert(
-        index, allCharsBufferUcs2.includes(patternStringUcs2, 0, 'ucs2'));
+    const patternStringUcs2 = patternBufferUcs2.toString('ucs2');
+    assert.ok(
+      allCharsBufferUcs2.includes(patternStringUcs2, 0, 'ucs2'));
   }
 }
 
-assert.throws(function() {
-  b.includes(function() { });
-});
-assert.throws(function() {
-  b.includes({});
-});
-assert.throws(function() {
-  b.includes([]);
+[
+  () => { },
+  {},
+  []
+].forEach((val) => {
+  common.expectsError(
+    () => b.includes(val),
+    {
+      code: 'ERR_INVALID_ARG_TYPE',
+      type: TypeError,
+      message: 'The "value" argument must be one of type string, ' +
+               `Buffer, or Uint8Array. Received type ${typeof val}`
+    }
+  );
 });
 
 // test truncation of Number arguments to uint8
 {
-  var buf = Buffer.from('this is a test');
+  const buf = Buffer.from('this is a test');
   assert.ok(buf.includes(0x6973));
   assert.ok(buf.includes(0x697320));
   assert.ok(buf.includes(0x69732069));

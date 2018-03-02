@@ -700,14 +700,17 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     byteOffset = dir ? 0 : (buffer.length - 1)
   }
 
+  // If the offset is greater than the length of the buffer, it will fail,
+  // except if the given value is an empty one, then the offset is returned
+  var offsetGreaterLength = false
   // Normalize byteOffset: negative offsets start from the end of the buffer
   if (byteOffset < 0) byteOffset = buffer.length + byteOffset
   if (byteOffset >= buffer.length) {
-    if (dir) return -1
+    if (dir) offsetGreaterLength = true
     else byteOffset = buffer.length - 1
   } else if (byteOffset < 0) {
     if (dir) byteOffset = 0
-    else return -1
+    else offsetGreaterLength = true
   }
 
   // Normalize val
@@ -715,12 +718,15 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     val = Buffer.from(val, encoding)
   }
 
+  // Special case: looking for empty string/buffer always passes
+  if (Buffer.isBuffer(val) && val.length === 0) {
+    return byteOffset
+  } else if (offsetGreaterLength) {
+    return -1
+  }
+
   // Finally, search either indexOf (if dir is true) or lastIndexOf
   if (Buffer.isBuffer(val)) {
-    // Special case: looking for empty string/buffer always fails
-    if (val.length === 0) {
-      return -1
-    }
     return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF // Search for a byte value [0-255]
@@ -734,7 +740,8 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
   }
 
-  throw new TypeError('val must be string, number or Buffer')
+  throw new TypeError('The "value" argument must be one of type ' +
+    'string, Buffer, or Uint8Array. Received type ' + typeof val)
 }
 
 function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
