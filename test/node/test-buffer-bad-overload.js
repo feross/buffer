@@ -3,9 +3,7 @@ var Buffer = require('../../').Buffer;
 const common = require('./common');
 const assert = require('assert');
 
-assert.doesNotThrow(function() {
-  Buffer.allocUnsafe(10);
-});
+Buffer.allocUnsafe(10); // Should not throw.
 
 const err = common.expectsError({
   code: 'ERR_INVALID_ARG_TYPE',
@@ -17,7 +15,5 @@ assert.throws(function() {
   Buffer.from(10, 'hex');
 }, err);
 
-assert.doesNotThrow(function() {
-  Buffer.from('deadbeaf', 'hex');
-});
+Buffer.from('deadbeaf', 'hex'); // Should not throw.
 

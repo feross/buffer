@@ -1,4 +1,3 @@
-// Copyright Joyent, Inc. and other Node contributors.var Buffer = require('../../').Buffer;
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19,6 +18,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+var Buffer = require('../../').Buffer;
 
 'use strict';
 
@@ -78,9 +78,8 @@ expectedSameBufs.forEach(([buf1, buf2]) => {
 
 const utf16Buf = Buffer.from('0123456789', 'utf16le');
 assert.deepStrictEqual(utf16Buf.slice(0, 6), Buffer.from('012', 'utf16le'));
-// try to slice a zero length Buffer
-// see https://github.com/joyent/node/issues/5881
-assert.doesNotThrow(() => Buffer.alloc(0).slice(0, 1));
+// Try to slice a zero length Buffer.
+// See https://github.com/joyent/node/issues/5881
 assert.strictEqual(Buffer.alloc(0).slice(0, 1).length, 0);
 
 {
