@@ -697,7 +697,10 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   byteOffset = +byteOffset // Coerce to Number.
   if (numberIsNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
-    byteOffset = dir ? 0 : (buffer.length - 1)
+    // In Node.js the default value for lastindexOf is buffer.length -1. Using
+    // buffer.length instead leads to the same results, but makes the code
+    // simpler
+    byteOffset = dir ? 0 : buffer.length
   }
 
   // If the offset is greater than the length of the buffer, it will fail,
@@ -707,7 +710,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   if (byteOffset < 0) byteOffset = buffer.length + byteOffset
   if (byteOffset >= buffer.length) {
     if (dir) offsetGreaterLength = true
-    else byteOffset = buffer.length - 1
+    byteOffset = buffer.length
   } else if (byteOffset < 0) {
     if (dir) byteOffset = 0
     else offsetGreaterLength = true
@@ -715,6 +718,8 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
 
   // Normalize val
   if (typeof val === 'string') {
+    val = Buffer.from(val, encoding)
+  } else if (isInstance(val, Uint8Array)) {
     val = Buffer.from(val, encoding)
   }
 
@@ -753,7 +758,7 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
     encoding = String(encoding).toLowerCase()
     if (encoding === 'ucs2' || encoding === 'ucs-2' ||
         encoding === 'utf16le' || encoding === 'utf-16le') {
-      if (arr.length < 2 || val.length < 2) {
+      if (arr.length < 2 || val.length < 2 || arr.length % 2 !== 0) {
         return -1
       }
       indexSize = 2
