@@ -4,16 +4,10 @@ var cp = require('child_process')
 var fs = require('fs')
 var path = require('path')
 
-var shouldRunBrowserTests = !process.env.TRAVIS_PULL_REQUEST ||
-  process.env.TRAVIS_PULL_REQUEST === 'false'
-
 var node = cp.spawn('npm', ['run', 'test-node'], { stdio: 'inherit' })
 node.on('close', function (code) {
-  if (code === 0 && shouldRunBrowserTests) {
-    runBrowserTests()
-  } else {
-    process.exit(code)
-  }
+  if (code !== 0) return process.exit(code)
+  runBrowserTests()
 })
 
 function runBrowserTests () {
