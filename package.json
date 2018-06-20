@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "base64-js": "^1.0.2",
-    "ieee754": "^1.1.4"
+    "ieee754": "^1.1.4",
+    "inspect-custom-symbol": "^1.1.0"
   },
   "devDependencies": {
     "airtap": "0.0.5",
