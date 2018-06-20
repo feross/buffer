@@ -27,6 +27,7 @@ const assert = require('assert');
 const util = require('util');
 const buffer = require('../../');
 
+var defaultMaxBytes = buffer.INSPECT_MAX_BYTES;
 buffer.INSPECT_MAX_BYTES = 2;
 
 let b = Buffer.allocUnsafe(4);
@@ -58,3 +59,5 @@ assert.strictEqual(util.inspect(s), expected);
 
 b.inspect = undefined;
 assert.strictEqual(util.inspect(b), expected);
+
+buffer.INSPECT_MAX_BYTES = defaultMaxBytes;
