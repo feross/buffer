@@ -183,6 +183,17 @@ assert.doesNotThrow(() => Buffer.alloc(1).write('', 1, 0));
 }
 
 {
+  // cast boolean to unsigned
+  const a = Buffer.alloc(1, true);
+  assert.ok(a.length === 1);
+  assert.ok(a[0] === 1);
+
+  const b = Buffer.alloc(1, false);
+  assert.ok(b.length === 1);
+  assert.ok(b[0] === 0);
+}
+
+{
   // also from a non-pooled instance
   const b = Buffer.allocUnsafeSlow(5);
   const c = b.slice(0, 4);

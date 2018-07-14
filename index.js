@@ -198,8 +198,9 @@ function alloc (size, fill, encoding) {
     // prevents accidentally sending in a number that would
     // be interpretted as a start offset.
     return typeof encoding === 'string'
-      ? createBuffer(size).fill(fill, encoding)
-      : createBuffer(size).fill(fill)
+      // cast boolean to unsigned
+      ? createBuffer(size).fill(typeof fill === 'boolean' ? Number(fill) : fill, encoding)
+      : createBuffer(size).fill(typeof fill === 'boolean' ? Number(fill) : fill)
   }
   return createBuffer(size)
 }
@@ -298,6 +299,10 @@ function fromObject (obj) {
     obj.copy(buf, 0, 0, len)
     return buf
   }
+
+  // if (typeof obj === 'boolean') {
+  //   return fromArrayLike([obj ? 0x01 : 0x00])
+  // }
 
   if (obj.length !== undefined) {
     if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
