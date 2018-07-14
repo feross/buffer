@@ -300,10 +300,6 @@ function fromObject (obj) {
     return buf
   }
 
-  // if (typeof obj === 'boolean') {
-  //   return fromArrayLike([obj ? 0x01 : 0x00])
-  // }
-
   if (obj.length !== undefined) {
     if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
       return createBuffer(0)
