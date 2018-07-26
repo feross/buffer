@@ -1,5 +1,5 @@
 declare module 'buffer' {
-    export class Buffer {
+    export class Buffer extends Uint8Array {
         length: number
         write(string: string, offset?: number, length?: number, encoding?: string): number;
         toString(encoding?: string, start?: number, end?: number): string;
