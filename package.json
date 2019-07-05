@@ -29,7 +29,7 @@
     "split": "^1.0.0",
     "standard": "*",
     "tape": "^4.0.0",
-    "through2": "^2.0.0",
+    "through2": "^3.0.1",
     "uglify-js": "^3.4.5"
   },
   "homepage": "https://github.com/feross/buffer",
