@@ -1,4 +1,5 @@
 .airtap.yml
+.github/
 .travis.yml
 bin/
 perf/
