@@ -22,7 +22,7 @@
     "airtap": "0.1.0",
     "benchmark": "^2.0.0",
     "browserify": "^16.1.0",
-    "concat-stream": "^1.4.7",
+    "concat-stream": "^2.0.0",
     "hyperquest": "^2.0.0",
     "is-buffer": "^2.0.0",
     "is-nan": "^1.0.1",
