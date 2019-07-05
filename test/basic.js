@@ -25,7 +25,7 @@ test('indexes from a string', function (t) {
 })
 
 test('indexes from an array', function (t) {
-  var buf = new B([ 97, 98, 99 ])
+  var buf = new B([97, 98, 99])
   t.equal(buf[0], 97)
   t.equal(buf[1], 98)
   t.equal(buf[2], 99)
@@ -33,7 +33,7 @@ test('indexes from an array', function (t) {
 })
 
 test('setting index value should modify buffer contents', function (t) {
-  var buf = new B([ 97, 98, 99 ])
+  var buf = new B([97, 98, 99])
   t.equal(buf[2], 99)
   t.equal(buf.toString(), 'abc')
 
