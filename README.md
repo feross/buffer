@@ -48,8 +48,7 @@ npm install buffer
 This module was previously called **native-buffer-browserify**, but please use **buffer**
 from now on.
 
-A standalone bundle is available [here](https://bundle.run/buffer), for non-browserify users.
-
+If you do not use a bundler, you can use the [standalone script](https://bundle.run/buffer).
 
 ## usage
 
