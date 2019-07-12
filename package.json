@@ -19,7 +19,7 @@
     "ieee754": "^1.1.4"
   },
   "devDependencies": {
-    "airtap": "2.0.2",
+    "airtap": "2.0.3",
     "benchmark": "^2.0.0",
     "browserify": "^16.1.0",
     "concat-stream": "^2.0.0",
