@@ -5,7 +5,7 @@ test('buffer.toJSON', function (t) {
   var data = [1, 2, 3, 4]
   t.deepEqual(
     new B(data).toJSON(),
-    { type: 'Buffer', data: [ 1, 2, 3, 4 ] }
+    { type: 'Buffer', data: [1, 2, 3, 4] }
   )
   t.end()
 })
@@ -41,7 +41,7 @@ test('test offset returns are correct', function (t) {
 
 test('concat() a varying number of buffers', function (t) {
   var zero = []
-  var one = [ new B('asdf') ]
+  var one = [new B('asdf')]
   var long = []
   for (var i = 0; i < 10; i++) {
     long.push(new B('asdf'))

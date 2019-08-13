@@ -34,7 +34,7 @@ test('hex of write{Uint,Int}{8,16,32}{LE,BE}', function (t) {
     '03', '0300', '0003', '03000000', '00000003',
     'fd', 'fdff', 'fffd', 'fdffffff', 'fffffffd'
   ]
-  var reads = [ 3, 3, 3, 3, 3, -3, -3, -3, -3, -3 ]
+  var reads = [3, 3, 3, 3, 3, -3, -3, -3, -3, -3]
   var xs = ['UInt', 'Int']
   var ys = [8, 16, 32]
   for (var i = 0; i < xs.length; i++) {

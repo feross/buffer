@@ -1,7 +1,7 @@
 {
   "name": "buffer",
   "description": "Node.js Buffer API, for the browser",
-  "version": "5.1.0",
+  "version": "5.3.0",
   "author": {
     "name": "Feross Aboukhadijeh",
     "email": "feross@feross.org",
@@ -20,18 +20,18 @@
     "inspect-custom-symbol": "^1.1.0"
   },
   "devDependencies": {
-    "airtap": "0.0.5",
+    "airtap": "^2.0.3",
     "benchmark": "^2.0.0",
     "browserify": "^16.1.0",
-    "concat-stream": "^1.4.7",
+    "concat-stream": "^2.0.0",
     "hyperquest": "^2.0.0",
     "is-buffer": "^2.0.0",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
     "standard": "*",
     "tape": "^4.0.0",
-    "through2": "^2.0.0",
-    "uglify-js": "^3.3.12"
+    "through2": "^3.0.1",
+    "uglify-js": "^3.4.5"
   },
   "homepage": "https://github.com/feross/buffer",
   "jspm": {
