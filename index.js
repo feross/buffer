@@ -10,6 +10,7 @@
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
+var customInspectSymbol = typeof Symbol === 'function' ? Symbol.for('nodejs.util.inspect.custom') : null
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -606,6 +607,9 @@ Buffer.prototype.inspect = function inspect () {
   str = this.toString('hex', 0, max).replace(/(.{2})/g, '$1 ').trim()
   if (this.length > max) str += ' ... '
   return '<Buffer ' + str + '>'
+}
+if (customInspectSymbol) {
+  Buffer.prototype[customInspectSymbol] = Buffer.prototype.inspect
 }
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
