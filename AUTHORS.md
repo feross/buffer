@@ -49,6 +49,7 @@
 - Сковорода Никита Андреевич (chalkerx@gmail.com)
 - greenkeeper[bot] (greenkeeper[bot]@users.noreply.github.com)
 - ukstv (sergey.ukustov@machinomy.com)
+- Renée Kooi (renee@kooi.me)
 - ranbochen (ranbochen@qq.com)
 - Vladimir Borovik (bobahbdb@gmail.com)
 - greenkeeper[bot] (23040076+greenkeeper[bot]@users.noreply.github.com)
