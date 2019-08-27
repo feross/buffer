@@ -74,6 +74,7 @@ assert.doesNotThrow(() => new Buffer('', 'ascii'));
 assert.doesNotThrow(() => new Buffer('', 'latin1'));
 assert.doesNotThrow(() => new Buffer('', 'binary'));
 assert.doesNotThrow(() => Buffer(0));
+assert.doesNotThrow(() => Buffer.alloc(16, !!true));
 
 // try to write a 0-length string beyond the end of b
 assert.throws(() => b.write('', 2048), RangeError);
