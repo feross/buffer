@@ -1068,7 +1068,7 @@ function hexSlice (buf, start, end) {
 
   var out = ''
   for (var i = start; i < end; ++i) {
-    out += hexSliceNewLookupTable[buf[i]]
+    out += hexSliceLookupTable[buf[i]]
   }
   return out
 }
@@ -1786,7 +1786,7 @@ function numberIsNaN (obj) {
 
 // Create lookup table for `toString('hex')`
 // See: https://github.com/feross/buffer/issues/219
-var hexSliceNewLookupTable = (function () {
+var hexSliceLookupTable = (function () {
   var alphabet = '0123456789abcdef'
   var table = new Array(256)
   for (var i = 0; i < 16; ++i) {
