@@ -1788,11 +1788,10 @@ function numberIsNaN (obj) {
 // See: https://github.com/feross/buffer/issues/219
 var hexSliceLookupTable = (function () {
   var alphabet = '0123456789abcdef'
-  var table = new Array(256)
+  var table = []
   for (var i = 0; i < 16; ++i) {
-    var i16 = i * 16
     for (var j = 0; j < 16; ++j) {
-      table[i16 + j] = alphabet[i] + alphabet[j]
+      table.push(alphabet[i] + alphabet[j])
     }
   }
   return table
