@@ -69,6 +69,9 @@
     "update-authors": "./bin/update-authors.sh"
   },
   "standard": {
+    "globals": [
+      "BigInt"
+    ],
     "ignore": [
       "test/node/**/*.js",
       "test/common.js",
