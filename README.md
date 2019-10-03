@@ -43,8 +43,6 @@ To use this module directly (without browserify), install it:
 npm install buffer
 ```
 
-[Get supported buffer with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-buffer?utm_source=npm-buffer&utm_medium=referral&utm_campaign=readme)
-
 This module was previously called **native-buffer-browserify**, but please use **buffer**
 from now on.
 
