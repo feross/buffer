@@ -127,7 +127,7 @@ function from (value, encodingOrOffset, length) {
   }
 
   if (ArrayBuffer.isView(value)) {
-    return fromArrayLike(value)
+    return fromArrayView(value)
   }
 
   if (value == null) {
@@ -267,6 +267,14 @@ function fromArrayLike (array) {
     buf[i] = array[i] & 255
   }
   return buf
+}
+
+function fromArrayView (arrayView) {
+  if (isInstance(arrayView, Uint8Array)) {
+    var copy = Uint8Array.from(arrayView)
+    return fromArrayBuffer(copy.buffer, copy.byteOffset, copy.byteLength)
+  }
+  return fromArrayLike(arrayView)
 }
 
 function fromArrayBuffer (array, byteOffset, length) {
