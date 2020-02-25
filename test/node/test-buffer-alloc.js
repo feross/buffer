@@ -51,6 +51,14 @@ assert.strictEqual(0, d.length);
     assert.deepStrictEqual(value, ui32[key]);
   }
 }
+{
+  const sab = new SharedArrayBuffer(Uint8Array.BYTES_PER_ELEMENT * 4);
+  const ui32 = new Uint8Array(sab).fill(42);
+  const e = Buffer(sab);
+  for (const [key, value] of e.entries()) {
+    assert.deepStrictEqual(value, ui32[key]);
+  }
+}
 
 // Test invalid encoding for Buffer.toString
 assert.throws(() => b.toString('invalid'),
