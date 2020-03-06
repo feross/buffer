@@ -142,8 +142,9 @@ function from (value, encodingOrOffset, length) {
     return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
-  if (isInstance(value, SharedArrayBuffer) ||
-      (value && isInstance(value.buffer, SharedArrayBuffer))) {
+  if (typeof SharedArrayBuffer !== 'undefined' &&
+      (isInstance(value, SharedArrayBuffer) ||
+      (value && isInstance(value.buffer, SharedArrayBuffer)))) {
     return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
