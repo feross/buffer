@@ -74,6 +74,9 @@
       "test/common.js",
       "test/_polyfill.js",
       "perf/**/*.js"
+    ],
+    "globals": [
+      "SharedArrayBuffer"
     ]
   }
 }
