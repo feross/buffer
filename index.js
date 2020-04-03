@@ -1088,6 +1088,12 @@ function utf16leSlice (buf, start, end) {
   return res
 }
 
+Buffer.prototype.subarray = function subarray (start, end) {
+  var newBuf = Uint8Array.prototype.subarray.bind(this)(start, end)
+  Object.setPrototypeOf(newBuf, Buffer.prototype)
+  return newBuf
+}
+
 Buffer.prototype.slice = function slice (start, end) {
   var len = this.length
   start = ~~start
@@ -1108,12 +1114,7 @@ Buffer.prototype.slice = function slice (start, end) {
   }
 
   if (end < start) end = start
-
-  var newBuf = this.subarray(start, end)
-  // Return an augmented `Uint8Array` instance
-  Object.setPrototypeOf(newBuf, Buffer.prototype)
-
-  return newBuf
+  return this.subarray(start, end)
 }
 
 /*
