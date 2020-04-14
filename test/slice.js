@@ -30,3 +30,9 @@ test('modifying parent buffer modifies .slice() buffer\'s memory', function (t) 
 
   t.end()
 })
+
+test('subarray returns buffer', function (t) {
+  var a = B.from('test')
+  t.equal(a.subarray(2, 3).constructor.name, 'Buffer')
+  t.end()
+})
