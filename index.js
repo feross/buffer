@@ -1543,11 +1543,6 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   if (this === target && typeof Uint8Array.prototype.copyWithin === 'function') {
     // Use built-in when available, missing from IE11
     this.copyWithin(targetStart, start, end)
-  } else if (this === target && start < targetStart && targetStart < end) {
-    // descending copy from end
-    for (var i = len - 1; i >= 0; --i) {
-      target[i + targetStart] = this[i + start]
-    }
   } else {
     Uint8Array.prototype.set.call(
       target,
