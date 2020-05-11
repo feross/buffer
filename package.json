@@ -27,7 +27,7 @@
     "is-buffer": "^2.0.0",
     "is-nan": "^1.0.1",
     "split": "^1.0.0",
-    "standard": "*",
+    "standard": ">=14.3.4",
     "tape": "^4.0.0",
     "through2": "^3.0.1",
     "uglify-js": "^3.4.5"
