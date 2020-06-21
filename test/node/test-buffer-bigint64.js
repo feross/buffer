@@ -37,10 +37,12 @@ const buf = Buffer.allocUnsafe(8)
   assert.throws(function() {
     const val = 0x10000000000000000n
     buf['writeBigUInt64' + endianness](val, 0)
-  }, {
-    code: 'ERR_OUT_OF_RANGE',
-    message: 'The value of "value" is out of range. It must be ' +
-             '>= 0n and < 2n ** 64n. Received 18_446_744_073_709_551_616n'
+  }, function(err) {
+    assert(err instanceof RangeError)
+    assert(err.code === 'ERR_OUT_OF_RANGE')
+    assert(err.message === 'The value of "value" is out of range. It must be ' +
+             '>= 0n and < 2n ** 64n. Received 18_446_744_073_709_551_616n')
+    return true;
   })
 
   // Should throw a TypeError upon invalid input
