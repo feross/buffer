@@ -479,7 +479,7 @@ assert.equal(511, longBufferString.lastIndexOf(pattern, 1534));
 // "yolo swag swag yolo swag yolo yolo swag" ..., goes on for about 5MB.
 // This is hard to search because it all looks similar, but never repeats.
 
-// countBits returns the number of bits in the binary reprsentation of n.
+// countBits returns the number of bits in the binary representation of n.
 function countBits(n) {
   for (var count = 0; n > 0; count++) {
     n = n & (n - 1); // remove top bit
