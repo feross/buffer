@@ -5,7 +5,7 @@
   "author": {
     "name": "Feross Aboukhadijeh",
     "email": "feross@feross.org",
-    "url": "http://feross.org"
+    "url": "https://feross.org"
   },
   "bugs": {
     "url": "https://github.com/feross/buffer/issues"
@@ -78,5 +78,19 @@
     "globals": [
       "SharedArrayBuffer"
     ]
-  }
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/feross"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/feross"
+    },
+    {
+      "type": "consulting",
+      "url": "https://feross.org/support"
+    }
+  ]
 }
