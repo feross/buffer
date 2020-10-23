@@ -62,7 +62,7 @@ test('concat() a varying number of buffers', function (t) {
 
 test('concat() works on Uint8Array instances', function (t) {
   var result = B.concat([new Uint8Array([1, 2]), new Uint8Array([3, 4])])
-  var expected = Buffer.from([1, 2, 3, 4])
+  var expected = B.from([1, 2, 3, 4])
   t.deepEqual(result, expected)
   t.end()
 })
