@@ -266,7 +266,7 @@ function fromArrayLike (array) {
 
 function fromArrayView (arrayView) {
   if (isInstance(arrayView, Uint8Array)) {
-    var copy = Uint8Array.from(arrayView)
+    var copy = new Uint8Array(arrayView)
     return fromArrayBuffer(copy.buffer, copy.byteOffset, copy.byteLength)
   }
   return fromArrayLike(arrayView)
