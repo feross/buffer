@@ -33,6 +33,14 @@ test('utf16le to utf16', function (t) {
   t.end()
 })
 
+test('utf16le to utf16 with odd byte length input', function (t) {
+  t.equal(
+    new B(new B('abcde', 'utf8').toString('utf16le'), 'utf16le').toString('utf8'),
+    'abcd'
+  )
+  t.end()
+})
+
 test('utf16le to hex', function (t) {
   t.equal(
     new B('abcd', 'utf16le').toString('hex'),
