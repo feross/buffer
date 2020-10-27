@@ -841,10 +841,6 @@ function asciiWrite (buf, string, offset, length) {
   return blitBuffer(asciiToBytes(string), buf, offset, length)
 }
 
-function latin1Write (buf, string, offset, length) {
-  return asciiWrite(buf, string, offset, length)
-}
-
 function base64Write (buf, string, offset, length) {
   return blitBuffer(base64ToBytes(string), buf, offset, length)
 }
@@ -900,11 +896,9 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
         return utf8Write(this, string, offset, length)
 
       case 'ascii':
-        return asciiWrite(this, string, offset, length)
-
       case 'latin1':
       case 'binary':
-        return latin1Write(this, string, offset, length)
+        return asciiWrite(this, string, offset, length)
 
       case 'base64':
         // Warning: maxLength not taken into account in base64Write
