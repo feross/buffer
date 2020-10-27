@@ -11,8 +11,8 @@
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
 var customInspectSymbol =
-  (typeof Symbol === 'function' && typeof Symbol.for === 'function')
-    ? Symbol.for('nodejs.util.inspect.custom')
+  (typeof Symbol === 'function' && typeof Symbol['for'] === 'function')
+    ? Symbol['for']('nodejs.util.inspect.custom')
     : null
 
 exports.Buffer = Buffer
