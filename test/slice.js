@@ -1,13 +1,13 @@
-var B = require('../').Buffer
-var test = require('tape')
+const B = require('../').Buffer
+const test = require('tape')
 
 test('modifying buffer created by .slice() modifies original memory', function (t) {
-  var buf1 = new B(26)
-  for (var i = 0; i < 26; i++) {
+  const buf1 = new B(26)
+  for (let i = 0; i < 26; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
   }
 
-  var buf2 = buf1.slice(0, 3)
+  const buf2 = buf1.slice(0, 3)
   t.equal(buf2.toString('ascii', 0, buf2.length), 'abc')
 
   buf2[0] = '!'.charCodeAt(0)
@@ -17,12 +17,12 @@ test('modifying buffer created by .slice() modifies original memory', function (
 })
 
 test('modifying parent buffer modifies .slice() buffer\'s memory', function (t) {
-  var buf1 = new B(26)
-  for (var i = 0; i < 26; i++) {
+  const buf1 = new B(26)
+  for (let i = 0; i < 26; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
   }
 
-  var buf2 = buf1.slice(0, 3)
+  const buf2 = buf1.slice(0, 3)
   t.equal(buf2.toString('ascii', 0, buf2.length), 'abc')
 
   buf1[0] = '!'.charCodeAt(0)

@@ -1,5 +1,5 @@
-var B = require('../').Buffer
-var test = require('tape')
+const B = require('../').Buffer
+const test = require('tape')
 
 test('utf8 buffer to base64', function (t) {
   t.equal(

@@ -1,9 +1,9 @@
-var B = require('../').Buffer
-var test = require('tape')
+const B = require('../').Buffer
+const test = require('tape')
 
 test('base64: ignore whitespace', function (t) {
-  var text = '\n   YW9ldQ==  '
-  var buf = new B(text, 'base64')
+  const text = '\n   YW9ldQ==  '
+  const buf = new B(text, 'base64')
   t.equal(buf.toString(), 'aoeu')
   t.end()
 })
@@ -46,7 +46,7 @@ test('base64: invalid non-alphanumeric characters -- should be stripped', functi
 })
 
 test('base64: high byte', function (t) {
-  var highByte = B.from([128])
+  const highByte = B.from([128])
   t.deepEqual(
     B.alloc(1, highByte.toString('base64'), 'base64'),
     highByte

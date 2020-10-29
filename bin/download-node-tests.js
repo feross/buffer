@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-var concat = require('concat-stream')
-var cp = require('child_process')
-var fs = require('fs')
-var hyperquest = require('hyperquest')
-var path = require('path')
-var split = require('split')
-var through = require('through2')
+const concat = require('concat-stream')
+const cp = require('child_process')
+const fs = require('fs')
+const hyperquest = require('hyperquest')
+const path = require('path')
+const split = require('split')
+const through = require('through2')
 
-var url = 'https://api.github.com/repos/nodejs/node/contents'
-var dirs = [
+const url = 'https://api.github.com/repos/nodejs/node/contents'
+const dirs = [
   '/test/parallel',
   '/test/pummel'
 ]
 
 cp.execSync('rm -rf node/test-*.js', { cwd: path.join(__dirname, '../test') })
 
-var httpOpts = {
+const httpOpts = {
   headers: {
     'User-Agent': null
     // auth if github rate-limits you...
@@ -25,7 +25,7 @@ var httpOpts = {
 }
 
 dirs.forEach(function (dir) {
-  var req = hyperquest(url + dir, httpOpts)
+  const req = hyperquest(url + dir, httpOpts)
   req.pipe(concat(function (data) {
     if (req.response.statusCode !== 200) {
       throw new Error(url + dir + ': ' + data.toString())
@@ -57,7 +57,7 @@ function downloadBufferTests (dir, files) {
 
     console.log(file.download_url)
 
-    var out = path.join(__dirname, '../test/node', file.name)
+    const out = path.join(__dirname, '../test/node', file.name)
     hyperquest(file.download_url, httpOpts)
       .pipe(split())
       .pipe(testfixer(file.name))
@@ -69,14 +69,14 @@ function downloadBufferTests (dir, files) {
 }
 
 function testfixer (filename) {
-  var firstline = true
+  let firstline = true
 
   return through(function (line, enc, cb) {
     line = line.toString()
 
     if (firstline) {
       // require buffer explicitly
-      var preamble = 'var Buffer = require(\'../../\').Buffer;'
+      const preamble = 'var Buffer = require(\'../../\').Buffer;'
       if (/use strict/.test(line)) line += '\n' + preamble
       else line += preamble + '\n' + line
       firstline = false
