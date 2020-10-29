@@ -153,9 +153,7 @@ function from (value, encodingOrOffset, length) {
 
   if (typeof Symbol !== 'undefined' && Symbol.toPrimitive != null &&
       typeof value[Symbol.toPrimitive] === 'function') {
-    return Buffer.from(
-      value[Symbol.toPrimitive]('string'), encodingOrOffset, length
-    )
+    return Buffer.from(value[Symbol.toPrimitive]('string'), encodingOrOffset, length)
   }
 
   throw new TypeError(
