@@ -1198,7 +1198,8 @@ Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
     this[offset + 3])
 }
 
-Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (offset = 0) {
+Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (offset) {
+  offset = offset >>> 0
   validateNumber(offset, 'offset')
   const first = this[offset]
   const last = this[offset + 7]
@@ -1219,7 +1220,8 @@ Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (
   return BigInt(lo) + (BigInt(hi) << 32n)
 })
 
-Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (offset = 0) {
+Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (offset) {
+  offset = offset >>> 0
   validateNumber(offset, 'offset')
   const first = this[offset]
   const last = this[offset + 7]
@@ -1317,7 +1319,8 @@ Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
     (this[offset + 3])
 }
 
-Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (offset = 0) {
+Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (offset) {
+  offset = offset >>> 0
   validateNumber(offset, 'offset')
   const first = this[offset]
   const last = this[offset + 7]
@@ -1337,7 +1340,8 @@ Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (of
     this[++offset] * 2 ** 24)
 })
 
-Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (offset = 0) {
+Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (offset) {
+  offset = offset >>> 0
   validateNumber(offset, 'offset')
   const first = this[offset]
   const last = this[offset + 7]
