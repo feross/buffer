@@ -1217,7 +1217,7 @@ Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (
     this[++offset] * 2 ** 16 +
     last * 2 ** 24
 
-  return BigInt(lo) + (BigInt(hi) << 32n)
+  return BigInt(lo) + (BigInt(hi) << BigInt(32))
 })
 
 Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (offset) {
@@ -1239,7 +1239,7 @@ Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (
     this[++offset] * 2 ** 8 +
     last
 
-  return (BigInt(hi) << 32n) + BigInt(lo)
+  return (BigInt(hi) << BigInt(32)) + BigInt(lo)
 })
 
 Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
@@ -1333,7 +1333,7 @@ Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (of
     this[offset + 6] * 2 ** 16 +
     (last << 24) // Overflow
 
-  return (BigInt(val) << 32n) +
+  return (BigInt(val) << BigInt(32)) +
     BigInt(first +
     this[++offset] * 2 ** 8 +
     this[++offset] * 2 ** 16 +
@@ -1354,7 +1354,7 @@ Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (of
     this[++offset] * 2 ** 8 +
     this[++offset]
 
-  return (BigInt(val) << 32n) +
+  return (BigInt(val) << BigInt(32)) +
     BigInt(this[++offset] * 2 ** 24 +
     this[++offset] * 2 ** 16 +
     this[++offset] * 2 ** 8 +
@@ -1487,7 +1487,7 @@ Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert
 function wrtBigUInt64LE (buf, value, offset, min, max) {
   checkIntBI(value, min, max, buf, offset, 7)
 
-  let lo = Number(value & 0xffffffffn)
+  let lo = Number(value & BigInt(0xffffffff))
   buf[offset++] = lo
   lo = lo >> 8
   buf[offset++] = lo
@@ -1495,7 +1495,7 @@ function wrtBigUInt64LE (buf, value, offset, min, max) {
   buf[offset++] = lo
   lo = lo >> 8
   buf[offset++] = lo
-  let hi = Number(value >> 32n & 0xffffffffn)
+  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff))
   buf[offset++] = hi
   hi = hi >> 8
   buf[offset++] = hi
@@ -1509,7 +1509,7 @@ function wrtBigUInt64LE (buf, value, offset, min, max) {
 function wrtBigUInt64BE (buf, value, offset, min, max) {
   checkIntBI(value, min, max, buf, offset, 7)
 
-  let lo = Number(value & 0xffffffffn)
+  let lo = Number(value & BigInt(0xffffffff))
   buf[offset + 7] = lo
   lo = lo >> 8
   buf[offset + 6] = lo
@@ -1517,7 +1517,7 @@ function wrtBigUInt64BE (buf, value, offset, min, max) {
   buf[offset + 5] = lo
   lo = lo >> 8
   buf[offset + 4] = lo
-  let hi = Number(value >> 32n & 0xffffffffn)
+  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff))
   buf[offset + 3] = hi
   hi = hi >> 8
   buf[offset + 2] = hi
@@ -1529,11 +1529,11 @@ function wrtBigUInt64BE (buf, value, offset, min, max) {
 }
 
 Buffer.prototype.writeBigUInt64LE = defineBigIntMethod(function writeBigUInt64LE (value, offset = 0) {
-  return wrtBigUInt64LE(this, value, offset, 0n, 0xffffffffffffffffn)
+  return wrtBigUInt64LE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
 })
 
 Buffer.prototype.writeBigUInt64BE = defineBigIntMethod(function writeBigUInt64BE (value, offset = 0) {
-  return wrtBigUInt64BE(this, value, offset, 0n, 0xffffffffffffffffn)
+  return wrtBigUInt64BE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
 })
 
 Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
@@ -1633,11 +1633,11 @@ Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) 
 }
 
 Buffer.prototype.writeBigInt64LE = defineBigIntMethod(function writeBigInt64LE (value, offset = 0) {
-  return wrtBigUInt64LE(this, value, offset, -0x8000000000000000n, 0x7fffffffffffffffn)
+  return wrtBigUInt64LE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
 })
 
 Buffer.prototype.writeBigInt64BE = defineBigIntMethod(function writeBigInt64BE (value, offset = 0) {
-  return wrtBigUInt64BE(this, value, offset, -0x8000000000000000n, 0x7fffffffffffffffn)
+  return wrtBigUInt64BE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
 })
 
 function checkIEEE754 (buf, value, offset, ext, max, min) {
@@ -1858,7 +1858,7 @@ E('ERR_OUT_OF_RANGE',
       received = addNumericalSeparator(String(input))
     } else if (typeof input === 'bigint') {
       received = String(input)
-      if (input > 2n ** 32n || input < -(2n ** 32n)) {
+      if (input > BigInt(2) ** BigInt(32) || input < -(BigInt(2) ** BigInt(32))) {
         received = addNumericalSeparator(received)
       }
       received += 'n'
@@ -1892,7 +1892,7 @@ function checkIntBI (value, min, max, buf, offset, byteLength) {
     const n = typeof min === 'bigint' ? 'n' : ''
     let range
     if (byteLength > 3) {
-      if (min === 0 || min === 0n) {
+      if (min === 0 || min === BigInt(0)) {
         range = `>= 0${n} and < 2${n} ** ${(byteLength + 1) * 8}${n}`
       } else {
         range = `>= -(2${n} ** ${(byteLength + 1) * 8 - 1}${n}) and < 2 ** ` +

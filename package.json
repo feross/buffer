@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "base64-js": "^1.3.1",
-    "ieee754": "^1.1.13"
+    "ieee754": "^1.2.1"
   },
   "devDependencies": {
     "airtap": "^3.0.0",
@@ -24,13 +24,13 @@
     "browserify": "^17.0.0",
     "concat-stream": "^2.0.0",
     "hyperquest": "^2.1.3",
-    "is-buffer": "^2.0.4",
+    "is-buffer": "^2.0.5",
     "is-nan": "^1.3.0",
     "split": "^1.0.1",
     "standard": "*",
     "tape": "^5.0.1",
     "through2": "^4.0.2",
-    "uglify-js": "^3.11.3"
+    "uglify-js": "^3.11.5"
   },
   "homepage": "https://github.com/feross/buffer",
   "jspm": {
@@ -61,25 +61,19 @@
     "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c",
     "test": "standard && node ./bin/test.js",
-    "test-browser-es5": "airtap -- test/*.js",
-    "test-browser-es5-local": "airtap --local -- test/*.js",
-    "test-browser-es6": "airtap -- test/*.js test/node/*.js",
-    "test-browser-es6-local": "airtap --local -- test/*.js test/node/*.js",
+    "test-browser-old": "airtap -- test/*.js",
+    "test-browser-old-local": "airtap --local -- test/*.js",
+    "test-browser-new": "airtap -- test/*.js test/node/*.js",
+    "test-browser-new-local": "airtap --local -- test/*.js test/node/*.js",
     "test-node": "tape test/*.js test/node/*.js",
     "update-authors": "./bin/update-authors.sh"
   },
   "standard": {
-    "globals": [
-      "BigInt"
-    ],
     "ignore": [
       "test/node/**/*.js",
       "test/common.js",
       "test/_polyfill.js",
       "perf/**/*.js"
-    ],
-    "globals": [
-      "SharedArrayBuffer"
     ]
   },
   "funding": [
