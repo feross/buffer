@@ -1802,7 +1802,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 // =============
 
 // Simplified versions from Node, changed for Buffer-only usage
-var errors = {}
+const errors = {}
 function E (sym, getMessage, Base) {
   errors[sym] = class NodeError extends Base {
     constructor () {
