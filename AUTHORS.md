@@ -63,6 +63,7 @@
 - Niklas Mischkulnig (mischnic@users.noreply.github.com)
 - Nikolai Vavilov (vvnicholas@gmail.com)
 - Fedor Nezhivoi (gyzerok@users.noreply.github.com)
+- shuse2 (shus.toda@gmail.com)
 - Peter Newman (peternewman@users.noreply.github.com)
 - mathmakgakpak (44949126+mathmakgakpak@users.noreply.github.com)
 
