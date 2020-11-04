@@ -407,10 +407,11 @@ Buffer.concat = function concat (list, length) {
   const buffer = Buffer.allocUnsafe(length)
   let pos = 0
   for (i = 0; i < list.length; ++i) {
-    const buf = list[i]
+    let buf = list[i]
     if (isInstance(buf, Uint8Array)) {
       if (pos + buf.length > buffer.length) {
-        Buffer.from(buf).copy(buffer, pos)
+        if (!Buffer.isBuffer(buf)) buf = Buffer.from(buf)
+        buf.copy(buffer, pos)
       } else {
         Uint8Array.prototype.set.call(
           buffer,
