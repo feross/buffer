@@ -67,6 +67,13 @@ test('concat() works on Uint8Array instances', function (t) {
   t.end()
 })
 
+test('concat() works on Uint8Array instances for smaller provided totalLength', function (t) {
+  const result = B.concat([new Uint8Array([1, 2]), new Uint8Array([3, 4])], 3)
+  const expected = B.from([1, 2, 3])
+  t.deepEqual(result, expected)
+  t.end()
+})
+
 test('fill', function (t) {
   const b = new B(10)
   b.fill(2)
