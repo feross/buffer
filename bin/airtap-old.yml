@@ -4,7 +4,4 @@ browsers:
   - name: safari
     version: 11..13
   - name: iphone
-    version:
-      - 11
-      - 12
-      - 13
+    version: 11.3
