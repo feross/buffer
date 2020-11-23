@@ -4,7 +4,7 @@ export class Buffer extends Uint8Array {
     toString(encoding?: string, start?: number, end?: number): string;
     toJSON(): { type: 'Buffer', data: any[] };
     equals(otherBuffer: Buffer): boolean;
-    compare(otherBuffer: Buffer, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number): number;
+    compare(otherBuffer: Uint8Array, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number): number;
     copy(targetBuffer: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
     slice(start?: number, end?: number): Buffer;
     writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
@@ -163,11 +163,11 @@ export class Buffer extends Uint8Array {
      * @param totalLength Total length of the buffers when concatenated.
      *   If totalLength is not provided, it is read from the buffers in the list. However, this adds an additional loop to the function, so it is faster to provide the length explicitly.
      */
-    static concat(list: Buffer[], totalLength?: number): Buffer;
+    static concat(list: Uint8Array[], totalLength?: number): Buffer;
     /**
      * The same as buf1.compare(buf2).
      */
-    static compare(buf1: Buffer, buf2: Buffer): number;
+    static compare(buf1: Uint8Array, buf2: Uint8Array): number;
     /**
      * Allocates a new buffer of {size} octets.
      *
