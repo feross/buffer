@@ -609,7 +609,7 @@ Buffer.prototype.toString = function toString () {
 Buffer.prototype.toLocaleString = Buffer.prototype.toString
 
 Buffer.prototype.equals = function equals (b) {
-  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (!Buffer.isBuffer(b) && !(b instanceof Uint8Array)) throw new TypeError('Argument must be a Buffer')
   if (this === b) return true
   return Buffer.compare(this, b) === 0
 }
@@ -1688,7 +1688,7 @@ Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
 Buffer.prototype.copy = function copy (target, targetStart, start, end) {
-  if (!Buffer.isBuffer(target)) throw new TypeError('argument should be a Buffer')
+  if (!Buffer.isBuffer(target) && !(target instanceof Uint8Array)) throw new TypeError('argument should be a Buffer')
   if (!start) start = 0
   if (!end && end !== 0) end = this.length
   if (targetStart >= target.length) targetStart = target.length

@@ -1,5 +1,6 @@
 const B = require('../').Buffer
 const test = require('tape')
+const { randomBytes } = require('crypto')
 
 test('buffer.toJSON', function (t) {
   const data = [1, 2, 3, 4]
@@ -26,6 +27,12 @@ test('buffer.copy', function (t) {
     buf2.toString('ascii', 0, 25),
     '!!!!!!!!qrst!!!!!!!!!!!!!'
   )
+
+  const buf3 = Buffer.from([1, 2, 3])
+  const buf4 = new Uint8Array(3)
+  buf3.copy(buf4)
+  t.ok(buf3.equals(buf4))
+
   t.end()
 })
 
@@ -136,5 +143,15 @@ test('buffer.slice out of range', function (t) {
   t.plan(2)
   t.equal((new B('hallo')).slice(0, 10).toString(), 'hallo')
   t.equal((new B('hallo')).slice(10, 2).toString(), '')
+  t.end()
+})
+
+test('buffer.includes', function (t) {
+  const bytes1 = new Uint8Array([54, 12, 21])
+  t.ok(B.from(bytes1), bytes1)
+
+  const size = 512
+  const bytes2 = randomBytes(size)
+  t.ok(B.alloc((size * 2) - 1, bytes2), bytes2)
   t.end()
 })

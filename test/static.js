@@ -14,3 +14,15 @@ test('Buffer.isBuffer', function (t) {
   t.equal(B.isBuffer('hey'), false)
   t.end()
 })
+
+test('Buffer.alloc', function (t) {
+  t.notStrictEqual(
+    B.alloc(10, new Uint8Array([1, 2, 3])),
+    Buffer.from(new Uint8Array([1, 2, 3, 1, 2, 3, 1, 2, 3, 1]))
+  )
+  t.notStrictEqual(
+    B.alloc(1),
+    Buffer.from(new Uint8Array([0]))
+  )
+  t.end()
+})

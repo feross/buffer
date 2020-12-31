@@ -3,9 +3,9 @@ export class Buffer extends Uint8Array {
     write(string: string, offset?: number, length?: number, encoding?: string): number;
     toString(encoding?: string, start?: number, end?: number): string;
     toJSON(): { type: 'Buffer', data: any[] };
-    equals(otherBuffer: Buffer): boolean;
+    equals(otherBuffer: Uint8Array): boolean;
     compare(otherBuffer: Uint8Array, targetStart?: number, targetEnd?: number, sourceStart?: number, sourceEnd?: number): number;
-    copy(targetBuffer: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
+    copy(targetBuffer: Uint8Array, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
     slice(start?: number, end?: number): Buffer;
     writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
     writeUIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
@@ -56,9 +56,9 @@ export class Buffer extends Uint8Array {
     writeDoubleLE(value: number, offset: number, noAssert?: boolean): number;
     writeDoubleBE(value: number, offset: number, noAssert?: boolean): number;
     fill(value: any, offset?: number, end?: number): this;
-    indexOf(value: string | number | Buffer, byteOffset?: number, encoding?: string): number;
-    lastIndexOf(value: string | number | Buffer, byteOffset?: number, encoding?: string): number;
-    includes(value: string | number | Buffer, byteOffset?: number, encoding?: string): boolean;
+    indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: string): number;
+    lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: string): number;
+    includes(value: string | number | Uint8Array, byteOffset?: number, encoding?: string): boolean;
 
     /**
      * Allocates a new buffer containing the given {str}.
@@ -122,7 +122,7 @@ export class Buffer extends Uint8Array {
      *
      * @param buffer
      */
-    static from(buffer: Buffer | Uint8Array): Buffer;
+    static from(buffer: Uint8Array): Buffer;
     /**
      * Creates a new Buffer containing the given JavaScript string {str}.
      * If provided, the {encoding} parameter identifies the character encoding.
@@ -176,7 +176,7 @@ export class Buffer extends Uint8Array {
      *    If parameter is omitted, buffer will be filled with zeros.
      * @param encoding encoding used for call to buf.fill while initializing
      */
-    static alloc(size: number, fill?: string | Buffer | number, encoding?: string): Buffer;
+    static alloc(size: number, fill?: string | Uint8Array | number, encoding?: string): Buffer;
     /**
      * Allocates a new buffer of {size} octets, leaving memory not initialized, so the contents
      * of the newly created Buffer are unknown and may contain sensitive data.
