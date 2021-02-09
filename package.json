@@ -1,6 +1,6 @@
 {
-  "name": "buffer",
-  "description": "Node.js Buffer API, for the browser",
+  "name": "@craftzdog/react-native-buffer",
+  "description": "Node.js Buffer API, for React Native",
   "version": "6.0.3",
   "author": {
     "name": "Feross Aboukhadijeh",
@@ -8,18 +8,20 @@
     "url": "https://feross.org"
   },
   "bugs": {
-    "url": "https://github.com/feross/buffer/issues"
+    "url": "https://github.com/craftzdog/react-native-buffer/issues"
   },
   "contributors": [
     "Romain Beauxis <toots@rastageeks.org>",
-    "James Halliday <mail@substack.net>"
+    "James Halliday <mail@substack.net>",
+    "Takuya Matsuyama <hi@craftz.dog>"
   ],
   "dependencies": {
-    "base64-js": "^1.3.1",
+    "react-native-quick-base64": "^0.1.0",
     "ieee754": "^1.2.1"
   },
   "devDependencies": {
     "airtap": "^3.0.0",
+    "base64-js": "^1.5.1",
     "benchmark": "^2.1.4",
     "browserify": "^17.0.0",
     "concat-stream": "^2.0.0",
@@ -32,7 +34,7 @@
     "through2": "^4.0.2",
     "uglify-js": "^3.11.5"
   },
-  "homepage": "https://github.com/feross/buffer",
+  "homepage": "https://github.com/craftzdog/react-native-buffer",
   "jspm": {
     "map": {
       "./index.js": {

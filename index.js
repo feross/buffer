@@ -8,7 +8,7 @@
 
 'use strict'
 
-const base64 = require('base64-js')
+const base64 = require('react-native-quick-base64')
 const ieee754 = require('ieee754')
 const customInspectSymbol =
   (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
