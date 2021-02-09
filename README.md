@@ -23,16 +23,10 @@ instance methods, and class methods that are supported.
 
 ## install
 
-To use this module directly (without browserify), install it:
-
 ```bash
-npm install buffer
+npm install @craftzdog/react-native-buffer react-native-quick-base64
+cd ios && pod install
 ```
-
-This module was previously called **native-buffer-browserify**, but please use **buffer**
-from now on.
-
-If you do not use a bundler, you can use the [standalone script](https://bundle.run/buffer).
 
 ## usage
 
@@ -40,20 +34,11 @@ The module's API is identical to node's `Buffer` API. Read the
 [official docs](https://nodejs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
-As mentioned above, `require('buffer')` or use the `Buffer` global with
-[browserify](http://browserify.org) and this module will automatically be included
-in your bundle. Almost any npm module will work in the browser, even if it assumes that
-the node `Buffer` API will be available.
-
-To depend on this module explicitly (without browserify), require it like this:
+To depend on this module explicitly, require it like this:
 
 ```js
-var Buffer = require("buffer/").Buffer; // note: the trailing slash is important!
+var Buffer = require("@craftzdog/react-native-buffer").Buffer;
 ```
-
-To require this module explicitly, use `require('buffer/')` which tells the node.js module
-lookup algorithm (also used by browserify) to use the **npm module** named `buffer`
-instead of the **node.js core** module named `buffer`!
 
 ## how does it work?
 
