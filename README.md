@@ -9,7 +9,7 @@
 [standard-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
 [standard-url]: https://standardjs.com
 
-#### The buffer module from [node.js](https://nodejs.org/), for the browser.
+#### The buffer module from [node.js](https://nodejs.org), for the browser.
 
 [![saucelabs][saucelabs-image]][saucelabs-url]
 
