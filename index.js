@@ -410,7 +410,9 @@ Buffer.concat = function concat (list, length) {
     let buf = list[i]
     if (isInstance(buf, Uint8Array)) {
       if (pos + buf.length > buffer.length) {
-        if (!Buffer.isBuffer(buf)) buf = Buffer.from(buf)
+        if (!Buffer.isBuffer(buf)) {
+          buf = Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength)
+        }
         buf.copy(buffer, pos)
       } else {
         Uint8Array.prototype.set.call(
