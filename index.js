@@ -846,9 +846,12 @@ function hexWrite (buf, string, offset, length) {
   }
   let i
   for (i = 0; i < length; ++i) {
-    const parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (numberIsNaN(parsed)) return i
-    buf[offset + i] = parsed
+    const a = hexCharValueTable[string[i * 2]]
+    const b = hexCharValueTable[string[i * 2 + 1]]
+    if (a === undefined || b === undefined) {
+      return i
+    }
+    buf[offset + i] = a << 4 | b
   }
   return i
 }
@@ -2103,6 +2106,17 @@ const hexSliceLookupTable = (function () {
     for (let j = 0; j < 16; ++j) {
       table[i16 + j] = alphabet[i] + alphabet[j]
     }
+  }
+  return table
+})()
+
+// Lookup table for Buffer.from(x, 'hex')
+const hexCharValueTable = (function () {
+  const alphabet = '0123456789abcdefABCDEF'
+  const table = {}
+  for (let i = 0; i < 22; ++i) {
+    // ABCDEF should be same value as abcdef
+    table[alphabet[i]] = i < 16 ? i : i - 6
   }
   return table
 })()
