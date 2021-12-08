@@ -15,6 +15,8 @@ const customInspectSymbol =
     ? Symbol['for']('nodejs.util.inspect.custom') // eslint-disable-line dot-notation
     : null
 
+const decoderUTF8 = new TextDecoder('utf8')
+
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
 exports.INSPECT_MAX_BYTES = 50
@@ -970,7 +972,14 @@ function base64Slice (buf, start, end) {
   }
 }
 
+// For smaller buffers than this TextDecoder#decode appears
+// to have more overhead than doing it in Javascript directly.
+const TEXT_DECODER_THRESHOLD = 7000
+
 function utf8Slice (buf, start, end) {
+  if ((end - start) > TEXT_DECODER_THRESHOLD) {
+    return decoderUTF8.decode(buf.slice(start, end))
+  }
   end = Math.min(buf.length, end)
   const res = []
 
