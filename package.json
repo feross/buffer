@@ -16,8 +16,8 @@
     "Takuya Matsuyama <hi@craftz.dog>"
   ],
   "dependencies": {
-    "react-native-quick-base64": "^0.1.0",
-    "ieee754": "^1.2.1"
+    "ieee754": "^1.2.1",
+    "react-native-quick-base64": "^2.0.0"
   },
   "devDependencies": {
     "airtap": "^3.0.0",
