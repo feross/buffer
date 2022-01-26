@@ -1227,14 +1227,14 @@ Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (
   }
 
   const lo = first +
-    this[++offset] * 2 ** 8 +
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 24
+    this[++offset] * 256 +
+    this[++offset] * 65536 +
+    this[++offset] * 16777216
 
   const hi = this[++offset] +
-    this[++offset] * 2 ** 8 +
-    this[++offset] * 2 ** 16 +
-    last * 2 ** 24
+    this[++offset] * 256 +
+    this[++offset] * 65536 +
+    last * 16777216
 
   return BigInt(lo) + (BigInt(hi) << BigInt(32))
 })
@@ -1248,14 +1248,14 @@ Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (
     boundsError(offset, this.length - 8)
   }
 
-  const hi = first * 2 ** 24 +
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 8 +
+  const hi = first * 16777216 +
+    this[++offset] * 65536 +
+    this[++offset] * 256 +
     this[++offset]
 
-  const lo = this[++offset] * 2 ** 24 +
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 8 +
+  const lo = this[++offset] * 16777216 +
+    this[++offset] * 65536 +
+    this[++offset] * 256 +
     last
 
   return (BigInt(hi) << BigInt(32)) + BigInt(lo)
@@ -1348,15 +1348,15 @@ Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (of
   }
 
   const val = this[offset + 4] +
-    this[offset + 5] * 2 ** 8 +
-    this[offset + 6] * 2 ** 16 +
+    this[offset + 5] * 256 +
+    this[offset + 6] * 65536 +
     (last << 24) // Overflow
 
   return (BigInt(val) << BigInt(32)) +
     BigInt(first +
-    this[++offset] * 2 ** 8 +
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 24)
+    this[++offset] * 256 +
+    this[++offset] * 65536 +
+    this[++offset] * 16777216)
 })
 
 Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (offset) {
@@ -1369,14 +1369,14 @@ Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (of
   }
 
   const val = (first << 24) + // Overflow
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 8 +
+    this[++offset] * 65536 +
+    this[++offset] * 256 +
     this[++offset]
 
   return (BigInt(val) << BigInt(32)) +
-    BigInt(this[++offset] * 2 ** 24 +
-    this[++offset] * 2 ** 16 +
-    this[++offset] * 2 ** 8 +
+    BigInt(this[++offset] * 16777216 +
+    this[++offset] * 65536 +
+    this[++offset] * 256 +
     last)
 })
 
@@ -1873,11 +1873,11 @@ E('ERR_OUT_OF_RANGE',
   function (str, range, input) {
     let msg = `The value of "${str}" is out of range.`
     let received = input
-    if (Number.isInteger(input) && Math.abs(input) > 2 ** 32) {
+    if (Number.isInteger(input) && Math.abs(input) > 4294967296) {
       received = addNumericalSeparator(String(input))
     } else if (typeof input === 'bigint') {
       received = String(input)
-      if (input > BigInt(2) ** BigInt(32) || input < -(BigInt(2) ** BigInt(32))) {
+      if (input > BigInt(4294967296) || input < -(BigInt(4294967296))) {
         received = addNumericalSeparator(received)
       }
       received += 'n'
