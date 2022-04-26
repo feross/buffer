@@ -22,6 +22,16 @@ exports.INSPECT_MAX_BYTES = 50
 const K_MAX_LENGTH = 0x7fffffff
 exports.kMaxLength = K_MAX_LENGTH
 
+// not used, but value is added for maintain api compatability
+// max length will vary from browser to browser, but using a likely expected value circa Node v8
+const K_STRING_MAX_LENGTH = 2**28 - 1
+exports.kStringMaxLength = K_STRING_MAX_LENGTH
+
+exports.constants = {
+  MAX_LENGTH: K_MAX_LENGTH,
+  MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
+}
+
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
