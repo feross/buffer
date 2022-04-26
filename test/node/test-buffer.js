@@ -4,6 +4,7 @@ var Buffer = require('../../').Buffer;
 var common = { skip: function () {} };
 var assert = require('assert');
 
+const buffer = require('../../');
 var Buffer = require('../../').Buffer;
 var SlowBuffer = require('../../').SlowBuffer;
 
@@ -442,10 +443,10 @@ for (var i = 0; i < Buffer.byteLength(utf8String); i++) {
 {
   // Bug regression test
   var testValue = '\u00F6\u65E5\u672C\u8A9E'; // ö日本語
-  var buffer = new Buffer(32);
-  var size = buffer.write(testValue, 0, 'utf8');
-//   console.log('bytes written to buffer: ' + size);
-  var slice = buffer.toString('utf8', 0, size);
+  var testBuffer = new Buffer(32);
+  var size = testBuffer.write(testValue, 0, 'utf8');
+//   console.log('bytes written to testBuffer: ' + size);
+  var slice = testBuffer.toString('utf8', 0, size);
   assert.equal(slice, testValue);
 }
 
@@ -1050,12 +1051,12 @@ Buffer(Buffer(0), 0, 0);
 
 // GH-5110
 {
-  var buffer = new Buffer('test');
-  var string = JSON.stringify(buffer);
+  var testBuffer = new Buffer('test');
+  var string = JSON.stringify(testBuffer);
 
   assert.strictEqual(string, '{"type":"Buffer","data":[116,101,115,116]}');
 
-  assert.deepStrictEqual(buffer, JSON.parse(string, function(key, value) {
+  assert.deepStrictEqual(testBuffer, JSON.parse(string, function(key, value) {
     return value && value.type === 'Buffer'
       ? new Buffer(value.data)
       : value;
@@ -1498,3 +1499,9 @@ assert.throws(() => Buffer(-100),
 assert.throws(() => Buffer(-1),
               '"size" argument must not be negative');
 
+// Verify constants
+assert.equal(0x7fffffff, buffer.kMaxLength)
+assert.equal(buffer.kMaxLength, buffer.constants.MAX_LENGTH)
+
+assert.equal(2**28 - 1, buffer.kStringMaxLength)
+assert.equal(buffer.kStringMaxLength, buffer.constants.MAX_STRING_LENGTH)
