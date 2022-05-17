@@ -388,6 +388,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
     case 'ascii':
     case 'latin1':
     case 'binary':
+    case 'base64url':
     case 'base64':
     case 'ucs2':
     case 'ucs-2':
@@ -545,8 +546,9 @@ function slowToString (encoding, start, end) {
       case 'binary':
         return latin1Slice(this, start, end)
 
+      case 'base64url':
       case 'base64':
-        return base64Slice(this, start, end)
+        return base64Slice(this, start, end, encoding)
 
       case 'ucs2':
       case 'ucs-2':
@@ -874,8 +876,9 @@ function asciiWrite (buf, string, offset, length) {
   return blitBuffer(asciiToBytes(string), buf, offset, length)
 }
 
-function base64Write (buf, string, offset, length) {
-  return blitBuffer(base64ToBytes(string), buf, offset, length)
+function base64Write (buf, string, offset, length, encoding) {
+  const b64 = encoding === 'base64url' ? base64urlToBase64(string) : string
+  return blitBuffer(base64ToBytes(b64), buf, offset, length)
 }
 
 function ucs2Write (buf, string, offset, length) {
@@ -933,9 +936,11 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
       case 'binary':
         return asciiWrite(this, string, offset, length)
 
+      case 'base64url':
       case 'base64':
+        // console.log(encoding, '::', string)
         // Warning: maxLength not taken into account in base64Write
-        return base64Write(this, string, offset, length)
+        return base64Write(this, string, offset, length, encoding)
 
       case 'ucs2':
       case 'ucs-2':
@@ -958,12 +963,14 @@ Buffer.prototype.toJSON = function toJSON () {
   }
 }
 
-function base64Slice (buf, start, end) {
+function base64Slice (buf, start, end, encoding) {
+  let b64
   if (start === 0 && end === buf.length) {
-    return base64.fromByteArray(buf)
+    b64 = base64.fromByteArray(buf)
   } else {
-    return base64.fromByteArray(buf.slice(start, end))
+    b64 = base64.fromByteArray(buf.slice(start, end))
   }
+  return encoding === 'base64url' ? base64urlFromBase64(b64) : b64
 }
 
 // For smaller buffers than this TextDecoder#decode appears
@@ -1960,6 +1967,23 @@ function boundsError (value, length, type) {
 // ================
 
 const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
+
+const BASE64_CHAR_62 = '+'
+const BASE64_CHAR_63 = '/'
+const BASE64URL_CHAR_62 = '-'
+const BASE64URL_CHAR_63 = '_'
+
+function base64urlToBase64 (str) {
+  return str
+    .replaceAll(BASE64URL_CHAR_62, BASE64_CHAR_62)
+    .replaceAll(BASE64URL_CHAR_63, BASE64_CHAR_63)
+}
+
+function base64urlFromBase64 (str) {
+  return str
+    .replaceAll(BASE64_CHAR_62, BASE64URL_CHAR_62)
+    .replaceAll(BASE64_CHAR_63, BASE64URL_CHAR_63)
+}
 
 function base64clean (str) {
   // Node takes equal signs as end of the Base64 encoding
