@@ -53,3 +53,21 @@ test('base64: high byte', function (t) {
   )
   t.end()
 })
+
+test('base64url: convert to/from base64', function (t) {
+  const base64url = '8J-Ps--4j_Cfj7PvuI8='
+  const base64 = '8J+Ps++4j/Cfj7PvuI8='
+  const text = '🏳️🏳️'
+
+  const base64urlBuf = new B(base64url, 'base64url')
+  t.equal(base64urlBuf.toString('base64'), base64)
+  t.equal(base64urlBuf.toString(), text)
+
+  const base64Buf = new B(base64, 'base64')
+  t.equal(base64Buf.toString('base64url'), base64url)
+  t.equal(base64Buf.toString(), text)
+
+  const buf = new B(text)
+  t.equal(buf.toString('base64url'), base64url)
+  t.end()
+})
