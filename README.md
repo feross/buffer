@@ -39,7 +39,7 @@ instance methods, and class methods that are supported.
 To use this module directly (without browserify), install it:
 
 ```bash
-npm install buffer
+npm install @caspertech/buffer
 ```
 
 This module was previously called **native-buffer-browserify**, but please use **buffer**

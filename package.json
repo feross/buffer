@@ -1,7 +1,7 @@
 {
-  "name": "buffer",
+  "name": "@caspertech/buffer",
   "description": "Node.js Buffer API, for the browser",
-  "version": "6.0.3",
+  "version": "6.0.8",
   "author": {
     "name": "Feross Aboukhadijeh",
     "email": "feross@feross.org",
