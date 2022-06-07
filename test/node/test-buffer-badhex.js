@@ -5,7 +5,7 @@ const assert = require('assert');
 
 // Test hex strings and bad hex strings
 {
-  const buf = Buffer.alloc(4);
+  let buf = Buffer.alloc(4);
   assert.strictEqual(buf.length, 4);
   assert.deepStrictEqual(buf, new Buffer([0, 0, 0, 0]));
   assert.strictEqual(buf.write('abcdxx', 0, 'hex'), 2);
@@ -17,9 +17,10 @@ const assert = require('assert');
   // Node Buffer behavior check
   // > Buffer.from('abc def01','hex')
   // <Buffer ab>
+  buf = Buffer.alloc(4);
   assert.strictEqual(buf.write('abc def01', 0, 'hex'), 1);
-  assert.deepStrictEqual(buf, new Buffer([0xab]));
-  assert.strictEqual(buf.toString('hex'), 'ab');
+  assert.deepStrictEqual(buf, new Buffer([0xab, 0x0, 0x0, 0x0]));
+  assert.strictEqual(buf.toString('hex'), 'ab000000');
 
   const copy = Buffer.from(buf.toString('hex'), 'hex');
   assert.strictEqual(buf.toString('hex'), copy.toString('hex'));
