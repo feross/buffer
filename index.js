@@ -1119,6 +1119,13 @@ Buffer.prototype.slice = function slice (start, end) {
   return newBuf
 }
 
+Buffer.prototype.subarray = function subarray (start, end) {
+  const newBuf = Uint8Array.prototype.subarray.call(this, start, end)
+  Object.setPrototypeOf(newBuf, Buffer.prototype)
+
+  return newBuf
+}
+
 /*
  * Need to make sure that buffer isn't trying to write out of bounds.
  */
