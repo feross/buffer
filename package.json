@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "ieee754": "^1.2.1",
-    "react-native-quick-base64": "^2.0.0"
+    "react-native-quick-base64": "^2.0.5"
   },
   "devDependencies": {
     "airtap": "^3.0.0",
