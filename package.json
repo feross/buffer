@@ -1,7 +1,7 @@
 {
   "name": "@craftzdog/react-native-buffer",
   "description": "Node.js Buffer API, for React Native",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "author": {
     "name": "Feross Aboukhadijeh",
     "email": "feross@feross.org",
