@@ -26,6 +26,17 @@ test('buffer.copy', function (t) {
     buf2.toString('ascii', 0, 25),
     '!!!!!!!!qrst!!!!!!!!!!!!!'
   )
+
+  const u8buf = new Uint8Array(26)
+  u8buf.fill(35) // ASCII #
+
+  buf1.copy(u8buf, 8, 20, 24)
+
+  t.equal(
+    new TextDecoder().decode(u8buf.slice(0, 25)),
+    '########uvwx#############'
+  )
+
   t.end()
 })
 
