@@ -535,6 +535,7 @@ function slowToString (encoding, start, end) {
         return latin1Slice(this, start, end)
 
       case 'base64url':
+        return base64urlSlice(this, start, end, encoding)
       case 'base64':
         return base64Slice(this, start, end, encoding)
 
@@ -947,14 +948,19 @@ Buffer.prototype.toJSON = function toJSON () {
   }
 }
 
-function base64Slice (buf, start, end, encoding) {
-  let b64
+function base64urlSlice (buf, start, end, encoding) {
   if (start === 0 && end === buf.length) {
-    b64 = base64.fromByteArray(buf)
-  } else {
-    b64 = base64.fromByteArray(buf.slice(start, end))
+    return base64urlFromBase64(base64.fromByteArray(buf))
   }
-  return encoding === 'base64url' ? base64urlFromBase64(b64) : b64
+  
+  return base64urlFromBase64(base64.fromByteArray(buf.slice(start, end)))
+}
+
+function base64Slice (buf, start, end, encoding) {
+  if (start === 0 && end === buf.length) {
+    return base64.fromByteArray(buf)
+  }
+  return base64.fromByteArray(buf.slice(start, end))
 }
 
 function utf8Slice (buf, start, end) {
