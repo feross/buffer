@@ -1,23 +1,36 @@
-name: ci
-'on':
-  - push
-  - pull_request
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
-  test:
-    name: Node ${{ matrix.node }} / ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  unit:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-        node:
-          - '14'
+        # see https://nodejs.org/en/about/releases/
+        node-version: [16.x, 18.x, 20.x]
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ runner.node }}
-      - run: npm install
-      - run: npm run build --if-present
-      - run: npm test
+    - uses: actions/checkout@main
+    - uses: actions/setup-node@main
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm test
+
+  standard:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+    - uses: actions/setup-node@main
+      with:
+        # don't use lts/* to prevent hitting rate-limit
+        node-version: 20.x
+    - run: npm install
+    - run: npm run standard
