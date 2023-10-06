@@ -952,7 +952,6 @@ function base64urlSlice (buf, start, end, encoding) {
   if (start === 0 && end === buf.length) {
     return base64urlFromBase64(base64.fromByteArray(buf))
   }
-  
   return base64urlFromBase64(base64.fromByteArray(buf.slice(start, end)))
 }
 
