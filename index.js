@@ -47,7 +47,7 @@ if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
 }
 
 function typedArraySupport () {
-  // Can typed array instances can be augmented?
+  // Can typed array instances be augmented?
   try {
     const arr = new Uint8Array(1)
     const proto = { foo: function () { return 42 } }
