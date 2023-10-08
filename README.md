@@ -147,8 +147,8 @@ Alternatively, use the [`to-arraybuffer`](https://www.npmjs.com/package/to-array
 
 See perf tests in `/perf`.
 
-`BrowserBuffer` is the browser `buffer` module (this repo). `Uint8Array` is included as a
-sanity check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Array` will
+`BrowserBuffer` is the browser `buffer` module (this repo). `Uint8Array` is included as an
+additional check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Array` will
 always be at least a bit faster). Finally, `NodeBuffer` is the node.js buffer module,
 which is included to compare against.
 
