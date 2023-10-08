@@ -1503,5 +1503,5 @@ assert.throws(() => Buffer(-1),
 assert.equal(0x7fffffff, buffer.kMaxLength)
 assert.equal(buffer.kMaxLength, buffer.constants.MAX_LENGTH)
 
-assert.equal(2**28 - 1, buffer.kStringMaxLength)
+assert.equal((1 << 28) - 16, buffer.kStringMaxLength)
 assert.equal(buffer.kStringMaxLength, buffer.constants.MAX_STRING_LENGTH)
