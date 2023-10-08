@@ -23,6 +23,22 @@ const K_MAX_LENGTH = 0x7fffffff
 exports.kMaxLength = K_MAX_LENGTH
 
 /**
+ * Not used internally, but exported to maintain api compatability
+ * Uses 32-bit implementation value from Node defined in String:kMaxLength
+ *
+ * @see https://github.com/nodejs/node/blob/main/deps/v8/include/v8-primitive.h#L126
+ * @see https://github.com/nodejs/node/blob/main/src/node_buffer.cc#L1298
+ * @see https://github.com/nodejs/node/blob/main/lib/buffer.js#L142
+ */
+const K_STRING_MAX_LENGTH = (1 << 28) - 16
+exports.kStringMaxLength = K_STRING_MAX_LENGTH
+
+exports.constants = {
+  MAX_LENGTH: K_MAX_LENGTH,
+  MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
+}
+
+/**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
  *   === false   Print warning and recommend using `buffer` v4.x which has an Object
