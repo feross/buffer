@@ -860,9 +860,12 @@ function hexWrite (buf, string, offset, length) {
   }
   let i
   for (i = 0; i < length; ++i) {
-    const parsed = parseInt(string.substr(i * 2, 2), 16)
-    if (numberIsNaN(parsed)) return i
-    buf[offset + i] = parsed
+    const a = hexCharValueTable[string[i * 2]]
+    const b = hexCharValueTable[string[i * 2 + 1]]
+    if (a === undefined || b === undefined) {
+      return i
+    }
+    buf[offset + i] = a << 4 | b
   }
   return i
 }
@@ -2113,6 +2116,32 @@ const hexSliceLookupTable = (function () {
   }
   return table
 })()
+
+// hex lookup table for Buffer.from(x, 'hex')
+const hexCharValueTable = {
+  '0': 0, 
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  '6': 6,
+  '7': 7,
+  '8': 8,
+  '9': 9,
+  a: 10,
+  b: 11,
+  c: 12,
+  d: 13,
+  e: 14,
+  f: 15,
+  A: 10,
+  B: 11,
+  C: 12,
+  D: 13,
+  E: 14,
+  F: 15
+}
 
 // Return not function with Error if BigInt not supported
 function defineBigIntMethod (fn) {

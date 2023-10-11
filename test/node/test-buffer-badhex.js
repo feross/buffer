@@ -14,6 +14,12 @@ const assert = require('assert');
   assert.strictEqual(buf.write('abcdef01', 0, 'hex'), 4);
   assert.deepStrictEqual(buf, new Buffer([0xab, 0xcd, 0xef, 0x01]));
   assert.strictEqual(buf.toString('hex'), 'abcdef01');
+  // Node Buffer behavior check
+  // > Buffer.from('abc def01','hex')
+  // <Buffer ab>
+  assert.strictEqual(buf.write('abc def01', 0, 'hex'), 1);
+  assert.deepStrictEqual(buf, new Buffer([0xab]));
+  assert.strictEqual(buf.toString('hex'), 'ab');
 
   const copy = Buffer.from(buf.toString('hex'), 'hex');
   assert.strictEqual(buf.toString('hex'), copy.toString('hex'));
