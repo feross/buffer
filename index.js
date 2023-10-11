@@ -2101,16 +2101,31 @@ const hexSliceLookupTable = (function () {
   return table
 })()
 
-// Lookup table for Buffer.from(x, 'hex')
-const hexCharValueTable = (function () {
-  const alphabet = '0123456789abcdefABCDEF'
-  const table = {}
-  for (let i = 0; i < 22; ++i) {
-    // ABCDEF should be same value as abcdef
-    table[alphabet[i]] = i < 16 ? i : i - 6
-  }
-  return table
-})()
+// hex lookup table for Buffer.from(x, 'hex')
+const hexCharValueTable = {
+  '0': 0, 
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  '6': 6,
+  '7': 7,
+  '8': 8,
+  '9': 9,
+  a: 10,
+  b: 11,
+  c: 12,
+  d: 13,
+  e: 14,
+  f: 15,
+  A: 10,
+  B: 11,
+  C: 12,
+  D: 13,
+  E: 14,
+  F: 15
+}
 
 // Return not function with Error if BigInt not supported
 function defineBigIntMethod (fn) {
