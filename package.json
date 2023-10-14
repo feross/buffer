@@ -66,7 +66,9 @@
     "test-browser-new": "airtap -- test/*.js test/node/*.js",
     "test-browser-new-local": "airtap --local -- test/*.js test/node/*.js",
     "test-node": "tape test/*.js test/node/*.js",
-    "update-authors": "./bin/update-authors.sh"
+    "update-authors": "./bin/update-authors.sh",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "standard": {
     "ignore": [
