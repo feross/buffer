@@ -376,8 +376,8 @@ Then, to run tests in Node.js, run:
 
 To test locally in a browser, you can run:
 
-    npm run test-browser-es5-local # For ES5 browsers that don't support ES6
-    npm run test-browser-es6-local # For ES6 compliant browsers
+    npm run test-browser-old-local # For ES5 browsers that don't support ES6
+    npm run test-browser-new-local # For ES6 compliant browsers
 
 This will print out a URL that you can then open in a browser to run the tests, using [airtap](https://www.npmjs.com/package/airtap).
 
