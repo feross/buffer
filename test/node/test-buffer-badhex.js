@@ -17,9 +17,10 @@ const assert = require('assert');
   // Node Buffer behavior check
   // > Buffer.from('abc def01','hex')
   // <Buffer ab>
+  assert.strictEqual(buf.write('00000000', 0, 'hex'), 4);
   assert.strictEqual(buf.write('abc def01', 0, 'hex'), 1);
-  assert.deepStrictEqual(buf, new Buffer([0xab]));
-  assert.strictEqual(buf.toString('hex'), 'ab');
+  assert.deepStrictEqual(buf, new Buffer([0xab, 0, 0, 0]));
+  assert.strictEqual(buf.toString('hex'), 'ab000000');
 
   const copy = Buffer.from(buf.toString('hex'), 'hex');
   assert.strictEqual(buf.toString('hex'), copy.toString('hex'));
@@ -53,4 +54,3 @@ const assert = require('assert');
   const badHex = `${hex.slice(0, 256)}xx${hex.slice(256, 510)}`;
   assert.deepStrictEqual(Buffer.from(badHex, 'hex'), buf.slice(0, 128));
 }
-
