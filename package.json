@@ -61,6 +61,7 @@
     "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",
     "perf-node": "node perf/bracket-notation.js && node perf/concat.js && node perf/copy-big.js && node perf/copy.js && node perf/new-big.js && node perf/new.js && node perf/readDoubleBE.js && node perf/readFloatBE.js && node perf/readUInt32LE.js && node perf/slice.js && node perf/writeFloatBE.js",
     "size": "browserify -r ./ | uglifyjs -c -m | gzip | wc -c",
+    "standard": "standard",
     "test": "tape test/*.js test/node/*.js",
     "test-browser-old": "airtap -- test/*.js",
     "test-browser-old-local": "airtap --local -- test/*.js",
