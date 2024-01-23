@@ -1826,42 +1826,36 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 // Simplified versions from Node, changed for Buffer-only usage
 const errors = {}
 function E (sym, getMessage, Base) {
-  errors[sym] = class NodeError extends Base {
-    constructor () {
-      super()
+  function NodeError () {
+    const err = new Base(getMessage.apply(null, arguments))
 
-      Object.defineProperty(this, 'message', {
-        value: getMessage.apply(this, arguments),
-        writable: true,
-        configurable: true
-      })
+    Object.setPrototypeOf(err, NodeError.prototype)
 
-      // Add the error code to the name to include it in the stack trace.
-      this.name = `${this.name} [${sym}]`
-      // Access the stack to generate the error message including the error code
-      // from the name.
-      this.stack // eslint-disable-line no-unused-expressions
-      // Reset the name to the actual name.
-      delete this.name
+    // Node.js `err.code` properties are own/enumerable properties.
+    err.code = sym
+    // Add the error code to the name to include it in the stack trace.
+    err.name = `${err.name} [${sym}]`
+    // Remove NodeError from the stack trace.
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(err, NodeError)
     }
+    // Access the stack to generate the error message including the error code
+    // from the name.
+    err.stack // eslint-disable-line no-unused-expressions
+    // Reset the name to the actual name.
+    delete err.name
 
-    get code () {
-      return sym
-    }
-
-    set code (value) {
-      Object.defineProperty(this, 'code', {
-        configurable: true,
-        enumerable: true,
-        value,
-        writable: true
-      })
-    }
-
-    toString () {
-      return `${this.name} [${sym}]: ${this.message}`
-    }
+    return err
   }
+
+  Object.setPrototypeOf(NodeError.prototype, Base.prototype)
+  Object.setPrototypeOf(NodeError, Base)
+
+  NodeError.prototype.toString = function toString () {
+    return `${this.name} [${sym}]: ${this.message}`
+  }
+
+  errors[sym] = NodeError
 }
 
 E('ERR_BUFFER_OUT_OF_BOUNDS',
