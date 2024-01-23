@@ -855,19 +855,24 @@ function hexWrite (buf, string, offset, length) {
 
   const strLen = string.length
 
-  if (length > strLen / 2) {
-    length = strLen / 2
+  if (length > (strLen >>> 1)) {
+    length = strLen >>> 1
   }
-  let i
-  for (i = 0; i < length; ++i) {
-    const a = hexCharValueTable[string[i * 2]]
-    const b = hexCharValueTable[string[i * 2 + 1]]
-    if (a === undefined || b === undefined) {
+
+  for (let i = 0; i < length; ++i) {
+    const a = string.charCodeAt(i * 2 + 0)
+    const b = string.charCodeAt(i * 2 + 1)
+    const hi = hexCharValueTable[a & 0x7f]
+    const lo = hexCharValueTable[b & 0x7f]
+
+    if ((a | b | hi | lo) & ~0x7f) {
       return i
     }
-    buf[offset + i] = a << 4 | b
+
+    buf[offset + i] = (hi << 4) | lo
   }
-  return i
+
+  return length
 }
 
 function utf8Write (buf, string, offset, length) {
@@ -2118,30 +2123,24 @@ const hexSliceLookupTable = (function () {
 })()
 
 // hex lookup table for Buffer.from(x, 'hex')
-const hexCharValueTable = {
-  0: 0,
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  a: 10,
-  b: 11,
-  c: 12,
-  d: 13,
-  e: 14,
-  f: 15,
-  A: 10,
-  B: 11,
-  C: 12,
-  D: 13,
-  E: 14,
-  F: 15
-}
+const hexCharValueTable = [
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+   0,  1,  2,  3,  4,  5,  6,  7,
+   8,  9, -1, -1, -1, -1, -1, -1,
+  -1, 10, 11, 12, 13, 14, 15, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, 10, 11, 12, 13, 14, 15, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1
+]
 
 // Return not function with Error if BigInt not supported
 function defineBigIntMethod (fn) {
