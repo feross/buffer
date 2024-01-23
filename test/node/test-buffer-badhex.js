@@ -21,6 +21,7 @@ const assert = require('assert');
   assert.strictEqual(buf.write('abc def01', 0, 'hex'), 1);
   assert.deepStrictEqual(buf, new Buffer([0xab, 0, 0, 0]));
   assert.strictEqual(buf.toString('hex'), 'ab000000');
+  assert.deepStrictEqual(Buffer.from('abc def01', 'hex'), Buffer.from([0xab]));
 
   const copy = Buffer.from(buf.toString('hex'), 'hex');
   assert.strictEqual(buf.toString('hex'), copy.toString('hex'));
