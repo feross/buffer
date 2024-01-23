@@ -1826,42 +1826,34 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
 // Simplified versions from Node, changed for Buffer-only usage
 const errors = {}
 function E (sym, getMessage, Base) {
-  errors[sym] = class NodeError extends Base {
-    constructor () {
-      super()
+  function NodeError () {
+    Base.call(this)
 
-      Object.defineProperty(this, 'message', {
-        value: getMessage.apply(this, arguments),
-        writable: true,
-        configurable: true
-      })
+    Object.defineProperty(this, 'message', {
+      value: getMessage.apply(this, arguments),
+      writable: true,
+      configurable: true
+    })
 
-      // Add the error code to the name to include it in the stack trace.
-      this.name = `${this.name} [${sym}]`
-      // Access the stack to generate the error message including the error code
-      // from the name.
-      this.stack // eslint-disable-line no-unused-expressions
-      // Reset the name to the actual name.
-      delete this.name
-    }
-
-    get code () {
-      return sym
-    }
-
-    set code (value) {
-      Object.defineProperty(this, 'code', {
-        configurable: true,
-        enumerable: true,
-        value,
-        writable: true
-      })
-    }
-
-    toString () {
-      return `${this.name} [${sym}]: ${this.message}`
-    }
+    // Add the error code to the name to include it in the stack trace.
+    this.name = `${this.name} [${sym}]`
+    // Access the stack to generate the error message including the error code
+    // from the name.
+    this.stack // eslint-disable-line no-unused-expressions
+    // Reset the name to the actual name.
+    delete this.name
   }
+
+  Object.setPrototypeOf(NodeError.prototype, Base.prototype)
+  Object.setPrototypeOf(NodeError, Base)
+
+  NodeError.prototype.code = sym
+
+  NodeError.prototype.toString = function toString () {
+    return `${this.name} [${sym}]: ${this.message}`
+  }
+
+  errors[sym] = NodeError
 }
 
 E('ERR_BUFFER_OUT_OF_BOUNDS',
