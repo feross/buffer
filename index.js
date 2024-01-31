@@ -2123,6 +2123,7 @@ const hexSliceLookupTable = (function () {
 })()
 
 // hex lookup table for Buffer.from(x, 'hex')
+/* eslint-disable no-multi-spaces, indent */
 const hexCharValueTable = [
   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1,
@@ -2141,6 +2142,7 @@ const hexCharValueTable = [
   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1
 ]
+/* eslint-enable no-multi-spaces, indent */
 
 // Return not function with Error if BigInt not supported
 function defineBigIntMethod (fn) {
