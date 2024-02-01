@@ -23,7 +23,7 @@ test('buffer.write("hex") should stop on invalid characters', function (t) {
       continue
     }
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       let str
 
       switch (i) {
