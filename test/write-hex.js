@@ -23,14 +23,33 @@ test('buffer.write("hex") should stop on invalid characters', function (t) {
       continue
     }
 
-    const str = 'abcd' + String.fromCharCode(ch) + 'ef0'
+    for (let i = 0; i < 3; i++) {
+      let str
 
-    buf.fill(0)
+      switch (i) {
+        case 0:
+          str = 'abcd' + String.fromCharCode(ch) + 'ef0'
+          break
+        case 1:
+          str = 'abcde' + String.fromCharCode(ch) + 'f0'
+          break
+        case 2:
+          str = 'abcd' + String.fromCharCode(ch + 0) +
+                         String.fromCharCode(ch + 1) + 'f0'
+          break
+        case 3:
+          str = 'abcde' + String.fromCharCode(ch + 0) +
+                          String.fromCharCode(ch + 1) + '0'
+          break
+      }
 
-    t.equal(str.length, 8)
-    t.equal(buf.write(str, 'hex'), 2)
-    t.equal(buf.toString('hex'), 'abcd0000')
-    t.equal(Buffer.from(str, 'hex').toString('hex'), 'abcd')
+      buf.fill(0)
+
+      t.equal(str.length, 8)
+      t.equal(buf.write(str, 'hex'), 2)
+      t.equal(buf.toString('hex'), 'abcd0000')
+      t.equal(Buffer.from(str, 'hex').toString('hex'), 'abcd')
+    }
   }
 
   t.end()
