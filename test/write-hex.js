@@ -4,8 +4,6 @@ const Buffer = require('../').Buffer
 const test = require('tape')
 
 test('buffer.write("hex") should stop on invalid characters', function (t) {
-  const buf = Buffer.alloc(4)
-
   // Test the entire 16-bit space.
   for (let ch = 0; ch <= 0xffff; ch++) {
     // 0-9
@@ -23,28 +21,13 @@ test('buffer.write("hex") should stop on invalid characters', function (t) {
       continue
     }
 
-    for (let i = 0; i < 4; i++) {
-      let str
-
-      switch (i) {
-        case 0:
-          str = 'abcd' + String.fromCharCode(ch) + 'ef0'
-          break
-        case 1:
-          str = 'abcde' + String.fromCharCode(ch) + 'f0'
-          break
-        case 2:
-          str = 'abcd' + String.fromCharCode(ch + 0) +
-                         String.fromCharCode(ch + 1) + 'f0'
-          break
-        case 3:
-          str = 'abcde' + String.fromCharCode(ch + 0) +
-                          String.fromCharCode(ch + 1) + '0'
-          break
-      }
-
-      buf.fill(0)
-
+    for (const str of [
+      'abcd' + String.fromCharCode(ch) + 'ef0',
+      'abcde' + String.fromCharCode(ch) + 'f0',
+      'abcd' + String.fromCharCode(ch + 0) + String.fromCharCode(ch + 1) + 'f0',
+      'abcde' + String.fromCharCode(ch + 0) + String.fromCharCode(ch + 1) + '0'
+    ]) {
+      const buf = Buffer.alloc(4)
       t.equal(str.length, 8)
       t.equal(buf.write(str, 'hex'), 2)
       t.equal(buf.toString('hex'), 'abcd0000')
