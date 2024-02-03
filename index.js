@@ -245,6 +245,41 @@ Buffer.allocUnsafeSlow = function (size) {
   return allocUnsafe(size)
 }
 
+/**
+ * Copies the underlying memory of `view` into a new `Buffer`.
+ */
+Buffer.copyBytesFrom = function copyBytesFrom (view, offset, length) {
+  if (!ArrayBuffer.isView(view) || !view.subarray) {
+    throw new errors.ERR_INVALID_ARG_TYPE('view', 'TypedArray', view)
+  }
+
+  if (view.length === 0) return createBuffer(0)
+
+  if (offset !== undefined || length !== undefined) {
+    if (offset !== undefined) {
+      validateInteger(offset, 'offset')
+      if (offset >= view.length) return createBuffer(0)
+    } else {
+      offset = 0
+    }
+
+    let end
+
+    if (length !== undefined) {
+      validateInteger(length, 'length')
+      end = offset + length
+    } else {
+      end = view.length
+    }
+
+    view = view.subarray(offset, end)
+  }
+
+  view = new Uint8Array(view.buffer, view.byteOffset, view.byteLength)
+
+  return fromArrayView(view)
+}
+
 function fromString (string, encoding) {
   if (typeof encoding !== 'string' || encoding === '') {
     encoding = 'utf8'
@@ -1878,8 +1913,8 @@ E('ERR_BUFFER_OUT_OF_BOUNDS',
     return 'Attempt to access memory outside buffer bounds'
   }, RangeError)
 E('ERR_INVALID_ARG_TYPE',
-  function (name, actual) {
-    return `The "${name}" argument must be of type number. Received type ${typeof actual}`
+  function (name, type, actual) {
+    return `The "${name}" argument must be of type ${type}. Received type ${typeof actual}`
   }, TypeError)
 E('ERR_OUT_OF_RANGE',
   function (str, range, input) {
@@ -1940,6 +1975,13 @@ function checkIntBI (value, min, max, buf, offset, byteLength) {
 function validateNumber (value, name) {
   if (typeof value !== 'number') {
     throw new errors.ERR_INVALID_ARG_TYPE(name, 'number', value)
+  }
+}
+
+function validateInteger (value, name) {
+  validateNumber(value, name)
+  if ((value >>> 0) !== value) {
+    throw new errors.ERR_BUFFER_OUT_OF_BOUNDS(name)
   }
 }
 
