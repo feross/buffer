@@ -312,6 +312,7 @@ function fromArrayBuffer (array, byteOffset, length) {
 
 function fromObject (obj) {
   if (Buffer.isBuffer(obj)) {
+    // Note: Probably not necessary anymore.
     const len = checked(obj.length) | 0
     const buf = createBuffer(len)
 
@@ -358,9 +359,7 @@ Buffer.isBuffer = function isBuffer (b) {
 }
 
 Buffer.compare = function compare (a, b) {
-  if (isInstance(a, Uint8Array)) a = Buffer.from(a, a.offset, a.byteLength)
-  if (isInstance(b, Uint8Array)) b = Buffer.from(b, b.offset, b.byteLength)
-  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
+  if (!isInstance(a, Uint8Array) || !isInstance(b, Uint8Array)) {
     throw new TypeError(
       'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
     )
@@ -423,35 +422,26 @@ Buffer.concat = function concat (list, length) {
   const buffer = Buffer.allocUnsafe(length)
   let pos = 0
   for (i = 0; i < list.length; ++i) {
-    let buf = list[i]
-    if (isInstance(buf, Uint8Array)) {
-      if (pos + buf.length > buffer.length) {
-        if (!Buffer.isBuffer(buf)) {
-          buf = Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength)
-        }
-        buf.copy(buffer, pos)
-      } else {
-        Uint8Array.prototype.set.call(
-          buffer,
-          buf,
-          pos
-        )
-      }
-    } else if (!Buffer.isBuffer(buf)) {
+    const buf = list[i]
+    if (!isInstance(buf, Uint8Array)) {
       throw new TypeError('"list" argument must be an Array of Buffers')
-    } else {
-      buf.copy(buffer, pos)
     }
+    if (pos + buf.length > buffer.length) {
+      buffer.set(buf.subarray(0, buffer.length - pos), pos)
+      break
+    }
+    buffer.set(buf, pos)
     pos += buf.length
   }
   return buffer
 }
 
 function byteLength (string, encoding) {
-  if (Buffer.isBuffer(string)) {
-    return string.length
-  }
   if (ArrayBuffer.isView(string) || isInstance(string, ArrayBuffer)) {
+    return string.byteLength
+  }
+  if (typeof SharedArrayBuffer !== 'undefined' &&
+      isInstance(string, SharedArrayBuffer)) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
@@ -627,7 +617,6 @@ Buffer.prototype.toString = function toString () {
 Buffer.prototype.toLocaleString = Buffer.prototype.toString
 
 Buffer.prototype.equals = function equals (b) {
-  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
   if (this === b) return true
   return Buffer.compare(this, b) === 0
 }
@@ -644,10 +633,7 @@ if (customInspectSymbol) {
 }
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
-  if (isInstance(target, Uint8Array)) {
-    target = Buffer.from(target, target.offset, target.byteLength)
-  }
-  if (!Buffer.isBuffer(target)) {
+  if (!isInstance(target, Uint8Array)) {
     throw new TypeError(
       'The "target" argument must be one of type Buffer or Uint8Array. ' +
       'Received type ' + (typeof target)
@@ -692,13 +678,10 @@ Buffer.prototype.compare = function compare (target, start, end, thisStart, this
   let y = end - start
   const len = Math.min(x, y)
 
-  const thisCopy = this.slice(thisStart, thisEnd)
-  const targetCopy = target.slice(start, end)
-
   for (let i = 0; i < len; ++i) {
-    if (thisCopy[i] !== targetCopy[i]) {
-      x = thisCopy[i]
-      y = targetCopy[i]
+    if (this[thisStart + i] !== target[start + i]) {
+      x = this[thisStart + i]
+      y = target[start + i]
       break
     }
   }
@@ -1714,7 +1697,7 @@ Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
 Buffer.prototype.copy = function copy (target, targetStart, start, end) {
-  if (!Buffer.isBuffer(target)) throw new TypeError('argument should be a Buffer')
+  if (!isInstance(target, Uint8Array)) throw new TypeError('argument should be a Buffer')
   if (!start) start = 0
   if (!end && end !== 0) end = this.length
   if (targetStart >= target.length) targetStart = target.length
@@ -1809,7 +1792,7 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
       this[i] = val
     }
   } else {
-    const bytes = Buffer.isBuffer(val)
+    const bytes = isInstance(val, Uint8Array)
       ? val
       : Buffer.from(val, encoding)
     const len = bytes.length
@@ -2101,7 +2084,8 @@ function blitBuffer (src, dst, offset, length) {
 function isInstance (obj, type) {
   return obj instanceof type ||
     (obj != null && obj.constructor != null && obj.constructor.name != null &&
-      obj.constructor.name === type.name)
+      obj.constructor.name === type.name) ||
+    (type === Uint8Array && Buffer.isBuffer(obj))
 }
 function numberIsNaN (obj) {
   // For IE11 support
