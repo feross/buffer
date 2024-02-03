@@ -38,6 +38,11 @@ exports.constants = {
   MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
 }
 
+exports.Blob = global.Blob
+exports.File = global.File
+exports.atob = global.atob
+exports.btoa = global.btoa
+
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
  *   === true    Use Uint8Array implementation (fastest)
