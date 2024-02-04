@@ -874,7 +874,15 @@ function utf8Write (buf, string, offset, length) {
 }
 
 function asciiWrite (buf, string, offset, length) {
-  return blitBuffer(asciiToBytes(string), buf, offset, length)
+  if (length > string.length) {
+    length = string.length
+  }
+
+  for (let i = 0; i < length; i++) {
+    buf[offset + i] = string.charCodeAt(i)
+  }
+
+  return length
 }
 
 function base64Write (buf, string, offset, length) {
@@ -2047,15 +2055,6 @@ function utf8ToBytes (string, units) {
   }
 
   return bytes
-}
-
-function asciiToBytes (str) {
-  const byteArray = []
-  for (let i = 0; i < str.length; ++i) {
-    // Node's code seems to be doing this and not & 0x7F..
-    byteArray.push(str.charCodeAt(i) & 0xFF)
-  }
-  return byteArray
 }
 
 function utf16leToBytes (str, units) {
