@@ -890,7 +890,20 @@ function base64Write (buf, string, offset, length) {
 }
 
 function ucs2Write (buf, string, offset, length) {
-  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+  length >>>= 1
+
+  if (length > string.length) {
+    length = string.length
+  }
+
+  for (let i = 0; i < length; i++) {
+    const ch = string.charCodeAt(i)
+
+    buf[offset + i * 2 + 0] = ch >> 0
+    buf[offset + i * 2 + 1] = ch >> 8
+  }
+
+  return length * 2
 }
 
 Buffer.prototype.write = function write (string, offset, length, encoding) {
@@ -2055,22 +2068,6 @@ function utf8ToBytes (string, units) {
   }
 
   return bytes
-}
-
-function utf16leToBytes (str, units) {
-  let c, hi, lo
-  const byteArray = []
-  for (let i = 0; i < str.length; ++i) {
-    if ((units -= 2) < 0) break
-
-    c = str.charCodeAt(i)
-    hi = c >> 8
-    lo = c % 256
-    byteArray.push(lo)
-    byteArray.push(hi)
-  }
-
-  return byteArray
 }
 
 function base64ToBytes (str) {
