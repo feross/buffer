@@ -897,6 +897,10 @@ function ucs2Write (buf, string, offset, length) {
 }
 
 Buffer.prototype.write = function write (string, offset, length, encoding) {
+  if (typeof string !== 'string') {
+    throw new TypeError('"string" argument must be a string')
+  }
+
   // Buffer#write(string)
   if (offset === undefined) {
     encoding = 'utf8'
@@ -926,7 +930,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
   const remaining = this.length - offset
   if (length === undefined || length > remaining) length = remaining
 
-  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+  if (length < 0 || offset < 0 || offset > this.length) {
     throw new RangeError('Attempt to write outside buffer bounds')
   }
 
