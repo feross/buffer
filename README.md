@@ -1,7 +1,7 @@
-# buffer [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
+# buffer [![ci][ci-image]][ci-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
 
-[travis-image]: https://img.shields.io/travis/feross/buffer/master.svg
-[travis-url]: https://travis-ci.org/feross/buffer
+[ci-image]: https://img.shields.io/github/workflow/status/feross/buffer/ci/master
+[ci-url]: https://github.com/feross/buffer/actions
 [npm-image]: https://img.shields.io/npm/v/buffer.svg
 [npm-url]: https://npmjs.org/package/buffer
 [downloads-image]: https://img.shields.io/npm/dm/buffer.svg
@@ -9,7 +9,7 @@
 [standard-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
 [standard-url]: https://standardjs.com
 
-#### The buffer module from [node.js](https://nodejs.org/), for the browser.
+#### The buffer module from [node.js](https://nodejs.org), for the browser.
 
 [![saucelabs][saucelabs-image]][saucelabs-url]
 
@@ -28,12 +28,11 @@ instance methods, and class methods that are supported.
 - Manipulate binary data like a boss, in all browsers!
 - Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
 - Extremely small bundle size (**6.75KB minified + gzipped**, 51.9KB with comments)
-- Excellent browser support (Chrome, Firefox, Edge, Safari 9+, IE 11, iOS 9+, Android, etc.)
-- Preserves Node API exactly, with one minor difference (see below)
+- Excellent browser support (Chrome, Firefox, Edge, Safari 11+, iOS 11+, Android, etc.)
+- Preserves Node API exactly
 - Square-bracket `buf[4]` notation works!
 - Does not modify any browser prototypes or put anything on `window`
 - Comprehensive test suite (including all buffer tests from node.js core)
-
 
 ## install
 
@@ -46,8 +45,7 @@ npm install buffer
 This module was previously called **native-buffer-browserify**, but please use **buffer**
 from now on.
 
-A standalone bundle is available [here](https://wzrd.in/standalone/buffer), for non-browserify users.
-
+If you do not use a bundler, you can use the [standalone script](https://bundle.run/buffer).
 
 ## usage
 
@@ -149,8 +147,8 @@ Alternatively, use the [`to-arraybuffer`](https://www.npmjs.com/package/to-array
 
 See perf tests in `/perf`.
 
-`BrowserBuffer` is the browser `buffer` module (this repo). `Uint8Array` is included as a
-sanity check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Array` will
+`BrowserBuffer` is the browser `buffer` module (this repo). `Uint8Array` is included as an
+additional check (since `BrowserBuffer` uses `Uint8Array` under the hood, `Uint8Array` will
 always be at least a bit faster). Finally, `NodeBuffer` is the node.js buffer module,
 which is included to compare against.
 
@@ -378,8 +376,8 @@ Then, to run tests in Node.js, run:
 
 To test locally in a browser, you can run:
 
-    npm run test-browser-es5-local # For ES5 browsers that don't support ES6
-    npm run test-browser-es6-local # For ES6 compliant browsers
+    npm run test-browser-old-local # For ES5 browsers that don't support ES6
+    npm run test-browser-new-local # For ES6 compliant browsers
 
 This will print out a URL that you can then open in a browser to run the tests, using [airtap](https://www.npmjs.com/package/airtap).
 
@@ -403,6 +401,9 @@ To test that the code conforms to the style, `npm install` and run:
 
 This was originally forked from [buffer-browserify](https://github.com/toots/buffer-browserify).
 
+## Security Policies and Procedures
+
+The `buffer` team and community take all security bugs in `buffer` seriously. Please see our [security policies and procedures](https://github.com/feross/security) document to learn how to report issues.
 
 ## license
 

@@ -1,9 +1,7 @@
 sauce_connect: true
 loopback: airtap.local
 browsers:
-  - name: ie
-    version: latest
   - name: safari
-    version: 9
+    version: 11..13
   - name: iphone
-    version: 9.3
+    version: 11.3

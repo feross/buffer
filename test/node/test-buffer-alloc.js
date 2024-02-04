@@ -51,6 +51,14 @@ assert.strictEqual(0, d.length);
     assert.deepStrictEqual(value, ui32[key]);
   }
 }
+{
+  const sab = new SharedArrayBuffer(Uint8Array.BYTES_PER_ELEMENT * 4);
+  const ui32 = new Uint8Array(sab).fill(42);
+  const e = Buffer(sab);
+  for (const [key, value] of e.entries()) {
+    assert.deepStrictEqual(value, ui32[key]);
+  }
+}
 
 // Test invalid encoding for Buffer.toString
 assert.throws(() => b.toString('invalid'),
@@ -63,17 +71,18 @@ assert.throws(() => b.write('test', 'utf8', 0),
               /is no longer supported/);
 
 
-// Try to create 0-length buffers. Should not throw.
-Buffer.from('');
-Buffer.from('', 'ascii');
-Buffer.from('', 'latin1');
-Buffer.alloc(0);
-Buffer.allocUnsafe(0);
-new Buffer('');
-new Buffer('', 'ascii');
-new Buffer('', 'latin1');
-new Buffer('', 'binary');
-Buffer(0);
+// try to create 0-length buffers
+assert.doesNotThrow(() => Buffer.from(''));
+assert.doesNotThrow(() => Buffer.from('', 'ascii'));
+assert.doesNotThrow(() => Buffer.from('', 'latin1'));
+assert.doesNotThrow(() => Buffer.alloc(0));
+assert.doesNotThrow(() => Buffer.allocUnsafe(0));
+assert.doesNotThrow(() => new Buffer(''));
+assert.doesNotThrow(() => new Buffer('', 'ascii'));
+assert.doesNotThrow(() => new Buffer('', 'latin1'));
+assert.doesNotThrow(() => new Buffer('', 'binary'));
+assert.doesNotThrow(() => Buffer(0));
+assert.doesNotThrow(() => Buffer.alloc(16, !!true));
 
 // try to write a 0-length string beyond the end of b
 assert.throws(() => b.write('', 2048), RangeError);

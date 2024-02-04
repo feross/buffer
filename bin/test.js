@@ -1,40 +1,34 @@
 #!/usr/bin/env node
 
-var cp = require('child_process')
-var fs = require('fs')
-var path = require('path')
+const cp = require('child_process')
+const fs = require('fs')
+const path = require('path')
 
-var shouldRunBrowserTests = !process.env.TRAVIS_PULL_REQUEST ||
-  process.env.TRAVIS_PULL_REQUEST === 'false'
-
-var node = cp.spawn('npm', ['run', 'test-node'], { stdio: 'inherit' })
+const node = cp.spawn('npm', ['run', 'test-node'], { stdio: 'inherit' })
 node.on('close', function (code) {
-  if (code === 0 && shouldRunBrowserTests) {
-    runBrowserTests()
-  } else {
-    process.exit(code)
-  }
+  if (code !== 0) return process.exit(code)
+  runBrowserTests()
 })
 
 function runBrowserTests () {
-  var airtapYmlPath = path.join(__dirname, '..', '.airtap.yml')
+  const airtapYmlPath = path.join(__dirname, '..', '.airtap.yml')
 
   writeES5AirtapYml()
-  cp.spawn('npm', ['run', 'test-browser-es5'], { stdio: 'inherit' })
+  cp.spawn('npm', ['run', 'test-browser-old'], { stdio: 'inherit' })
     .on('close', function (code) {
       if (code !== 0) process.exit(code)
       writeES6AirtapYml()
-      cp.spawn('npm', ['run', 'test-browser-es6'], { stdio: 'inherit' })
+      cp.spawn('npm', ['run', 'test-browser-new'], { stdio: 'inherit' })
         .on('close', function (code) {
           process.exit(code)
         })
     })
 
   function writeES5AirtapYml () {
-    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-es5.yml')))
+    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-old.yml')))
   }
 
   function writeES6AirtapYml () {
-    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-es6.yml')))
+    fs.writeFileSync(airtapYmlPath, fs.readFileSync(path.join(__dirname, 'airtap-new.yml')))
   }
 }

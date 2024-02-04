@@ -1,21 +1,21 @@
-var B = require('../').Buffer
-var test = require('tape')
+const B = require('../').Buffer
+const test = require('tape')
 
 test('buffer.toJSON', function (t) {
-  var data = [1, 2, 3, 4]
+  const data = [1, 2, 3, 4]
   t.deepEqual(
     new B(data).toJSON(),
-    { type: 'Buffer', data: [ 1, 2, 3, 4 ] }
+    { type: 'Buffer', data: [1, 2, 3, 4] }
   )
   t.end()
 })
 
 test('buffer.copy', function (t) {
   // copied from nodejs.org example
-  var buf1 = new B(26)
-  var buf2 = new B(26)
+  const buf1 = new B(26)
+  const buf2 = new B(26)
 
-  for (var i = 0; i < 26; i++) {
+  for (let i = 0; i < 26; i++) {
     buf1[i] = i + 97 // 97 is ASCII a
     buf2[i] = 33 // ASCII !
   }
@@ -30,7 +30,7 @@ test('buffer.copy', function (t) {
 })
 
 test('test offset returns are correct', function (t) {
-  var b = new B(16)
+  const b = new B(16)
   t.equal(4, b.writeUInt32LE(0, 0))
   t.equal(6, b.writeUInt16LE(0, 4))
   t.equal(7, b.writeUInt8(0, 6))
@@ -40,17 +40,17 @@ test('test offset returns are correct', function (t) {
 })
 
 test('concat() a varying number of buffers', function (t) {
-  var zero = []
-  var one = [ new B('asdf') ]
-  var long = []
-  for (var i = 0; i < 10; i++) {
+  const zero = []
+  const one = [new B('asdf')]
+  const long = []
+  for (let i = 0; i < 10; i++) {
     long.push(new B('asdf'))
   }
 
-  var flatZero = B.concat(zero)
-  var flatOne = B.concat(one)
-  var flatLong = B.concat(long)
-  var flatLongLen = B.concat(long, 40)
+  const flatZero = B.concat(zero)
+  const flatOne = B.concat(one)
+  const flatLong = B.concat(long)
+  const flatLongLen = B.concat(long, 40)
 
   t.equal(flatZero.length, 0)
   t.equal(flatOne.toString(), 'asdf')
@@ -61,21 +61,28 @@ test('concat() a varying number of buffers', function (t) {
 })
 
 test('concat() works on Uint8Array instances', function (t) {
-  var result = B.concat([new Uint8Array([1, 2]), new Uint8Array([3, 4])])
-  var expected = Buffer.from([1, 2, 3, 4])
+  const result = B.concat([new Uint8Array([1, 2]), new Uint8Array([3, 4])])
+  const expected = B.from([1, 2, 3, 4])
+  t.deepEqual(result, expected)
+  t.end()
+})
+
+test('concat() works on Uint8Array instances for smaller provided totalLength', function (t) {
+  const result = B.concat([new Uint8Array([1, 2]), new Uint8Array([3, 4])], 3)
+  const expected = B.from([1, 2, 3])
   t.deepEqual(result, expected)
   t.end()
 })
 
 test('fill', function (t) {
-  var b = new B(10)
+  const b = new B(10)
   b.fill(2)
   t.equal(b.toString('hex'), '02020202020202020202')
   t.end()
 })
 
 test('fill (string)', function (t) {
-  var b = new B(10)
+  const b = new B(10)
   b.fill('abc')
   t.equal(b.toString(), 'abcabcabca')
   b.fill('է')
@@ -84,18 +91,18 @@ test('fill (string)', function (t) {
 })
 
 test('copy() empty buffer with sourceEnd=0', function (t) {
-  var source = new B([42])
-  var destination = new B([43])
+  const source = new B([42])
+  const destination = new B([43])
   source.copy(destination, 0, 0, 0)
   t.equal(destination.readUInt8(0), 43)
   t.end()
 })
 
 test('copy() after slice()', function (t) {
-  var source = new B(200)
-  var dest = new B(200)
-  var expected = new B(200)
-  for (var i = 0; i < 200; i++) {
+  const source = new B(200)
+  const dest = new B(200)
+  const expected = new B(200)
+  for (let i = 0; i < 200; i++) {
     source[i] = i
     dest[i] = 0
   }
@@ -107,14 +114,14 @@ test('copy() after slice()', function (t) {
 })
 
 test('copy() ascending', function (t) {
-  var b = new B('abcdefghij')
+  const b = new B('abcdefghij')
   b.copy(b, 0, 3, 10)
   t.equal(b.toString(), 'defghijhij')
   t.end()
 })
 
 test('copy() descending', function (t) {
-  var b = new B('abcdefghij')
+  const b = new B('abcdefghij')
   b.copy(b, 3, 0, 7)
   t.equal(b.toString(), 'abcabcdefg')
   t.end()
