@@ -480,7 +480,7 @@ function byteLength (string, encoding) {
         return len
       case 'utf8':
       case 'utf-8':
-        return utf8ToBytes(string).length
+        return utf8ByteLength(string)
       case 'ucs2':
       case 'ucs-2':
       case 'utf16le':
@@ -492,7 +492,7 @@ function byteLength (string, encoding) {
         return base64ToBytes(string).length
       default:
         if (loweredCase) {
-          return mustMatch ? -1 : utf8ToBytes(string).length // assume utf8
+          return mustMatch ? -1 : utf8ByteLength(string) // assume utf8
         }
         encoding = ('' + encoding).toLowerCase()
         loweredCase = true
@@ -870,7 +870,141 @@ function hexWrite (buf, string, offset, length) {
 }
 
 function utf8Write (buf, string, offset, length) {
-  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+  let remaining = length
+  let leadSurrogate = 0
+  let pos = offset
+
+  for (let i = 0; i < string.length; i++) {
+    let codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xd7ff && codePoint < 0xe000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xdbff) {
+          // unexpected trail
+          if (remaining >= 3) pos = writeInvalid(buf, pos)
+          remaining -= 3
+          continue
+        } else if (i + 1 === string.length) {
+          // unpaired lead
+          if (remaining >= 3) pos = writeInvalid(buf, pos)
+          remaining -= 3
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xdc00) {
+        if (remaining >= 3) pos = writeInvalid(buf, pos)
+        remaining -= 3
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint -= 0xdc00
+      codePoint |= (leadSurrogate - 0xd800) << 10
+      codePoint += 0x10000
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      if (remaining >= 3) pos = writeInvalid(buf, pos)
+      remaining -= 3
+    }
+
+    leadSurrogate = 0
+
+    // encode utf8
+    if (codePoint < 0x80) {
+      if (remaining < 1) break
+      buf[pos++] = codePoint
+      remaining -= 1
+    } else if (codePoint < 0x800) {
+      if (remaining < 2) break
+      buf[pos++] = (codePoint >> 6) | 0xc0
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 2
+    } else if (codePoint < 0x10000) {
+      if (remaining < 3) break
+      buf[pos++] = (codePoint >> 12) | 0xe0
+      buf[pos++] = ((codePoint >> 6) & 0x3f) | 0x80
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 3
+    } else if (codePoint < 0x110000) {
+      if (remaining < 4) break
+      buf[pos++] = (codePoint >> 18) | 0xf0
+      buf[pos++] = ((codePoint >> 12) & 0x3f) | 0x80
+      buf[pos++] = ((codePoint >> 6) & 0x3f) | 0x80
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 4
+    } else {
+      throw new Error('Invalid code point')
+    }
+  }
+
+  return pos - offset
+}
+
+function utf8ByteLength (string) {
+  let leadSurrogate = 0
+  let size = 0
+
+  for (let i = 0; i < string.length; i++) {
+    let codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xd7ff && codePoint < 0xe000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xdbff) {
+          // unexpected trail
+          size += 3
+          continue
+        } else if (i + 1 === string.length) {
+          // unpaired lead
+          size += 3
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xdc00) {
+        size += 3
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint -= 0xdc00
+      codePoint |= (leadSurrogate - 0xd800) << 10
+      codePoint += 0x10000
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      size += 3
+    }
+
+    leadSurrogate = 0
+
+    // encode utf8
+    size += 1
+    size += (codePoint >= 0x80) | 0
+    size += (codePoint >= 0x800) | 0
+    size += (codePoint >= 0x10000) | 0
+  }
+
+  return size
 }
 
 function asciiWrite (buf, string, offset, length) {
@@ -1990,88 +2124,16 @@ function base64clean (str) {
   return str
 }
 
-function utf8ToBytes (string, units) {
-  units = units || Infinity
-  let codePoint
-  const length = string.length
-  let leadSurrogate = null
-  const bytes = []
-
-  for (let i = 0; i < length; ++i) {
-    codePoint = string.charCodeAt(i)
-
-    // is surrogate component
-    if (codePoint > 0xD7FF && codePoint < 0xE000) {
-      // last char was a lead
-      if (!leadSurrogate) {
-        // no lead yet
-        if (codePoint > 0xDBFF) {
-          // unexpected trail
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          continue
-        } else if (i + 1 === length) {
-          // unpaired lead
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          continue
-        }
-
-        // valid lead
-        leadSurrogate = codePoint
-
-        continue
-      }
-
-      // 2 leads in a row
-      if (codePoint < 0xDC00) {
-        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-        leadSurrogate = codePoint
-        continue
-      }
-
-      // valid surrogate pair
-      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000
-    } else if (leadSurrogate) {
-      // valid bmp char, but last char was a lead
-      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-    }
-
-    leadSurrogate = null
-
-    // encode utf8
-    if (codePoint < 0x80) {
-      if ((units -= 1) < 0) break
-      bytes.push(codePoint)
-    } else if (codePoint < 0x800) {
-      if ((units -= 2) < 0) break
-      bytes.push(
-        codePoint >> 0x6 | 0xC0,
-        codePoint & 0x3F | 0x80
-      )
-    } else if (codePoint < 0x10000) {
-      if ((units -= 3) < 0) break
-      bytes.push(
-        codePoint >> 0xC | 0xE0,
-        codePoint >> 0x6 & 0x3F | 0x80,
-        codePoint & 0x3F | 0x80
-      )
-    } else if (codePoint < 0x110000) {
-      if ((units -= 4) < 0) break
-      bytes.push(
-        codePoint >> 0x12 | 0xF0,
-        codePoint >> 0xC & 0x3F | 0x80,
-        codePoint >> 0x6 & 0x3F | 0x80,
-        codePoint & 0x3F | 0x80
-      )
-    } else {
-      throw new Error('Invalid code point')
-    }
-  }
-
-  return bytes
-}
-
 function base64ToBytes (str) {
   return base64.toByteArray(base64clean(str))
+}
+
+function writeInvalid (buf, pos) {
+  // U+FFFD (Replacement Character)
+  buf[pos++] = 0xef
+  buf[pos++] = 0xbf
+  buf[pos++] = 0xbd
+  return pos
 }
 
 function blitBuffer (src, dst, offset, length) {
