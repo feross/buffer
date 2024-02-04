@@ -1117,6 +1117,8 @@ function utf16leSlice (buf, start, end) {
   return res
 }
 
+let subarrayCallsChild = false
+
 Buffer.prototype.slice = function slice (start, end) {
   const len = this.length
   start = ~~start
@@ -1139,8 +1141,11 @@ Buffer.prototype.slice = function slice (start, end) {
   if (end < start) end = start
 
   const newBuf = this.subarray(start, end)
-  // Return an augmented `Uint8Array` instance
-  Object.setPrototypeOf(newBuf, Buffer.prototype)
+
+  if (!subarrayCallsChild) {
+    // Return an augmented `Uint8Array` instance
+    Object.setPrototypeOf(newBuf, Buffer.prototype)
+  }
 
   return newBuf
 }
@@ -2151,4 +2156,8 @@ function defineBigIntMethod (fn) {
 
 function BufferBigIntNotDefined () {
   throw new Error('BigInt not supported')
+}
+
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  subarrayCallsChild = createBuffer(1).subarray(0, 1) instanceof Buffer
 }
