@@ -963,7 +963,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
 Buffer.prototype.toJSON = function toJSON () {
   return {
     type: 'Buffer',
-    data: Array.prototype.slice.call(this._arr || this, 0)
+    data: Array.prototype.slice.call(this, 0)
   }
 }
 
