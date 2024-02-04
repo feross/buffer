@@ -847,21 +847,10 @@ Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) 
 }
 
 function hexWrite (buf, string, offset, length) {
-  offset = Number(offset) || 0
-  const remaining = buf.length - offset
-  if (!length) {
-    length = remaining
-  } else {
-    length = Number(length)
-    if (length > remaining) {
-      length = remaining
-    }
-  }
+  const bytes = string.length >>> 1
 
-  const strLen = string.length
-
-  if (length > (strLen >>> 1)) {
-    length = strLen >>> 1
+  if (length > bytes) {
+    length = bytes
   }
 
   for (let i = 0; i < length; ++i) {
