@@ -8,7 +8,6 @@
 
 'use strict'
 
-const base64 = require('base64-js')
 const ieee754 = require('ieee754')
 const customInspectSymbol =
   (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
@@ -38,10 +37,54 @@ exports.constants = {
   MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
 }
 
-exports.Blob = global.Blob
-exports.File = global.File
-exports.atob = global.atob
-exports.btoa = global.btoa
+exports.Blob = typeof Blob !== 'undefined' ? Blob : undefined
+exports.File = typeof File !== 'undefined' ? File : undefined
+exports.atob = typeof atob !== 'undefined' ? atob : undefined
+exports.btoa = typeof btoa !== 'undefined' ? btoa : undefined
+
+/**
+ * The `atob` and `btoa` functions are unoptimized in node.js[1][2].
+ * As a result of this, we call out to Buffer directly when running
+ * inside of node.js. Unfortunately, detecting node.js is tricky:
+ *
+ * We can't check `process.browser` because it will cause browserify
+ * to pull in the entire `process` module.
+ *
+ * Instead, we check for a global `Buffer` object with `asciiSlice`
+ * defined on the prototype. This undocumented method has been
+ * defined on the node.js Buffer prototype since the _very_ early
+ * days of node.js (as early as 0.4.0) and is still defined to this
+ * day (but is not defined on _our_ Buffer prototype).
+ *
+ * Because our `Buffer` constructor is hoisted, we can't check for
+ * `typeof Buffer === 'function'`. Instead, we need to access `global`.
+ *
+ * Unfortunately, we can't assume `global` exists as there may be a
+ * non-browserify bundler which supports CJS but not a full node.js
+ * environment which includes `global`.
+ *
+ * As an added bonus, this hack also accounts for nodes prior to
+ * v16.0.0 (when `atob` and `btoa` were first exposed globally).
+ *
+ * [1] https://github.com/feross/buffer/issues/339
+ * [2] https://github.com/nodejs/node/pull/38433
+ */
+let _atob = exports.atob
+let _btoa = exports.btoa
+
+if (typeof global !== 'undefined' && global && global.Math === Math &&
+    typeof global.Buffer === 'function' && global.Buffer.prototype &&
+    typeof global.Buffer.prototype.asciiSlice === 'function') {
+  const NodeBuffer = global.Buffer
+
+  _atob = function atob (str) {
+    return NodeBuffer.from(str, 'base64').toString('binary')
+  }
+
+  _btoa = function btoa (str) {
+    return NodeBuffer.from(str, 'binary').toString('base64')
+  }
+}
 
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
@@ -398,6 +441,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
     case 'latin1':
     case 'binary':
     case 'base64':
+    case 'base64url':
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
@@ -489,7 +533,8 @@ function byteLength (string, encoding) {
       case 'hex':
         return len >>> 1
       case 'base64':
-        return base64ToBytes(string).length
+      case 'base64url':
+        return base64ByteLength(string, len)
       default:
         if (loweredCase) {
           return mustMatch ? -1 : utf8ByteLength(string) // assume utf8
@@ -556,6 +601,9 @@ function slowToString (encoding, start, end) {
 
       case 'base64':
         return base64Slice(this, start, end)
+
+      case 'base64url':
+        return base64UrlSlice(this, start, end)
 
       case 'ucs2':
       case 'ucs-2':
@@ -1020,7 +1068,14 @@ function asciiWrite (buf, string, offset, length) {
 }
 
 function base64Write (buf, string, offset, length) {
-  return blitBuffer(base64ToBytes(string), buf, offset, length)
+  try {
+    // Parse optimistically as base64.
+    string = _atob(string)
+  } catch (e) {
+    // Fall back to full preprocessing.
+    string = _atob(base64clean(string))
+  }
+  return asciiWrite(buf, string, offset, length)
 }
 
 function ucs2Write (buf, string, offset, length) {
@@ -1096,6 +1151,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
         return asciiWrite(this, string, offset, length)
 
       case 'base64':
+      case 'base64url':
         // Warning: maxLength not taken into account in base64Write
         return base64Write(this, string, offset, length)
 
@@ -1121,11 +1177,11 @@ Buffer.prototype.toJSON = function toJSON () {
 }
 
 function base64Slice (buf, start, end) {
-  if (start === 0 && end === buf.length) {
-    return base64.fromByteArray(buf)
-  } else {
-    return base64.fromByteArray(buf.slice(start, end))
-  }
+  return _btoa(latin1Slice(buf, start, end))
+}
+
+function base64UrlSlice (buf, start, end) {
+  return base64convert(base64Slice(buf, start, end))
 }
 
 function utf8Slice (buf, start, end) {
@@ -2109,23 +2165,62 @@ function boundsError (value, length, type) {
 // ================
 
 const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
+const BASE64URL_62 = /-/g
+const BASE64URL_63 = /_/g
 
 function base64clean (str) {
-  // Node takes equal signs as end of the Base64 encoding
-  str = str.split('=')[0]
-  // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = str.trim().replace(INVALID_BASE64_RE, '')
+  // Node takes equal signs as end of the encoding
+  const index = str.indexOf('=')
+
+  if (index >= 0) {
+    str = str.slice(0, index)
+  }
+
+  // Node strips out invalid characters, atob does not
+  str = str.replace(INVALID_BASE64_RE, '')
+
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
-  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
-  while (str.length % 4 !== 0) {
-    str = str + '='
+
+  // Node handles base64-url, atob does not
+  str = str.replace(BASE64URL_62, '+')
+  str = str.replace(BASE64URL_63, '/')
+
+  // Node allows for non-padded strings, atob _may_ not
+  while (str.length & 3) {
+    str += '='
   }
+
   return str
 }
 
-function base64ToBytes (str) {
-  return base64.toByteArray(base64clean(str))
+const BASE64_62 = /\+/g
+const BASE64_63 = /\//g
+
+function base64convert (str) {
+  // Convert base64 to base64-url.
+  let len = str.length
+
+  if (len > 0 && str[len - 1] === '=') len--
+  if (len > 0 && str[len - 1] === '=') len--
+
+  if (len !== str.length) {
+    str = str.slice(0, len)
+  }
+
+  str = str.replace(BASE64_62, '-')
+  str = str.replace(BASE64_63, '_')
+
+  return str
+}
+
+function base64ByteLength (str, bytes) {
+  // Handle padding
+  if (bytes > 0 && str.charCodeAt(bytes - 1) === 0x3d) bytes--
+  if (bytes > 1 && str.charCodeAt(bytes - 1) === 0x3d) bytes--
+
+  // Base64 ratio: 3/4
+  return (bytes * 3) >>> 2
 }
 
 function writeInvalid (buf, pos) {
@@ -2134,15 +2229,6 @@ function writeInvalid (buf, pos) {
   buf[pos++] = 0xbf
   buf[pos++] = 0xbd
   return pos
-}
-
-function blitBuffer (src, dst, offset, length) {
-  let i
-  for (i = 0; i < length; ++i) {
-    if ((i + offset >= dst.length) || (i >= src.length)) break
-    dst[i + offset] = src[i]
-  }
-  return i
 }
 
 // ArrayBuffer or Uint8Array objects from other contexts (i.e. iframes) do not pass
