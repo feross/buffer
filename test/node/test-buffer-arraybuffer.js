@@ -150,3 +150,6 @@ b.writeDoubleBE(11.11, 0, true);
   });
 }
 
+// Test an array like entry with the length set to NaN.
+assert.deepStrictEqual(Buffer.from({ length: NaN }), Buffer.alloc(0));
+

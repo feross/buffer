@@ -410,7 +410,8 @@ Buffer.isEncoding = function isEncoding (encoding) {
 
 Buffer.concat = function concat (list, length) {
   if (!Array.isArray(list)) {
-    throw new TypeError('"list" argument must be an Array of Buffers')
+    throw new TypeError('The "list" argument must be one of type ' +
+      'Array, Buffer, or Uint8Array')
   }
 
   if (list.length === 0) {
@@ -443,7 +444,7 @@ Buffer.concat = function concat (list, length) {
         )
       }
     } else if (!Buffer.isBuffer(buf)) {
-      throw new TypeError('"list" argument must be an Array of Buffers')
+      throw new TypeError('The "list" argument must be one of type Array, Buffer, or Uint8Array')
     } else {
       buf.copy(buffer, pos)
     }
@@ -738,30 +739,41 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   byteOffset = +byteOffset // Coerce to Number.
   if (numberIsNaN(byteOffset)) {
     // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
-    byteOffset = dir ? 0 : (buffer.length - 1)
+    // In Node.js the default value for lastindexOf is buffer.length -1. Using
+    // buffer.length instead leads to the same results, but makes the code
+    // simpler
+    byteOffset = dir ? 0 : buffer.length
   }
 
+  // If the offset is greater than the length of the buffer, it will fail,
+  // except if the given value is an empty one, then the offset is returned
+  var offsetGreaterLength = false
   // Normalize byteOffset: negative offsets start from the end of the buffer
   if (byteOffset < 0) byteOffset = buffer.length + byteOffset
   if (byteOffset >= buffer.length) {
-    if (dir) return -1
-    else byteOffset = buffer.length - 1
+    if (dir) offsetGreaterLength = true
+    byteOffset = buffer.length
   } else if (byteOffset < 0) {
     if (dir) byteOffset = 0
-    else return -1
+    else offsetGreaterLength = true
   }
 
   // Normalize val
   if (typeof val === 'string') {
     val = Buffer.from(val, encoding)
+  } else if (isInstance(val, Uint8Array)) {
+    val = Buffer.from(val, encoding)
+  }
+
+  // Special case: looking for empty string/buffer always passes
+  if (Buffer.isBuffer(val) && val.length === 0) {
+    return byteOffset
+  } else if (offsetGreaterLength) {
+    return -1
   }
 
   // Finally, search either indexOf (if dir is true) or lastIndexOf
   if (Buffer.isBuffer(val)) {
-    // Special case: looking for empty string/buffer always fails
-    if (val.length === 0) {
-      return -1
-    }
     return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF // Search for a byte value [0-255]
@@ -775,7 +787,8 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     return arrayIndexOf(buffer, [val], byteOffset, encoding, dir)
   }
 
-  throw new TypeError('val must be string, number or Buffer')
+  throw new TypeError('The "value" argument must be one of type ' +
+    'string, Buffer, or Uint8Array. Received type ' + typeof val)
 }
 
 function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
@@ -787,7 +800,7 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
     encoding = String(encoding).toLowerCase()
     if (encoding === 'ucs2' || encoding === 'ucs-2' ||
         encoding === 'utf16le' || encoding === 'utf-16le') {
-      if (arr.length < 2 || val.length < 2) {
+      if (arr.length < 2 || val.length < 2 || arr.length % 2 !== 0) {
         return -1
       }
       indexSize = 2

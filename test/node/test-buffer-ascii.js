@@ -1,4 +1,3 @@
-// Copyright Joyent, Inc. and other Node contributors.var Buffer = require('../../').Buffer;
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19,6 +18,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
+var Buffer = require('../../').Buffer;
 
 'use strict';
 require('./common');
