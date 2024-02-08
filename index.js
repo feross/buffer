@@ -8,7 +8,6 @@
 
 'use strict'
 
-const base64 = require('base64-js')
 const ieee754 = require('ieee754')
 const customInspectSymbol =
   (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
@@ -38,10 +37,54 @@ exports.constants = {
   MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
 }
 
-exports.Blob = global.Blob
-exports.File = global.File
-exports.atob = global.atob
-exports.btoa = global.btoa
+exports.Blob = typeof Blob !== 'undefined' ? Blob : undefined
+exports.File = typeof File !== 'undefined' ? File : undefined
+exports.atob = typeof atob !== 'undefined' ? atob : undefined
+exports.btoa = typeof btoa !== 'undefined' ? btoa : undefined
+
+/**
+ * The `atob` and `btoa` functions are unoptimized in node.js[1][2].
+ * As a result of this, we call out to Buffer directly when running
+ * inside of node.js. Unfortunately, detecting node.js is tricky:
+ *
+ * We can't check `process.browser` because it will cause browserify
+ * to pull in the entire `process` module.
+ *
+ * Instead, we check for a global `Buffer` object with `asciiSlice`
+ * defined on the prototype. This undocumented method has been
+ * defined on the node.js Buffer prototype since the _very_ early
+ * days of node.js (as early as 0.4.0) and is still defined to this
+ * day (but is not defined on _our_ Buffer prototype).
+ *
+ * Because our `Buffer` constructor is hoisted, we can't check for
+ * `typeof Buffer === 'function'`. Instead, we need to access `global`.
+ *
+ * Unfortunately, we can't assume `global` exists as there may be a
+ * non-browserify bundler which supports CJS but not a full node.js
+ * environment which includes `global`.
+ *
+ * As an added bonus, this hack also accounts for nodes prior to
+ * v16.0.0 (when `atob` and `btoa` were first exposed globally).
+ *
+ * [1] https://github.com/feross/buffer/issues/339
+ * [2] https://github.com/nodejs/node/pull/38433
+ */
+let _atob = exports.atob
+let _btoa = exports.btoa
+
+if (typeof global !== 'undefined' && global && global.Math === Math &&
+    typeof global.Buffer === 'function' && global.Buffer.prototype &&
+    typeof global.Buffer.prototype.asciiSlice === 'function') {
+  const NodeBuffer = global.Buffer
+
+  _atob = function atob (str) {
+    return NodeBuffer.from(str, 'base64').toString('binary')
+  }
+
+  _btoa = function btoa (str) {
+    return NodeBuffer.from(str, 'binary').toString('base64')
+  }
+}
 
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
@@ -397,6 +440,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
     case 'latin1':
     case 'binary':
     case 'base64':
+    case 'base64url':
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
@@ -470,7 +514,7 @@ function byteLength (string, encoding) {
         return len
       case 'utf8':
       case 'utf-8':
-        return utf8ToBytes(string).length
+        return utf8ByteLength(string)
       case 'ucs2':
       case 'ucs-2':
       case 'utf16le':
@@ -479,10 +523,11 @@ function byteLength (string, encoding) {
       case 'hex':
         return len >>> 1
       case 'base64':
-        return base64ToBytes(string).length
+      case 'base64url':
+        return base64ByteLength(string, len)
       default:
         if (loweredCase) {
-          return mustMatch ? -1 : utf8ToBytes(string).length // assume utf8
+          return mustMatch ? -1 : utf8ByteLength(string) // assume utf8
         }
         encoding = ('' + encoding).toLowerCase()
         loweredCase = true
@@ -546,6 +591,9 @@ function slowToString (encoding, start, end) {
 
       case 'base64':
         return base64Slice(this, start, end)
+
+      case 'base64url':
+        return base64UrlSlice(this, start, end)
 
       case 'ucs2':
       case 'ucs-2':
@@ -830,21 +878,10 @@ Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) 
 }
 
 function hexWrite (buf, string, offset, length) {
-  offset = Number(offset) || 0
-  const remaining = buf.length - offset
-  if (!length) {
-    length = remaining
-  } else {
-    length = Number(length)
-    if (length > remaining) {
-      length = remaining
-    }
-  }
+  const bytes = string.length >>> 1
 
-  const strLen = string.length
-
-  if (length > (strLen >>> 1)) {
-    length = strLen >>> 1
+  if (length > bytes) {
+    length = bytes
   }
 
   for (let i = 0; i < length; ++i) {
@@ -864,22 +901,188 @@ function hexWrite (buf, string, offset, length) {
 }
 
 function utf8Write (buf, string, offset, length) {
-  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+  let remaining = length
+  let leadSurrogate = 0
+  let pos = offset
+
+  for (let i = 0; i < string.length; i++) {
+    let codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xd7ff && codePoint < 0xe000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xdbff) {
+          // unexpected trail
+          if (remaining >= 3) pos = writeInvalid(buf, pos)
+          remaining -= 3
+          continue
+        } else if (i + 1 === string.length) {
+          // unpaired lead
+          if (remaining >= 3) pos = writeInvalid(buf, pos)
+          remaining -= 3
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xdc00) {
+        if (remaining >= 3) pos = writeInvalid(buf, pos)
+        remaining -= 3
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint -= 0xdc00
+      codePoint |= (leadSurrogate - 0xd800) << 10
+      codePoint += 0x10000
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      if (remaining >= 3) pos = writeInvalid(buf, pos)
+      remaining -= 3
+    }
+
+    leadSurrogate = 0
+
+    // encode utf8
+    if (codePoint < 0x80) {
+      if (remaining < 1) break
+      buf[pos++] = codePoint
+      remaining -= 1
+    } else if (codePoint < 0x800) {
+      if (remaining < 2) break
+      buf[pos++] = (codePoint >> 6) | 0xc0
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 2
+    } else if (codePoint < 0x10000) {
+      if (remaining < 3) break
+      buf[pos++] = (codePoint >> 12) | 0xe0
+      buf[pos++] = ((codePoint >> 6) & 0x3f) | 0x80
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 3
+    } else if (codePoint < 0x110000) {
+      if (remaining < 4) break
+      buf[pos++] = (codePoint >> 18) | 0xf0
+      buf[pos++] = ((codePoint >> 12) & 0x3f) | 0x80
+      buf[pos++] = ((codePoint >> 6) & 0x3f) | 0x80
+      buf[pos++] = (codePoint & 0x3f) | 0x80
+      remaining -= 4
+    } else {
+      throw new Error('Invalid code point')
+    }
+  }
+
+  return pos - offset
+}
+
+function utf8ByteLength (string) {
+  let leadSurrogate = 0
+  let size = 0
+
+  for (let i = 0; i < string.length; i++) {
+    let codePoint = string.charCodeAt(i)
+
+    // is surrogate component
+    if (codePoint > 0xd7ff && codePoint < 0xe000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xdbff) {
+          // unexpected trail
+          size += 3
+          continue
+        } else if (i + 1 === string.length) {
+          // unpaired lead
+          size += 3
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xdc00) {
+        size += 3
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint -= 0xdc00
+      codePoint |= (leadSurrogate - 0xd800) << 10
+      codePoint += 0x10000
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      size += 3
+    }
+
+    leadSurrogate = 0
+
+    // encode utf8
+    size += 1
+    size += (codePoint >= 0x80) | 0
+    size += (codePoint >= 0x800) | 0
+    size += (codePoint >= 0x10000) | 0
+  }
+
+  return size
 }
 
 function asciiWrite (buf, string, offset, length) {
-  return blitBuffer(asciiToBytes(string), buf, offset, length)
+  if (length > string.length) {
+    length = string.length
+  }
+
+  for (let i = 0; i < length; i++) {
+    buf[offset + i] = string.charCodeAt(i)
+  }
+
+  return length
 }
 
 function base64Write (buf, string, offset, length) {
-  return blitBuffer(base64ToBytes(string), buf, offset, length)
+  try {
+    // Parse optimistically as base64.
+    string = _atob(string)
+  } catch (e) {
+    // Fall back to full preprocessing.
+    string = _atob(base64clean(string))
+  }
+  return asciiWrite(buf, string, offset, length)
 }
 
 function ucs2Write (buf, string, offset, length) {
-  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+  length >>>= 1
+
+  if (length > string.length) {
+    length = string.length
+  }
+
+  for (let i = 0; i < length; i++) {
+    const ch = string.charCodeAt(i)
+
+    buf[offset + i * 2 + 0] = ch >> 0
+    buf[offset + i * 2 + 1] = ch >> 8
+  }
+
+  return length * 2
 }
 
 Buffer.prototype.write = function write (string, offset, length, encoding) {
+  if (typeof string !== 'string') {
+    throw new TypeError('"string" argument must be a string')
+  }
+
   // Buffer#write(string)
   if (offset === undefined) {
     encoding = 'utf8'
@@ -909,7 +1112,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
   const remaining = this.length - offset
   if (length === undefined || length > remaining) length = remaining
 
-  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+  if (length < 0 || offset < 0 || offset > this.length) {
     throw new RangeError('Attempt to write outside buffer bounds')
   }
 
@@ -931,6 +1134,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
         return asciiWrite(this, string, offset, length)
 
       case 'base64':
+      case 'base64url':
         // Warning: maxLength not taken into account in base64Write
         return base64Write(this, string, offset, length)
 
@@ -956,11 +1160,11 @@ Buffer.prototype.toJSON = function toJSON () {
 }
 
 function base64Slice (buf, start, end) {
-  if (start === 0 && end === buf.length) {
-    return base64.fromByteArray(buf)
-  } else {
-    return base64.fromByteArray(buf.slice(start, end))
-  }
+  return _btoa(latin1Slice(buf, start, end))
+}
+
+function base64UrlSlice (buf, start, end) {
+  return base64convert(base64Slice(buf, start, end))
 }
 
 function utf8Slice (buf, start, end) {
@@ -1944,137 +2148,70 @@ function boundsError (value, length, type) {
 // ================
 
 const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
+const BASE64URL_62 = /-/g
+const BASE64URL_63 = /_/g
 
 function base64clean (str) {
-  // Node takes equal signs as end of the Base64 encoding
-  str = str.split('=')[0]
-  // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = str.trim().replace(INVALID_BASE64_RE, '')
+  // Node takes equal signs as end of the encoding
+  const index = str.indexOf('=')
+
+  if (index >= 0) {
+    str = str.slice(0, index)
+  }
+
+  // Node strips out invalid characters, atob does not
+  str = str.replace(INVALID_BASE64_RE, '')
+
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
-  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
-  while (str.length % 4 !== 0) {
-    str = str + '='
+
+  // Node handles base64-url, atob does not
+  str = str.replace(BASE64URL_62, '+')
+  str = str.replace(BASE64URL_63, '/')
+
+  // Node allows for non-padded strings, atob _may_ not
+  while (str.length & 3) {
+    str += '='
   }
+
   return str
 }
 
-function utf8ToBytes (string, units) {
-  units = units || Infinity
-  let codePoint
-  const length = string.length
-  let leadSurrogate = null
-  const bytes = []
+const BASE64_62 = /\+/g
+const BASE64_63 = /\//g
 
-  for (let i = 0; i < length; ++i) {
-    codePoint = string.charCodeAt(i)
+function base64convert (str) {
+  // Convert base64 to base64-url.
+  let len = str.length
 
-    // is surrogate component
-    if (codePoint > 0xD7FF && codePoint < 0xE000) {
-      // last char was a lead
-      if (!leadSurrogate) {
-        // no lead yet
-        if (codePoint > 0xDBFF) {
-          // unexpected trail
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          continue
-        } else if (i + 1 === length) {
-          // unpaired lead
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          continue
-        }
+  if (len > 0 && str[len - 1] === '=') len--
+  if (len > 0 && str[len - 1] === '=') len--
 
-        // valid lead
-        leadSurrogate = codePoint
-
-        continue
-      }
-
-      // 2 leads in a row
-      if (codePoint < 0xDC00) {
-        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-        leadSurrogate = codePoint
-        continue
-      }
-
-      // valid surrogate pair
-      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000
-    } else if (leadSurrogate) {
-      // valid bmp char, but last char was a lead
-      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-    }
-
-    leadSurrogate = null
-
-    // encode utf8
-    if (codePoint < 0x80) {
-      if ((units -= 1) < 0) break
-      bytes.push(codePoint)
-    } else if (codePoint < 0x800) {
-      if ((units -= 2) < 0) break
-      bytes.push(
-        codePoint >> 0x6 | 0xC0,
-        codePoint & 0x3F | 0x80
-      )
-    } else if (codePoint < 0x10000) {
-      if ((units -= 3) < 0) break
-      bytes.push(
-        codePoint >> 0xC | 0xE0,
-        codePoint >> 0x6 & 0x3F | 0x80,
-        codePoint & 0x3F | 0x80
-      )
-    } else if (codePoint < 0x110000) {
-      if ((units -= 4) < 0) break
-      bytes.push(
-        codePoint >> 0x12 | 0xF0,
-        codePoint >> 0xC & 0x3F | 0x80,
-        codePoint >> 0x6 & 0x3F | 0x80,
-        codePoint & 0x3F | 0x80
-      )
-    } else {
-      throw new Error('Invalid code point')
-    }
+  if (len !== str.length) {
+    str = str.slice(0, len)
   }
 
-  return bytes
+  str = str.replace(BASE64_62, '-')
+  str = str.replace(BASE64_63, '_')
+
+  return str
 }
 
-function asciiToBytes (str) {
-  const byteArray = []
-  for (let i = 0; i < str.length; ++i) {
-    // Node's code seems to be doing this and not & 0x7F..
-    byteArray.push(str.charCodeAt(i) & 0xFF)
-  }
-  return byteArray
+function base64ByteLength (str, bytes) {
+  // Handle padding
+  if (bytes > 0 && str.charCodeAt(bytes - 1) === 0x3d) bytes--
+  if (bytes > 1 && str.charCodeAt(bytes - 1) === 0x3d) bytes--
+
+  // Base64 ratio: 3/4
+  return (bytes * 3) >>> 2
 }
 
-function utf16leToBytes (str, units) {
-  let c, hi, lo
-  const byteArray = []
-  for (let i = 0; i < str.length; ++i) {
-    if ((units -= 2) < 0) break
-
-    c = str.charCodeAt(i)
-    hi = c >> 8
-    lo = c % 256
-    byteArray.push(lo)
-    byteArray.push(hi)
-  }
-
-  return byteArray
-}
-
-function base64ToBytes (str) {
-  return base64.toByteArray(base64clean(str))
-}
-
-function blitBuffer (src, dst, offset, length) {
-  let i
-  for (i = 0; i < length; ++i) {
-    if ((i + offset >= dst.length) || (i >= src.length)) break
-    dst[i + offset] = src[i]
-  }
-  return i
+function writeInvalid (buf, pos) {
+  // U+FFFD (Replacement Character)
+  buf[pos++] = 0xef
+  buf[pos++] = 0xbf
+  buf[pos++] = 0xbd
+  return pos
 }
 
 // ArrayBuffer or Uint8Array objects from other contexts (i.e. iframes) do not pass

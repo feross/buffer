@@ -53,3 +53,50 @@ test('base64: high byte', function (t) {
   )
   t.end()
 })
+
+test('base64: rfc test vectors', function (t) {
+  // https://tools.ietf.org/html/rfc4648#section-10
+  const vectors = [
+    ['', ''],
+    ['66', 'Zg=='],
+    ['666f', 'Zm8='],
+    ['666f6f', 'Zm9v'],
+    ['666f6f62', 'Zm9vYg=='],
+    ['666f6f6261', 'Zm9vYmE='],
+    ['666f6f626172', 'Zm9vYmFy'],
+    ['53e9363b2962fcaf', 'U+k2Oyli/K8=']
+  ]
+
+  for (const [base16, base64] of vectors) {
+    const buf16 = B.from(base16, 'hex')
+    const buf64 = B.from(base64, 'base64')
+
+    t.equal(buf16.toString('base64'), base64)
+    t.equal(buf64.toString('hex'), base16)
+  }
+
+  t.end()
+})
+
+test('base64url: rfc test vectors', function (t) {
+  const vectors = [
+    ['', ''],
+    ['66', 'Zg'],
+    ['666f', 'Zm8'],
+    ['666f6f', 'Zm9v'],
+    ['666f6f62', 'Zm9vYg'],
+    ['666f6f6261', 'Zm9vYmE'],
+    ['666f6f626172', 'Zm9vYmFy'],
+    ['53e9363b2962fcaf', 'U-k2Oyli_K8']
+  ]
+
+  for (const [base16, base64] of vectors) {
+    const buf16 = B.from(base16, 'hex')
+    const buf64 = B.from(base64, 'base64url')
+
+    t.equal(buf16.toString('base64url'), base64)
+    t.equal(buf64.toString('hex'), base16)
+  }
+
+  t.end()
+})
