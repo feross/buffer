@@ -38,10 +38,10 @@ exports.constants = {
   MAX_STRING_LENGTH: K_STRING_MAX_LENGTH
 }
 
-exports.Blob = global.Blob
-exports.File = global.File
-exports.atob = global.atob
-exports.btoa = global.btoa
+exports.Blob = typeof Blob !== 'undefined' ? Blob : undefined
+exports.File = typeof File !== 'undefined' ? File : undefined
+exports.atob = typeof atob !== 'undefined' ? atob : undefined
+exports.btoa = typeof btoa !== 'undefined' ? btoa : undefined
 
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
