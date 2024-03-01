@@ -1126,11 +1126,7 @@ Buffer.prototype.slice = function slice (start, end) {
 
   if (end < start) end = start
 
-  const newBuf = this.subarray(start, end)
-  // Return an augmented `Uint8Array` instance
-  Object.setPrototypeOf(newBuf, Buffer.prototype)
-
-  return newBuf
+  return this.subarray(start, end)
 }
 
 /*
@@ -1811,6 +1807,19 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
   }
 
   return this
+}
+
+// A number of mobile web views do not seem to implement the
+// ES2016 "subarray instantiates child class" behavior. Test
+// for this and monkey-patch subarray if need be. Only check
+// for this once we're done setting up the Buffer prototype.
+// See: https://github.com/feross/buffer/issues/329
+if (!(createBuffer(1).subarray(0, 1) instanceof Buffer)) {
+  Buffer.prototype.subarray = function subarray() {
+    const buf = Uint8Array.prototype.subarray.apply(this, arguments)
+    Object.setPrototypeOf(buf, Buffer.prototype)
+    return buf
+  }
 }
 
 // CUSTOM ERRORS
