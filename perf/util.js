@@ -1,6 +1,6 @@
 var benchmark = require('benchmark')
 
-exports.suite = function () {
+exports.suite = function (isAsync) {
   var suite = new benchmark.Suite()
   process.nextTick(function () {
     suite
@@ -13,7 +13,7 @@ exports.suite = function () {
       .on('complete', function () {
         console.log('Fastest is ' + this.filter('fastest').map('name'))
       })
-      .run({ async: true })
+      .run({ async: isAsync === undefined ? true : isAsync })
   })
   return suite
 }
