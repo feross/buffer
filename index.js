@@ -8,7 +8,7 @@
 
 'use strict'
 
-const base64 = require('base64-js')
+const hextreme = require('hextreme')
 const ieee754 = require('ieee754')
 const customInspectSymbol =
   (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
@@ -847,20 +847,10 @@ function hexWrite (buf, string, offset, length) {
     length = strLen >>> 1
   }
 
-  for (let i = 0; i < length; ++i) {
-    const a = string.charCodeAt(i * 2 + 0)
-    const b = string.charCodeAt(i * 2 + 1)
-    const hi = hexCharValueTable[a & 0x7f]
-    const lo = hexCharValueTable[b & 0x7f]
-
-    if ((a | b | hi | lo) & ~0x7f) {
-      return i
-    }
-
-    buf[offset + i] = (hi << 4) | lo
-  }
-
-  return length
+  if (string.length > length << 1) string = string.slice(0, length << 1)
+  const data = hextreme.fromHex(string, { onInvalidInput: 'truncate' })
+  buf.set(data, offset)
+  return data.length
 }
 
 function utf8Write (buf, string, offset, length) {
@@ -957,9 +947,9 @@ Buffer.prototype.toJSON = function toJSON () {
 
 function base64Slice (buf, start, end) {
   if (start === 0 && end === buf.length) {
-    return base64.fromByteArray(buf)
+    return hextreme.toBase64(buf)
   } else {
-    return base64.fromByteArray(buf.slice(start, end))
+    return hextreme.toBase64(buf.slice(start, end))
   }
 }
 
@@ -1088,11 +1078,11 @@ function hexSlice (buf, start, end) {
   if (!start || start < 0) start = 0
   if (!end || end < 0 || end > len) end = len
 
-  let out = ''
-  for (let i = start; i < end; ++i) {
-    out += hexSliceLookupTable[buf[i]]
+  if (start === 0 && end === buf.length) {
+    return hextreme.toHex(buf)
+  } else {
+    return hextreme.toHex(buf.slice(start, end))
   }
-  return out
 }
 
 function utf16leSlice (buf, start, end) {
@@ -1943,22 +1933,6 @@ function boundsError (value, length, type) {
 // HELPER FUNCTIONS
 // ================
 
-const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g
-
-function base64clean (str) {
-  // Node takes equal signs as end of the Base64 encoding
-  str = str.split('=')[0]
-  // Node strips out invalid characters like \n and \t from the string, base64-js does not
-  str = str.trim().replace(INVALID_BASE64_RE, '')
-  // Node converts strings with length < 2 to ''
-  if (str.length < 2) return ''
-  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
-  while (str.length % 4 !== 0) {
-    str = str + '='
-  }
-  return str
-}
-
 function utf8ToBytes (string, units) {
   units = units || Infinity
   let codePoint
@@ -2065,7 +2039,7 @@ function utf16leToBytes (str, units) {
 }
 
 function base64ToBytes (str) {
-  return base64.toByteArray(base64clean(str))
+  return hextreme.fromBase64(str, { onInvalidInput: 'skip', alphabet: 'base64any' })
 }
 
 function blitBuffer (src, dst, offset, length) {
@@ -2090,42 +2064,6 @@ function numberIsNaN (obj) {
   // For IE11 support
   return obj !== obj // eslint-disable-line no-self-compare
 }
-
-// Create lookup table for `toString('hex')`
-// See: https://github.com/feross/buffer/issues/219
-const hexSliceLookupTable = (function () {
-  const alphabet = '0123456789abcdef'
-  const table = new Array(256)
-  for (let i = 0; i < 16; ++i) {
-    const i16 = i * 16
-    for (let j = 0; j < 16; ++j) {
-      table[i16 + j] = alphabet[i] + alphabet[j]
-    }
-  }
-  return table
-})()
-
-// hex lookup table for Buffer.from(x, 'hex')
-/* eslint-disable no-multi-spaces, indent */
-const hexCharValueTable = [
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-   0,  1,  2,  3,  4,  5,  6,  7,
-   8,  9, -1, -1, -1, -1, -1, -1,
-  -1, 10, 11, 12, 13, 14, 15, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, 10, 11, 12, 13, 14, 15, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1,
-  -1, -1, -1, -1, -1, -1, -1, -1
-]
-/* eslint-enable no-multi-spaces, indent */
 
 // Return not function with Error if BigInt not supported
 function defineBigIntMethod (fn) {
