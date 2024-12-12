@@ -1083,16 +1083,45 @@ function latin1Slice (buf, start, end) {
 }
 
 function hexSlice (buf, start, end) {
-  const len = buf.length
+  const buflen = buf.length
 
   if (!start || start < 0) start = 0
-  if (!end || end < 0 || end > len) end = len
+  if (!end || end < 0 || end > buflen) end = buflen
 
-  let out = ''
-  for (let i = start; i < end; ++i) {
-    out += hexSliceLookupTable[buf[i]]
+  buf = buf.subarray(start, end)  // `slice` is deprecated
+
+  // buffer needs to be 4-byte aligned for what follows
+  if (buf.byteOffset % 4 !== 0) buf = new Uint8Array(buf)
+
+  const len = buf.length
+  const halfLen = len >>> 1
+  const quarterLen = len >>> 2
+  const out16 = new Uint16Array(len)
+  const buf32 = new Uint32Array(buf.buffer, buf.byteOffset, quarterLen)
+  const out32 = new Uint32Array(out16.buffer, out16.byteOffset, halfLen)
+  const lt = hexSliceLookupTable
+
+  // read 4 bytes (1x uint32) and write 8 bytes (2x uint32) at a time
+  let i = 0
+  let j = 0
+  let v
+  if (littleEndian) while (i < quarterLen) {
+    v = buf32[i++]
+    out32[j++] = lt[(v >>> 8) & 255] << 16 | lt[v & 255]
+    out32[j++] = lt[v >>> 24] << 16 | lt[(v >>> 16) & 255]
   }
-  return out
+  else while (i < quarterLen) {
+    v = buf32[i++]
+    out32[j++] = lt[v >>> 24] << 16 | lt[(v >>> 16) & 255]
+    out32[j++] = lt[(v >>> 8) & 255] << 16 | lt[v & 255]
+  }
+
+  // deal with up to 3 remaining bytes
+  i <<= 2;  // uint32 addressing to uint8 addressing
+  while (i < len) out16[i] = lt[buf[i++]]
+
+  const hex = textDecoder.decode(out16.subarray(0, len))
+  return hex
 }
 
 function utf16leSlice (buf, start, end) {
@@ -2091,16 +2120,17 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-// Create lookup table for `toString('hex')`
-// See: https://github.com/feross/buffer/issues/219
+// Create lookup table etc. for `toString('hex')`
+const textDecoder = new TextDecoder()
+const littleEndian = new Uint8Array((new Uint16Array([0x0102]).buffer))[0] === 0x02
 const hexSliceLookupTable = (function () {
-  const alphabet = '0123456789abcdef'
-  const table = new Array(256)
-  for (let i = 0; i < 16; ++i) {
-    const i16 = i * 16
-    for (let j = 0; j < 16; ++j) {
-      table[i16 + j] = alphabet[i] + alphabet[j]
-    }
+  const alphabet = new TextEncoder().encode('0123456789abcdef')
+  const table = new Uint16Array(256)
+  if (littleEndian) for (let i = 0; i < 256; i++) {
+    table[i] = alphabet[i & 0xF] << 8 | alphabet[i >>> 4]
+  }
+  else for (let i = 0; i < 256; i++) {
+    table[i] = alphabet[i & 0xF] | alphabet[i >>> 4] << 8
   }
   return table
 })()

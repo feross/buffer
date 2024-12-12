@@ -2,3 +2,5 @@
 .airtap.yml
 *.log
 node_modules/
+package-lock.json
+perf/bundle.js
