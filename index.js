@@ -712,7 +712,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
   // Normalize byteOffset
   if (typeof byteOffset === 'string') {
     encoding = byteOffset
-    byteOffset = 0
+    byteOffset = undefined
   } else if (byteOffset > 0x7fffffff) {
     byteOffset = 0x7fffffff
   } else if (byteOffset < -0x80000000) {
