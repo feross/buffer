@@ -10,6 +10,17 @@ The goal is to provide an API that is 100% identical to
 [official docs](https://nodejs.org/api/buffer.html) for the full list of properties,
 instance methods, and class methods that are supported.
 
+## features
+
+- Manipulate binary data like a boss, in all browsers!
+- Super fast. Backed by Typed Arrays (`Uint8Array`/`ArrayBuffer`, not `Object`)
+- Extremely small bundle size (**6.75KB minified + gzipped**, 51.9KB with comments)
+- Excellent browser support (Chrome, Firefox, Edge, Safari 11+, iOS 11+, Android, etc.)
+- Preserves Node API exactly
+- Square-bracket `buf[4]` notation works!
+- Does not modify any browser prototypes or put anything on `window`
+- Comprehensive test suite (including all buffer tests from node.js core)
+
 ## install
 
 ```bash
@@ -92,7 +103,38 @@ Alternatively, use the [`to-arraybuffer`](https://www.npmjs.com/package/to-array
 
 4x faster than base64-js on an iPhone 11 Pro when dealing with base64, thanks to [react-native-quick-base64](https://github.com/craftzdog/react-native-quick-base64).
 
-## credit
+## Testing the project
+
+First, install the project:
+
+    npm install
+
+Then, to run tests in Node.js, run:
+
+    npm run test-node
+
+To test locally in a browser, you can run:
+
+    npm run test-browser-old-local # For ES5 browsers that don't support ES6
+    npm run test-browser-new-local # For ES6 compliant browsers
+
+This will print out a URL that you can then open in a browser to run the tests, using [airtap](https://www.npmjs.com/package/airtap).
+
+To run automated browser tests using Saucelabs, ensure that your `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables are set, then run:
+
+    npm test
+
+This is what's run in Travis, to check against various browsers. The list of browsers is kept in the `bin/airtap-es5.yml` and `bin/airtap-es6.yml` files.
+
+## JavaScript Standard Style
+
+This module uses [JavaScript Standard Style](https://github.com/feross/standard).
+
+[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
+To test that the code conforms to the style, `npm install` and run:
+
+## Credit
 
 This was originally forked from [feross/buffer](https://github.com/feross/buffer).
 
