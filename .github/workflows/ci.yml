@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # see https://nodejs.org/en/about/releases/
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@main
+    - uses: actions/setup-node@main
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm run test-node
+
+  standard:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+    - uses: actions/setup-node@main
+      with:
+        # don't use lts/* to prevent hitting rate-limit
+        node-version: 20.x
+    - run: npm install
+    - run: npm run standard
