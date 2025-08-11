@@ -55,7 +55,7 @@
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feross/buffer.git"
+    "url": "https://github.com/feross/buffer.git"
   },
   "scripts": {
     "perf": "browserify --debug perf/bracket-notation.js > perf/bundle.js && open perf/index.html",
