@@ -138,3 +138,12 @@ test('buffer.slice out of range', function (t) {
   t.equal((new B('hallo')).slice(10, 2).toString(), '')
   t.end()
 })
+
+test('lastIndexOf with encoding as second arg', function (t) {
+  const b = new B('abcdefghij')
+  t.equal(b.lastIndexOf('b'), 1)
+  t.equal(b.lastIndexOf('b', 'utf8'), 1)
+  t.equal(b.lastIndexOf('b', 'latin1'), 1)
+  t.equal(b.lastIndexOf('b', 'binary'), 1)
+  t.end()
+})
