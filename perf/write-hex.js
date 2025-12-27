@@ -1,24 +1,27 @@
-const BrowserBuffer = require('../').Buffer // (this module)
-const util = require('./util')
-const suite = util.suite()
+'use strict'
 
-const LENGTH = 4096
-const browserSubject = BrowserBuffer.alloc(LENGTH)
-const nodeSubject = Buffer.alloc(LENGTH)
+var BrowserBuffer = require('../').Buffer // (this module)
+var util = require('./util')
+var suite = util.suite()
 
-const charset = '0123456789abcdef'
+var LENGTH = 4096
+var browserSubject = BrowserBuffer.alloc(LENGTH)
+var nodeSubject = Buffer.alloc(LENGTH)
 
-let str = ''
+var charset = '0123456789abcdef'
 
-for (let i = 0; i < LENGTH * 2; i++)
+var str = ''
+
+for (var i = 0; i < LENGTH * 2; i++) {
   str += charset[Math.random() * charset.length | 0]
+}
 
-suite
-  .add('BrowserBuffer#write(' + LENGTH + ', "hex")', function () {
-    browserSubject.write(str, 'hex')
-  })
+suite.add('BrowserBuffer#write(' + str.length + ', "hex")', function () {
+  browserSubject.write(str, 'hex')
+})
 
-if (!process.browser) suite
-  .add('NodeBuffer#write(' + LENGTH + ', "hex")', function () {
+if (!process.browser) {
+  suite.add('NodeBuffer#write(' + str.length + ', "hex")', function () {
     nodeSubject.write(str, 'hex')
   })
+}
