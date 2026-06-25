@@ -122,3 +122,26 @@ test('large values do not improperly roll over (ref #80)', function (t) {
   t.equal(nums[2], newNum)
   t.end()
 })
+
+test('write with explicit length does not write a partial multibyte char (ref node parity)', function (t) {
+  // Node guarantees: "partially encoded characters will not be written", and the
+  // return value counts only complete characters. A length smaller than the
+  // byte length of the next character must drop that character entirely.
+
+  // 'é' is 2 utf8 bytes (c3 a9); length 1 cannot hold it -> nothing written.
+  const a = B.alloc(8, 0)
+  t.equal(a.write('é', 0, 1, 'utf8'), 0, 'é len 1 returns 0')
+  t.equal(a.toString('hex'), '0000000000000000', 'é len 1 leaves buffer zeroed')
+
+  // '€' is 3 utf8 bytes (e2 82 ac); length 2 cannot hold it -> nothing written.
+  const b = B.alloc(8, 0)
+  t.equal(b.write('€', 0, 2, 'utf8'), 0, '€ len 2 returns 0')
+  t.equal(b.toString('hex'), '0000000000000000', '€ len 2 leaves buffer zeroed')
+
+  // 'ab' utf16le is 4 bytes; length 3 holds one full 2-byte unit only.
+  const c = B.alloc(8, 0)
+  t.equal(c.write('ab', 0, 3, 'utf16le'), 2, 'ab len 3 utf16le returns 2')
+  t.equal(c.toString('hex'), '6100000000000000', 'ab len 3 utf16le writes only the first complete unit')
+
+  t.end()
+})
