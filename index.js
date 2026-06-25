@@ -864,7 +864,7 @@ function hexWrite (buf, string, offset, length) {
 }
 
 function utf8Write (buf, string, offset, length) {
-  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+  return blitBuffer(utf8ToBytes(string, length), buf, offset, length)
 }
 
 function asciiWrite (buf, string, offset, length) {
@@ -876,7 +876,7 @@ function base64Write (buf, string, offset, length) {
 }
 
 function ucs2Write (buf, string, offset, length) {
-  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+  return blitBuffer(utf16leToBytes(string, length), buf, offset, length)
 }
 
 Buffer.prototype.write = function write (string, offset, length, encoding) {
