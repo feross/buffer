@@ -1,6 +1,6 @@
 # buffer [![ci][ci-image]][ci-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
 
-[ci-image]: https://img.shields.io/github/workflow/status/feross/buffer/ci/master
+[ci-image]: https://img.shields.io/github/actions/workflow/status/feross/buffer/ci.yml?branch=master
 [ci-url]: https://github.com/feross/buffer/actions
 [npm-image]: https://img.shields.io/npm/v/buffer.svg
 [npm-url]: https://npmjs.org/package/buffer
