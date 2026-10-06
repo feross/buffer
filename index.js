@@ -1107,8 +1107,8 @@ function utf16leSlice (buf, start, end) {
 
 Buffer.prototype.slice = function slice (start, end) {
   const len = this.length
-  start = ~~start
-  end = end === undefined ? len : ~~end
+  start = Math.trunc(start)
+  end = end === undefined ? len : Math.trunc(end)
 
   if (start < 0) {
     start += len
